@@ -8,11 +8,26 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, TwoFactorAuthenticatable, HasRoles;
+    use HasFactory, Notifiable, TwoFactorAuthenticatable, HasRoles, SoftDeletes;
+
+    protected static function booted(): void
+    {
+        static::deleting(function (User $user) {
+            if (!$user->isForceDeleting()) {
+                $user->email = $user->email . '#deleted-' . time();
+                if ($user->username) {
+                    $user->username = $user->username . '#deleted-' . time();
+                }
+                $user->save();
+            }
+        });
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -22,6 +37,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'username',
         'password',
     ];
 
@@ -49,5 +65,30 @@ class User extends Authenticatable
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
         ];
+    }
+
+    public function researchSubmissions(): HasMany
+    {
+        return $this->hasMany(ResearchSubmission::class);
+    }
+
+    public function communityServiceSubmissions(): HasMany
+    {
+        return $this->hasMany(CommunityServiceSubmission::class);
+    }
+
+    public function ethicalClearanceSubmissions(): HasMany
+    {
+        return $this->hasMany(EthicalClearanceSubmission::class);
+    }
+
+    public function logs(): HasMany
+    {
+        return $this->hasMany(UserLog::class);
+    }
+
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(Notification::class);
     }
 }

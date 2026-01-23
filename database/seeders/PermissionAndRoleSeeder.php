@@ -79,6 +79,7 @@ class PermissionAndRoleSeeder extends Seeder
             'email' => 'admin@itekes-bali.ac.id',
         ], [
             'name' => 'Admin',
+            'username' => 'admin',
             'password' => bcrypt('password'),
         ]);
         $userAdmin->assignRole($admin);
@@ -87,6 +88,7 @@ class PermissionAndRoleSeeder extends Seeder
             'email' => 'lecture@itekes-bali.ac.id',
         ], [
             'name' => 'Lecture',
+            'username' => 'lecture',
             'password' => bcrypt('password'),
         ]);
         $userLecture->assignRole($lecture);
@@ -95,6 +97,7 @@ class PermissionAndRoleSeeder extends Seeder
             'email' => 'guest@itekes-bali.ac.id',
         ], [
             'name' => 'Guest',
+            'username' => 'guest',
             'password' => bcrypt('password'),
         ]);
         $userGuest->assignRole($guest);
@@ -103,6 +106,7 @@ class PermissionAndRoleSeeder extends Seeder
             'email' => 'operator@itekes-bali.ac.id',
         ], [
             'name' => 'Operator',
+            'username' => 'operator',
             'password' => bcrypt('password'),
         ]);
         $userOperator->assignRole($operator);
@@ -111,6 +115,7 @@ class PermissionAndRoleSeeder extends Seeder
             'email' => 'reviewer-research@itekes-bali.ac.id',
         ], [
             'name' => 'Reviewer Research',
+            'username' => 'reviewer-research',
             'password' => bcrypt('password'),
         ]);
         $userReviewerResearch->assignRole($reviewerResearch);
@@ -119,6 +124,7 @@ class PermissionAndRoleSeeder extends Seeder
             'email' => 'reviewer-community@itekes-bali.ac.id',
         ], [
             'name' => 'Reviewer Community Service',
+            'username' => 'reviewer-community',
             'password' => bcrypt('password'),
         ]);
         $userReviewerCommunityService->assignRole($reviewerCommunityService);
