@@ -1,17 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-use Laravel\Fortify\Features;
-
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canRegister' => Features::enabled(Features::registration()),
-    ]);
-})->name('home');
-
-Route::get('dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-require __DIR__ . '/settings.php';
+require __DIR__ . '/modules/general.php';
+require __DIR__ . '/modules/settings.php';
+require __DIR__ . '/modules/review_request.php';
+require __DIR__ . '/modules/reviewer.php';
+require __DIR__ . '/modules/reviewer_assignment.php';
+require __DIR__ . '/modules/users.php';
+require __DIR__ . '/modules/base_system.php';

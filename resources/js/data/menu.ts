@@ -1,5 +1,18 @@
 import { NavGroup, NavItem, User } from '@/types';
-import { BellIcon, FileTextIcon, LayoutGrid, LogsIcon, MicroscopeIcon, UsersIcon } from 'lucide-svelte';
+import {
+    BellIcon,
+    Building2Icon,
+    CircleCheckBigIcon,
+    CircleDashedIcon,
+    CircleDotDashed,
+    FileTextIcon,
+    LayoutGrid,
+    LogsIcon,
+    MicroscopeIcon,
+    ShieldIcon,
+    UsersIcon,
+    ZapIcon,
+} from 'lucide-svelte';
 import { permissions, roles } from './permission-and-role';
 
 function validateAbility(userRoles: string[], userPermissions: string[]) {
@@ -37,15 +50,18 @@ export function createMenu(user: User): Record<string, NavGroup> {
                     items: [
                         {
                             title: 'Usulan Awal',
-                            href: '/apply/research/initial-proposal',
+                            href: '/apply/research/proposal',
+                            icon: CircleDashedIcon,
                         },
                         {
                             title: 'Laporan Kemajuan',
                             href: '/apply/research/progress-report',
+                            icon: CircleDotDashed,
                         },
                         {
                             title: 'Laporan Akhir',
                             href: '/apply/research/final-report',
+                            icon: CircleCheckBigIcon,
                         },
                     ],
                 }),
@@ -56,15 +72,18 @@ export function createMenu(user: User): Record<string, NavGroup> {
                     items: [
                         {
                             title: 'Usulan Awal',
-                            href: '/apply/community-service/initial-proposal',
+                            href: '/apply/community-service/proposal',
+                            icon: CircleDashedIcon,
                         },
                         {
                             title: 'Laporan Kemajuan',
                             href: '/apply/community-service/progress-report',
+                            icon: CircleDotDashed,
                         },
                         {
                             title: 'Laporan Akhir',
                             href: '/apply/community-service/final-report',
+                            icon: CircleCheckBigIcon,
                         },
                     ],
                 }),
@@ -75,11 +94,13 @@ export function createMenu(user: User): Record<string, NavGroup> {
                     items: [
                         {
                             title: 'Usulan Awal',
-                            href: '/apply/ethics/initial-proposal',
+                            href: '/apply/ethics/proposal',
+                            icon: CircleDashedIcon,
                         },
                         {
                             title: 'Output',
                             href: '/apply/ethics/output',
+                            icon: CircleCheckBigIcon,
                         },
                     ],
                 }),
@@ -90,55 +111,63 @@ export function createMenu(user: User): Record<string, NavGroup> {
             label: 'Reviewer',
             items: [
                 validate(permissions.REVIEW_RESEARCH, {
-                    title: 'Penelitian',
+                    title: 'Validasi Penelitian',
                     href: '/review/research',
                     icon: MicroscopeIcon,
                     items: [
                         {
                             title: 'Usulan Awal',
-                            href: '/review/research/initial-proposal',
+                            href: '/review/research/proposal',
+                            icon: CircleDashedIcon,
                         },
                         {
                             title: 'Laporan Kemajuan',
                             href: '/review/research/progress-report',
+                            icon: CircleDotDashed,
                         },
                         {
                             title: 'Laporan Akhir',
                             href: '/review/research/final-report',
+                            icon: CircleCheckBigIcon,
                         },
                     ],
                 }),
                 validate(permissions.REVIEW_COMMUNITY_SERVICE, {
-                    title: 'Pengabdian',
+                    title: 'Validasi Pengabdian',
                     href: '/review/community-service',
                     icon: UsersIcon,
                     items: [
                         {
                             title: 'Usulan Awal',
-                            href: '/review/community-service/initial-proposal',
+                            href: '/review/community-service/proposal',
+                            icon: CircleDashedIcon,
                         },
                         {
                             title: 'Laporan Kemajuan',
                             href: '/review/community-service/progress-report',
+                            icon: CircleDotDashed,
                         },
                         {
                             title: 'Laporan Akhir',
                             href: '/review/community-service/final-report',
+                            icon: CircleCheckBigIcon,
                         },
                     ],
                 }),
                 validate(permissions.REVIEW_ETHICS, {
-                    title: 'Lembar Etik',
+                    title: 'Validasi Lembar Etik',
                     href: '/review/ethics',
                     icon: FileTextIcon,
                     items: [
                         {
                             title: 'Usulan Awal',
-                            href: '/review/ethics/initial-proposal',
+                            href: '/review/ethics/proposal',
+                            icon: CircleDashedIcon,
                         },
                         {
                             title: 'Output',
                             href: '/review/ethics/output',
+                            icon: CircleCheckBigIcon,
                         },
                     ],
                 }),
@@ -172,14 +201,19 @@ export function createMenu(user: User): Record<string, NavGroup> {
                         {
                             title: 'Role',
                             href: '/users/role',
-                            icon: UsersIcon,
+                            icon: ShieldIcon,
                         },
                         {
                             title: 'Permission',
                             href: '/users/permission',
-                            icon: UsersIcon,
+                            icon: ZapIcon,
                         },
                     ],
+                }),
+                validate(permissions.MANAGE_BASE, {
+                    title: 'Program Studi',
+                    href: '/study-program',
+                    icon: Building2Icon,
                 }),
                 validate(permissions.MANAGE_FORM, {
                     title: 'Pilihan Form',

@@ -12,6 +12,7 @@ export const roles = {
 
 export const permissions = {
     MANAGE_USERS: 'manage users',
+    MANAGE_BASE: 'manage base',
     MANAGE_FORM: 'manage form',
     REQUEST_RESEARCH_REVIEW: 'request research review',
     REQUEST_COMMUNITY_SERVICE_REVIEW: 'request community service review',

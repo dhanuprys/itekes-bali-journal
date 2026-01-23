@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Enums\PermissionRole;
 use App\Models\User;
-use App\Services\PermissionAndRoleDictionary;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -16,32 +15,34 @@ class PermissionAndRoleSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin = Role::updateOrCreate(['name' => PermissionAndRoleDictionary::getRoleCode('ADMIN')]);
-        $lecture = Role::updateOrCreate(['name' => PermissionAndRoleDictionary::getRoleCode('LECTURE')]);
-        $guest = Role::updateOrCreate(['name' => PermissionAndRoleDictionary::getRoleCode('GUEST')]);
-        $operator = Role::updateOrCreate(['name' => PermissionAndRoleDictionary::getRoleCode('OPERATOR')]);
-        $reviewerResearch = Role::updateOrCreate(['name' => PermissionAndRoleDictionary::getRoleCode('REVIEWER_RESEARCH')]);
-        $reviewerCommunityService = Role::updateOrCreate(['name' => PermissionAndRoleDictionary::getRoleCode('REVIEWER_COMMUNITY_SERVICE')]);
+        $admin = Role::updateOrCreate(['name' => PermissionRole::R_ADMIN->value]);
+        $lecture = Role::updateOrCreate(['name' => PermissionRole::R_LECTURE->value]);
+        $guest = Role::updateOrCreate(['name' => PermissionRole::R_GUEST->value]);
+        $operator = Role::updateOrCreate(['name' => PermissionRole::R_OPERATOR->value]);
+        $reviewerResearch = Role::updateOrCreate(['name' => PermissionRole::R_REVIEWER_RESEARCH->value]);
+        $reviewerCommunityService = Role::updateOrCreate(['name' => PermissionRole::R_REVIEWER_COMMUNITY_SERVICE->value]);
 
         // manage users, roles, permissions
-        $permissionManageUsers = Permission::updateOrCreate(['name' => PermissionAndRoleDictionary::getPermissionCode('MANAGE_USERS')]);
+        $permissionManageUsers = Permission::updateOrCreate(['name' => PermissionRole::P_MANAGE_USERS->value]);
+        // manage base values (e.g study program)
+        $permissionManageBase = Permission::updateOrCreate(['name' => PermissionRole::P_MANAGE_BASE->value]);
         // manage options based table
-        $permissionManageForm = Permission::updateOrCreate(['name' => PermissionAndRoleDictionary::getPermissionCode('MANAGE_FORM')]);
+        $permissionManageForm = Permission::updateOrCreate(['name' => PermissionRole::P_MANAGE_FORM->value]);
         // apply for review
-        $permissionRequestResearchReview = Permission::updateOrCreate(['name' => PermissionAndRoleDictionary::getPermissionCode('REQUEST_RESEARCH_REVIEW')]);
-        $permissionRequestCommunityServiceReview = Permission::updateOrCreate(['name' => PermissionAndRoleDictionary::getPermissionCode('REQUEST_COMMUNITY_SERVICE_REVIEW')]);
-        $permissionRequestEthicsReview = Permission::updateOrCreate(['name' => PermissionAndRoleDictionary::getPermissionCode('REQUEST_ETHICS_REVIEW')]);
+        $permissionRequestResearchReview = Permission::updateOrCreate(['name' => PermissionRole::P_REQUEST_RESEARCH_REVIEW->value]);
+        $permissionRequestCommunityServiceReview = Permission::updateOrCreate(['name' => PermissionRole::P_REQUEST_COMMUNITY_SERVICE_REVIEW->value]);
+        $permissionRequestEthicsReview = Permission::updateOrCreate(['name' => PermissionRole::P_REQUEST_ETHICS_REVIEW->value]);
         // manage reviewer assignment
-        $permissionAssignReviewerResearch = Permission::updateOrCreate(['name' => PermissionAndRoleDictionary::getPermissionCode('ASSIGN_REVIEWER_RESEARCH')]);
-        $permissionAssignReviewerCommunityService = Permission::updateOrCreate(['name' => PermissionAndRoleDictionary::getPermissionCode('ASSIGN_REVIEWER_COMMUNITY_SERVICE')]);
-        $permissionReviewResearch = Permission::updateOrCreate(['name' => PermissionAndRoleDictionary::getPermissionCode('REVIEW_RESEARCH')]);
-        $permissionReviewCommunityService = Permission::updateOrCreate(['name' => PermissionAndRoleDictionary::getPermissionCode('REVIEW_COMMUNITY_SERVICE')]);
-        $permissionReviewEthics = Permission::updateOrCreate(['name' => PermissionAndRoleDictionary::getPermissionCode('REVIEW_ETHICS')]);
-        $permissionViewAllResearch = Permission::updateOrCreate(['name' => PermissionAndRoleDictionary::getPermissionCode('VIEW_ALL_RESEARCH')]);
-        $permissionViewAllCommunityService = Permission::updateOrCreate(['name' => PermissionAndRoleDictionary::getPermissionCode('VIEW_ALL_COMMUNITY_SERVICE')]);
-        $permissionViewAllEthics = Permission::updateOrCreate(['name' => PermissionAndRoleDictionary::getPermissionCode('VIEW_ALL_ETHICS')]);
+        $permissionAssignReviewerResearch = Permission::updateOrCreate(['name' => PermissionRole::P_ASSIGN_REVIEWER_RESEARCH->value]);
+        $permissionAssignReviewerCommunityService = Permission::updateOrCreate(['name' => PermissionRole::P_ASSIGN_REVIEWER_COMMUNITY_SERVICE->value]);
+        $permissionReviewResearch = Permission::updateOrCreate(['name' => PermissionRole::P_REVIEW_RESEARCH->value]);
+        $permissionReviewCommunityService = Permission::updateOrCreate(['name' => PermissionRole::P_REVIEW_COMMUNITY_SERVICE->value]);
+        $permissionReviewEthics = Permission::updateOrCreate(['name' => PermissionRole::P_REVIEW_ETHICS->value]);
+        $permissionViewAllResearch = Permission::updateOrCreate(['name' => PermissionRole::P_VIEW_ALL_RESEARCH->value]);
+        $permissionViewAllCommunityService = Permission::updateOrCreate(['name' => PermissionRole::P_VIEW_ALL_COMMUNITY_SERVICE->value]);
+        $permissionViewAllEthics = Permission::updateOrCreate(['name' => PermissionRole::P_VIEW_ALL_ETHICS->value]);
         // view for user logs
-        $permissionViewUserLogs = Permission::updateOrCreate(['name' => PermissionAndRoleDictionary::getPermissionCode('VIEW_USER_LOGS')]);
+        $permissionViewUserLogs = Permission::updateOrCreate(['name' => PermissionRole::P_VIEW_USER_LOGS->value]);
 
         $lecture->givePermissionTo([
             $permissionRequestResearchReview,
@@ -61,6 +62,7 @@ class PermissionAndRoleSeeder extends Seeder
             $permissionViewAllResearch,
             $permissionViewAllCommunityService,
             $permissionViewAllEthics,
+            $permissionViewUserLogs
         ]);
 
         $reviewerResearch->givePermissionTo([

@@ -69,7 +69,12 @@
                                             <SidebarMenuSubButton>
                                                 {#snippet child({ props })}
                                                     <Link class="flex items-center justify-between" href={subItem.href} {...props}>
-                                                        <span>{subItem.title}</span>
+                                                        <div class="flex items-center gap-x-2">
+                                                            {#if subItem.icon}
+                                                                <subItem.icon class="size-3" />
+                                                            {/if}
+                                                            <span>{subItem.title}</span>
+                                                        </div>
                                                         {#if subItem.badge}
                                                             <SidebarMenuBadge>{subItem.badge}</SidebarMenuBadge>
                                                         {/if}
