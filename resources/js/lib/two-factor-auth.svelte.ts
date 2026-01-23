@@ -20,9 +20,7 @@ export function createTwoFactorAuth() {
 
     async function fetchQrCode(): Promise<void> {
         try {
-            const { svg } = await fetchJson<{ svg: string; url: string }>(
-                route('two-factor.qr-code')
-            );
+            const { svg } = await fetchJson<{ svg: string; url: string }>(route('two-factor.qr-code'));
 
             qrCodeSvg = svg;
         } catch {
@@ -33,9 +31,7 @@ export function createTwoFactorAuth() {
 
     async function fetchSetupKey(): Promise<void> {
         try {
-            const { secretKey: key } = await fetchJson<{ secretKey: string }>(
-                route('two-factor.secret-key')
-            );
+            const { secretKey: key } = await fetchJson<{ secretKey: string }>(route('two-factor.secret-key'));
 
             manualSetupKey = key;
         } catch {
@@ -63,9 +59,7 @@ export function createTwoFactorAuth() {
     async function fetchRecoveryCodes(): Promise<void> {
         try {
             clearErrors();
-            recoveryCodesList = await fetchJson<string[]>(
-                route('two-factor.recovery-codes')
-            );
+            recoveryCodesList = await fetchJson<string[]>(route('two-factor.recovery-codes'));
         } catch {
             errors.push('Failed to fetch recovery codes');
             recoveryCodesList = [];
@@ -83,11 +77,21 @@ export function createTwoFactorAuth() {
     }
 
     return {
-        get errors() { return errors; },
-        get manualSetupKey() { return manualSetupKey; },
-        get qrCodeSvg() { return qrCodeSvg; },
-        get recoveryCodesList() { return recoveryCodesList; },
-        get hasSetupData() { return hasSetupData; },
+        get errors() {
+            return errors;
+        },
+        get manualSetupKey() {
+            return manualSetupKey;
+        },
+        get qrCodeSvg() {
+            return qrCodeSvg;
+        },
+        get recoveryCodesList() {
+            return recoveryCodesList;
+        },
+        get hasSetupData() {
+            return hasSetupData;
+        },
         clearSetupData,
         clearErrors,
         clearTwoFactorAuthData,
