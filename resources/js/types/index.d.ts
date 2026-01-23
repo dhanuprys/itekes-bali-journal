@@ -14,7 +14,14 @@ export interface NavItem {
     title: string;
     href: string;
     icon?: any;
+    badge?: string;
     isActive?: boolean;
+    items?: NavItem[];
+}
+
+export interface NavGroup {
+    label: string | null;
+    items: (NavItem | null)[];
 }
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
@@ -30,6 +37,8 @@ export interface User {
     name: string;
     email: string;
     avatar?: string;
+    roles: string[];
+    permissions: string[];
     email_verified_at: string | null;
     two_factor_confirmed_at: string | null;
     created_at: string;

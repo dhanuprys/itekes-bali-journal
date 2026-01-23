@@ -7,6 +7,7 @@
     import { ChevronsUpDown } from 'lucide-svelte';
 
     const user = $derived($page.props.auth.user);
+    $inspect(user);
 </script>
 
 <SidebarMenu>

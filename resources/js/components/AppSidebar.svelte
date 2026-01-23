@@ -4,27 +4,18 @@
     import NavUser from '@/components/NavUser.svelte';
     import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
     import { type NavItem } from '@/types';
-    import { Link } from '@inertiajs/svelte';
-    import { BookOpen, Folder, LayoutGrid } from 'lucide-svelte';
+    import { Link, page } from '@inertiajs/svelte';
     import AppLogo from './AppLogo.svelte';
+    import { BookOpen } from 'lucide-svelte';
+    import { createMenu } from '@/data/menu';
 
-    const mainNavItems: NavItem[] = [
-        {
-            title: 'Dashboard',
-            href: '/dashboard',
-            icon: LayoutGrid,
-        },
-    ];
+    const user = $derived($page.props.auth.user);
+    const menu = $derived(createMenu(user));
 
     const footerNavItems: NavItem[] = [
         {
-            title: 'Repository',
-            href: 'https://github.com/oseughu/svelte-starter-kit',
-            icon: Folder,
-        },
-        {
-            title: 'Documentation',
-            href: 'https://laravel.com/docs/starter-kits',
+            title: 'Changelog',
+            href: '/changelog',
             icon: BookOpen,
         },
     ];
@@ -44,7 +35,11 @@
     </SidebarHeader>
 
     <SidebarContent>
-        <NavMain items={mainNavItems} />
+        <NavMain group={menu.general} />
+        <NavMain group={menu.applyForReview} />
+        <NavMain group={menu.reviewerMenu} />
+        <NavMain group={menu.assignmentMenu} />
+        <NavMain group={menu.masterMenu} />
     </SidebarContent>
 
     <SidebarFooter>
