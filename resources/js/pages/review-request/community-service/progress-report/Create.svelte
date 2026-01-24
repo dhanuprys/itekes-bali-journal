@@ -1,0 +1,75 @@
+<script lang="ts">
+    import LayoutComposer from '@/layouts/LayoutComposer.svelte';
+    import AppLayout from '@/layouts/AppLayout.svelte';
+    import { type BreadcrumbItem } from '@/types';
+    import Heading from '@/components/Heading.svelte';
+    import ProgressReportForm from '@/components/review-request/ProgressReportForm.svelte';
+    import { useForm } from '@inertiajs/svelte';
+    import { Button } from '@/components/ui/button';
+    import { toast } from 'svelte-sonner';
+
+    let { submission, detail } = $props();
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        { title: 'Permintaan Review', href: '#' },
+        { title: 'Pengabdian Masyarakat', href: '#' },
+        { title: 'Laporan Kemajuan', href: route('apply.community_service.progress_report.index') },
+        { title: 'Buat Laporan', href: '#' },
+    ];
+
+    // Initialize form with proposal data
+    const form = useForm({
+        submission_id: submission.id,
+        final_title: detail.final_title || detail.title,
+        final_leader_name: detail.final_leader_name || detail.leader_name,
+        leader_nidn: detail.leader_nidn,
+        members: detail.members ? detail.members.map((m: any) => ({ name: m.name })) : [],
+        final_report_file: null,
+        manuscript_file: null,
+    });
+
+    function submit() {
+        form.post(route('apply.community_service.progress_report.store'), {
+            onSuccess: () => {
+                toast.success('Laporan kemajuan berhasil disimpan.');
+            },
+            onError: () => {
+                toast.error('Gagal menyimpan laporan. Periksa kembali input Anda.');
+            },
+        });
+    }
+</script>
+
+<svelte:head>
+    <title>Buat Laporan Kemajuan - Pengabdian</title>
+</svelte:head>
+
+<AppLayout {breadcrumbs}>
+    <LayoutComposer>
+        {#snippet header()}
+            <Heading title="Buat Laporan Kemajuan" description="Isi formulir laporan kemajuan/akhir pengabdian." />
+        {/snippet}
+
+        {#snippet children()}
+            <form
+                onsubmit={(e) => {
+                    e.preventDefault();
+                    submit();
+                }}
+            >
+                <ProgressReportForm {form} type="community-service" mode="create" />
+
+                <div class="mt-6 flex justify-end gap-3">
+                    <Button variant="outline" href={route('apply.community_service.progress_report.index')}>Batal</Button>
+                    <Button type="submit" disabled={form.processing}>
+                        {#if form.processing}
+                            Menyimpan...
+                        {:else}
+                            Simpan Laporan
+                        {/if}
+                    </Button>
+                </div>
+            </form>
+        {/snippet}
+    </LayoutComposer>
+</AppLayout>

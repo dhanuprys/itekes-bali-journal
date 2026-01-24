@@ -47,3 +47,61 @@ export interface User {
 }
 
 export type BreadcrumbItemType = BreadcrumbItem;
+
+export interface ResearchSubmission {
+    id: number;
+    user_id: number;
+    stage: string;
+    status: string;
+    created_at: string;
+    updated_at: string;
+    latest_detail?: ResearchSubmissionDetail;
+    details?: ResearchSubmissionDetail[];
+}
+
+export interface ResearchSubmissionDetail {
+    id: number;
+    research_submission_id: number;
+    title: string;
+    leader_name: string;
+    leader_nidn: string;
+    budget: number;
+    proposal_path: string;
+    study_program_id: number;
+    research_schema_id?: number;
+    research_target_id?: number;
+    study_program?: any;
+    research_schema?: any;
+    research_target?: any;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface CommunityServiceSubmission {
+    id: number;
+    user_id: number;
+    stage: string;
+    status: string;
+    created_at: string;
+    updated_at: string;
+    latest_detail?: CommunityServiceSubmissionDetail;
+    details?: CommunityServiceSubmissionDetail[];
+}
+
+export interface CommunityServiceSubmissionDetail {
+    id: number;
+    community_service_submission_id: number;
+    title: string;
+    leader_name: string;
+    leader_nidn: string;
+    budget: number;
+    proposal_path: string;
+    study_program_id: number;
+    community_service_schema_id?: number;
+    community_service_target_id?: number;
+    study_program?: any;
+    schema?: any;
+    target?: any;
+    created_at: string;
+    updated_at: string;
+}

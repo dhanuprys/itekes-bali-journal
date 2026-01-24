@@ -17,10 +17,10 @@
 </script>
 
 <svelte:head>
-    <title>Forgot Password</title>
+    <title>Lupa Kata Sandi</title>
 </svelte:head>
 
-<AuthLayout title="Forgot password" description="Enter your email to receive a password reset link">
+<AuthLayout title="Lupa Kata Sandi" description="Masukkan email Anda untuk menerima tautan reset kata sandi">
     {#if status}
         <div class="mb-4 text-center text-sm font-medium text-green-600">
             {status}
@@ -31,8 +31,8 @@
         <Form method="post" action={route('password.email')}>
             {#snippet children({ errors, processing }: BaseFormSnippetProps)}
                 <div class="grid gap-2">
-                    <Label for="email">Email address</Label>
-                    <Input id="email" type="email" name="email" autocomplete="off" autofocus placeholder="email@example.com" />
+                    <Label for="email">Alamat Email</Label>
+                    <Input id="email" type="email" name="email" autocomplete="off" autofocus placeholder="email@contoh.com" />
                     <InputError message={errors.email} />
                 </div>
 
@@ -41,15 +41,15 @@
                         {#if processing}
                             <LoaderCircle class="h-4 w-4 animate-spin" />
                         {/if}
-                        Email password reset link
+                        Kirim Tautan Reset Kata Sandi
                     </Button>
                 </div>
             {/snippet}
         </Form>
 
         <div class="space-x-1 text-center text-sm text-muted-foreground">
-            <span>Or, return to</span>
-            <TextLink href={route('login')}>log in</TextLink>
+            <span>Atau, kembali ke</span>
+            <TextLink href={route('login')}>halaman masuk</TextLink>
         </div>
     </div>
 </AuthLayout>

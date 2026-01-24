@@ -9,4 +9,5 @@ enum CommunityServiceStatus: string
     case REVISION_NEEDED = 'revision_needed';
     case APPROVED = 'approved';
     case REJECTED = 'rejected';
+    case CANCELED = 'canceled';
 }

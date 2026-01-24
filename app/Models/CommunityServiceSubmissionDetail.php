@@ -12,6 +12,7 @@ class CommunityServiceSubmissionDetail extends Model
     use HasFactory;
 
     protected $fillable = [
+        // proposal (locked when already on progress-report)
         'community_service_submission_id',
         'leader_name',
         'study_program_id',
@@ -19,6 +20,9 @@ class CommunityServiceSubmissionDetail extends Model
         'budget',
         'community_service_target_id',
         'proposal_path',
+        // it has members (and still editable even on progress-report)
+
+        // progress-report / final-report
         'community_service_schema_id',
         'final_leader_name',
         'leader_nidn',
@@ -59,6 +63,6 @@ class CommunityServiceSubmissionDetail extends Model
 
     public function comments(): HasMany
     {
-        return $this->hasMany(CommunityServiceComment::class, 'community_service_subdetail_id');
+        return $this->hasMany(CommunityServiceSubmissionComment::class, 'community_service_subdetail_id');
     }
 }

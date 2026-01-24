@@ -4,25 +4,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CommunityServiceSubmission extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['user_id', 'stage', 'status'];
+    protected $fillable = [
+        'user_id',
+        'stage',
+        'status',
+    ];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function detail(): HasOne
+    public function details(): HasMany
     {
-        return $this->hasOne(CommunityServiceSubmissionDetail::class);
+        return $this->hasMany(CommunityServiceSubmissionDetail::class);
     }
 
     public function reviewers(): HasMany
@@ -30,8 +33,8 @@ class CommunityServiceSubmission extends Model
         return $this->hasMany(CommunityServiceSubmissionReviewer::class);
     }
 
-    public function logs(): HasMany
+    public function latestDetail()
     {
-        return $this->hasMany(CommunityServiceSubmissionLog::class);
+        return $this->hasOne(CommunityServiceSubmissionDetail::class)->latestOfMany();
     }
 }

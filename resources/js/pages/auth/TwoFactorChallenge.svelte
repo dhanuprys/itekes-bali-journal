@@ -19,14 +19,14 @@
     const authConfigContent = $derived<AuthConfigContent>(
         showRecoveryInput
             ? {
-                  title: 'Recovery Code',
-                  description: 'Please confirm access to your account by entering one of your emergency recovery codes.',
-                  toggleText: 'login using an authentication code',
+                  title: 'Kode Pemulihan',
+                  description: 'Harap konfirmasi akses ke akun Anda dengan memasukkan salah satu kode pemulihan darurat Anda.',
+                  toggleText: 'masuk menggunakan kode autentikasi',
               }
             : {
-                  title: 'Authentication Code',
-                  description: 'Enter the authentication code provided by your authenticator application.',
-                  toggleText: 'login using a recovery code',
+                  title: 'Kode Autentikasi',
+                  description: 'Masukkan kode autentikasi yang disediakan oleh aplikasi autentikator Anda.',
+                  toggleText: 'masuk menggunakan kode pemulihan',
               },
     );
 
@@ -38,7 +38,7 @@
 </script>
 
 <svelte:head>
-    <title>Two-Factor Authentication</title>
+    <title>Autentikasi Dua Faktor</title>
 </svelte:head>
 
 <AuthLayout title={authConfigContent.title} description={authConfigContent.description}>
@@ -61,9 +61,9 @@
                         </div>
                         <InputError message={errors.code} />
                     </div>
-                    <Button type="submit" class="w-full" disabled={processing}>Continue</Button>
+                    <Button type="submit" class="w-full" disabled={processing}>Lanjutkan</Button>
                     <div class="text-center text-sm text-muted-foreground">
-                        <span>or you can </span>
+                        <span>atau Anda dapat </span>
                         <button
                             type="button"
                             class="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
@@ -77,12 +77,12 @@
         {:else}
             <Form method="post" action={route('two-factor.login')} class="space-y-4" resetOnError={true}>
                 {#snippet children({ errors, processing, clearErrors }: BaseFormSnippetProps & { clearErrors: () => void })}
-                    <Input name="recovery_code" type="text" placeholder="Enter recovery code" autofocus={showRecoveryInput} required />
+                    <Input name="recovery_code" type="text" placeholder="Masukkan kode pemulihan" autofocus={showRecoveryInput} required />
                     <InputError message={errors.recovery_code} />
-                    <Button type="submit" class="w-full" disabled={processing}>Continue</Button>
+                    <Button type="submit" class="w-full" disabled={processing}>Lanjutkan</Button>
 
                     <div class="text-center text-sm text-muted-foreground">
-                        <span>or you can </span>
+                        <span>atau Anda dapat </span>
                         <button
                             type="button"
                             class="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"

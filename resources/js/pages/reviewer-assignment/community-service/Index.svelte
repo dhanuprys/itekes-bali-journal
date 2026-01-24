@@ -3,35 +3,29 @@
     import AppLayout from '@/layouts/AppLayout.svelte';
     import { type BreadcrumbItem } from '@/types';
     import Heading from '@/components/Heading.svelte';
+    import AssignmentTable from '@/components/reviewer-assignment/AssignmentTable.svelte';
+
+    let { submissions, reviewers, filters } = $props();
 
     const breadcrumbs: BreadcrumbItem[] = [
-        {
-            title: 'Penugasan Reviewer',
-            href: '#',
-        },
-        {
-            title: 'Pengabdian Masyarakat',
-            href: '#',
-        },
+        { title: 'Penugasan Reviewer', href: '#' },
+        { title: 'Pengabdian Masyarakat', href: '#' },
     ];
 </script>
 
 <svelte:head>
-    <title>Penugasan Pengabdian Masyarakat</title>
+    <title>Atur Reviewer Pengabdian</title>
 </svelte:head>
 
 <AppLayout {breadcrumbs}>
     <LayoutComposer>
         {#snippet header()}
-            <Heading title="Penugasan Pengabdian Masyarakat" description="Kelola penugasan reviewer untuk pengabdian masyarakat" />
+            <Heading title="Atur Reviewer Pengabdian" description="Tetapkan reviewer untuk setiap usulan pengabdian." />
         {/snippet}
 
         {#snippet children()}
-            <div class="flex h-96 items-center justify-center rounded-lg border border-dashed shadow-sm">
-                <div class="flex flex-col items-center gap-1 text-center">
-                    <h3 class="text-2xl font-bold tracking-tight">Konten Placeholder</h3>
-                    <p class="text-sm text-muted-foreground">Bagian ini sedang dalam pengembangan.</p>
-                </div>
+            <div class="bg-background shadow-sm rounded-lg">
+                <AssignmentTable {submissions} {reviewers} {filters} assignRouteName="reviewer_assignment.community_service.store" />
             </div>
         {/snippet}
     </LayoutComposer>

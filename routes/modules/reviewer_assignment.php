@@ -15,6 +15,7 @@ Route::middleware(['auth'])
                 ->group(
                     function () {
                         Route::get('', [ReviewerAssignment\ResearchController::class, 'index'])->name('index');
+                        Route::post('{id}/assign', [ReviewerAssignment\ResearchController::class, 'store'])->name('store');
                     }
                 );
 
@@ -24,6 +25,7 @@ Route::middleware(['auth'])
                 ->group(
                     function () {
                         Route::get('', [ReviewerAssignment\CommunityServiceController::class, 'index'])->name('index');
+                        Route::post('{id}/assign', [ReviewerAssignment\CommunityServiceController::class, 'store'])->name('store');
                     }
                 );
         }

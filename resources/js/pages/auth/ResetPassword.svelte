@@ -17,10 +17,10 @@
 </script>
 
 <svelte:head>
-    <title>Reset Password</title>
+    <title>Reset Kata Sandi</title>
 </svelte:head>
 
-<AuthLayout title="Reset password" description="Please enter your new password below">
+<AuthLayout title="Reset Kata Sandi" description="Silakan masukkan kata sandi baru Anda">
     <Form
         method="post"
         action={route('password.store')}
@@ -36,7 +36,7 @@
                 </div>
 
                 <div class="grid gap-2">
-                    <Label for="password">Password</Label>
+                    <Label for="password">Kata Sandi Baru</Label>
                     <Input
                         id="password"
                         type="password"
@@ -44,20 +44,20 @@
                         autocomplete="new-password"
                         class="mt-1 block w-full"
                         autofocus
-                        placeholder="Password"
+                        placeholder="Kata Sandi"
                     />
                     <InputError message={errors.password} />
                 </div>
 
                 <div class="grid gap-2">
-                    <Label for="password_confirmation">Confirm Password</Label>
+                    <Label for="password_confirmation">Konfirmasi Kata Sandi</Label>
                     <Input
                         id="password_confirmation"
                         type="password"
                         name="password_confirmation"
                         autocomplete="new-password"
                         class="mt-1 block w-full"
-                        placeholder="Confirm password"
+                        placeholder="Konfirmasi kata sandi"
                     />
                     <InputError message={errors.password_confirmation} />
                 </div>
@@ -66,7 +66,7 @@
                     {#if processing}
                         <LoaderCircle class="h-4 w-4 animate-spin" />
                     {/if}
-                    Reset password
+                    Reset Kata Sandi
                 </Button>
             </div>
         {/snippet}

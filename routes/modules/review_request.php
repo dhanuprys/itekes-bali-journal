@@ -16,8 +16,10 @@ Route::middleware(['auth', 'permission:' . PermissionRole::P_REQUEST_RESEARCH_RE
             Route::prefix('proposal')->as('proposal.')->group(
                 function () {
                     Route::get('', [ReviewRequest\Research\ProposalController::class, 'index'])->name('index');
-                    Route::post('', [ReviewRequest\Research\ProposalController::class, 'create'])->name('create');
+                    Route::get('create', [ReviewRequest\Research\ProposalController::class, 'create'])->name('create');
+                    Route::post('', [ReviewRequest\Research\ProposalController::class, 'store'])->name('store');
                     Route::get('{id}', [ReviewRequest\Research\ProposalController::class, 'show'])->name('show');
+                    Route::get('{id}/edit', [ReviewRequest\Research\ProposalController::class, 'edit'])->name('edit');
                     Route::post('{id}/revise', [ReviewRequest\Research\ProposalController::class, 'revise'])->name('revise');
 
                     Route::post('{id}/comment', [ReviewRequest\Research\ProposalController::class, 'comment'])->name('comment');
@@ -27,6 +29,8 @@ Route::middleware(['auth', 'permission:' . PermissionRole::P_REQUEST_RESEARCH_RE
             Route::prefix('progress-report')->as('progress_report.')->group(
                 function () {
                     Route::get('', [ReviewRequest\Research\ProgressReportController::class, 'index'])->name('index');
+                    Route::get('create', [ReviewRequest\Research\ProgressReportController::class, 'create'])->name('create');
+                    Route::post('', [ReviewRequest\Research\ProgressReportController::class, 'store'])->name('store');
                     Route::get('{id}', [ReviewRequest\Research\ProgressReportController::class, 'show'])->name('show');
                     Route::post('{id}/revise', [ReviewRequest\Research\ProgressReportController::class, 'revise'])->name('revise');
 
@@ -55,8 +59,10 @@ Route::middleware(['auth', 'permission:' . PermissionRole::P_REQUEST_COMMUNITY_S
             Route::prefix('proposal')->as('proposal.')->group(
                 function () {
                     Route::get('', [ReviewRequest\CommunityService\ProposalController::class, 'index'])->name('index');
-                    Route::post('', [ReviewRequest\CommunityService\ProposalController::class, 'create'])->name('create');
+                    Route::get('create', [ReviewRequest\CommunityService\ProposalController::class, 'create'])->name('create');
+                    Route::post('', [ReviewRequest\CommunityService\ProposalController::class, 'store'])->name('store');
                     Route::get('{id}', [ReviewRequest\CommunityService\ProposalController::class, 'show'])->name('show');
+                    Route::get('{id}/edit', [ReviewRequest\CommunityService\ProposalController::class, 'edit'])->name('edit');
                     Route::post('{id}/revise', [ReviewRequest\CommunityService\ProposalController::class, 'revise'])->name('revise');
 
                     Route::post('{id}/comment', [ReviewRequest\CommunityService\ProposalController::class, 'comment'])->name('comment');
@@ -66,6 +72,8 @@ Route::middleware(['auth', 'permission:' . PermissionRole::P_REQUEST_COMMUNITY_S
             Route::prefix('progress-report')->as('progress_report.')->group(
                 function () {
                     Route::get('', [ReviewRequest\CommunityService\ProgressReportController::class, 'index'])->name('index');
+                    Route::get('create', [ReviewRequest\CommunityService\ProgressReportController::class, 'create'])->name('create');
+                    Route::post('', [ReviewRequest\CommunityService\ProgressReportController::class, 'store'])->name('store');
                     Route::get('{id}', [ReviewRequest\CommunityService\ProgressReportController::class, 'show'])->name('show');
                     Route::post('{id}/revise', [ReviewRequest\CommunityService\ProgressReportController::class, 'revise'])->name('revise');
 

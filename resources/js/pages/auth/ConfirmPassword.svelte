@@ -10,15 +10,15 @@
 </script>
 
 <svelte:head>
-    <title>Confirm Password</title>
+    <title>Konfirmasi Kata Sandi</title>
 </svelte:head>
 
-<AuthLayout title="Confirm your password" description="This is a secure area of the application. Please confirm your password before continuing.">
+<AuthLayout title="Konfirmasi Kata Sandi" description="Ini adalah area aman dari aplikasi. Harap konfirmasi kata sandi Anda sebelum melanjutkan.">
     <Form method="post" action={route('password.confirm')} resetOnSuccess>
         {#snippet children({ errors, processing }: BaseFormSnippetProps)}
             <div class="space-y-6">
                 <div class="grid gap-2">
-                    <Label for="password">Password</Label>
+                    <Label for="password">Kata Sandi</Label>
                     <Input
                         id="password"
                         name="password"
@@ -37,7 +37,7 @@
                         {#if processing}
                             <LoaderCircle class="h-4 w-4 animate-spin" />
                         {/if}
-                        Confirm Password
+                        Konfirmasi Kata Sandi
                     </Button>
                 </div>
             </div>

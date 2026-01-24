@@ -2,6 +2,7 @@
 
 namespace App\Actions\Fortify;
 
+use App\Enums\PermissionRole;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -21,6 +22,14 @@ class CreateNewUser implements CreatesNewUsers
     {
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
+            'username' => [
+                'required',
+                'string',
+                'lowercase',
+                'max:255',
+                'regex:/^[a-z0-9_]+$/',
+                Rule::unique(User::class),
+            ],
             'email' => [
                 'required',
                 'string',
@@ -31,10 +40,16 @@ class CreateNewUser implements CreatesNewUsers
             'password' => $this->passwordRules(),
         ])->validate();
 
-        return User::create([
+        $user = User::create([
             'name' => $input['name'],
+            'username' => $input['username'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
         ]);
+
+        // automatically assign as guest
+        $user->assignRole(PermissionRole::R_GUEST->value);
+
+        return $user;
     }
 }

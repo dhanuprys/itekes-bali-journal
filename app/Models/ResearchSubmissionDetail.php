@@ -12,6 +12,7 @@ class ResearchSubmissionDetail extends Model
     use HasFactory;
 
     protected $fillable = [
+        // proposal
         'research_submission_id',
         'leader_name',
         'study_program_id',
@@ -19,6 +20,9 @@ class ResearchSubmissionDetail extends Model
         'budget',
         'research_target_id',
         'proposal_path',
+        // it has members (and still editable even on progress-report)
+
+        // progress-report / final-report
         'research_schema_id',
         'final_leader_name',
         'leader_nidn',
