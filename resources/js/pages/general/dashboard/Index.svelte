@@ -1,7 +1,7 @@
 <script lang="ts">
-    import PlaceholderPattern from '@/components/PlaceholderPatternn.svelte';
     import AppLayout from '@/layouts/AppLayout.svelte';
     import { type BreadcrumbItem } from '@/types';
+    import { Construction } from 'lucide-svelte';
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
@@ -16,20 +16,17 @@
 </svelte:head>
 
 <AppLayout {breadcrumbs}>
-    <div class="space-y-4 px-4 pt-4 overflow-x-auto">
-        <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-            <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                <PlaceholderPattern class="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
+    <div class="flex h-[calc(100vh-7rem)] items-center justify-center p-4">
+        <div class="flex flex-col items-center justify-center space-y-4 text-center">
+            <div class="flex h-20 w-20 items-center justify-center rounded-full bg-neutral-100 dark:bg-neutral-800">
+                <Construction class="h-10 w-10 text-neutral-500 dark:text-neutral-400" />
             </div>
-            <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                <PlaceholderPattern class="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
+            <div class="space-y-2">
+                <h3 class="text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">Coming Soon ✨</h3>
+                <p class="max-w-[500px] text-neutral-500 dark:text-neutral-400">
+                    Mohon maaf, halaman dashboard saat ini sedang dikembangkan dan akan tersedia beberapa saat lagi.
+                </p>
             </div>
-            <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                <PlaceholderPattern class="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-            </div>
-        </div>
-        <div class="relative h-[calc(100vh-21rem)] overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-            <PlaceholderPattern class="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
         </div>
     </div>
 </AppLayout>
