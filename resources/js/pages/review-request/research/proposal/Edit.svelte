@@ -8,6 +8,7 @@
     import * as Alert from '@/components/ui/alert';
     import ProposalForm from '@/components/review-request/ProposalForm.svelte';
     import RevisionCommentSheet from '@/components/review-request/RevisionCommentSheet.svelte';
+    import { uploadState } from '@/stores/upload-state.svelte';
 
     let { submission, detail, studyPrograms = [], researchSchemas = [], researchTargets = [] } = $props();
 
@@ -26,11 +27,12 @@
         budget: detail.budget || null,
         research_schema_id: detail.research_schema_id || '',
         research_target_id: detail.research_target_id || '',
-        proposal_file: null as File | null,
+        proposal_path: detail.proposal_path || '',
         members: detail.members ? detail.members.map((m: any) => ({ name: m.name })) : [],
     });
 
     function submit() {
+        if (uploadState.isUploading) return;
         $form.post(route('apply.research.proposal.revise', submission.id), {
             forceFormData: true,
         });
@@ -70,7 +72,7 @@
                 class="space-y-6"
             >
                 <ProposalForm
-                    form={$form}
+                    bind:form={$form}
                     type="research"
                     mode="revise"
                     data={{
@@ -80,8 +82,11 @@
                     }}
                 />
 
-                <div class="flex justify-end">
-                    <Button type="submit" disabled={$form.processing}>
+                <div class="flex justify-end items-center gap-4">
+                    {#if uploadState.isUploading}
+                        <span class="text-sm text-muted-foreground animate-pulse">Mengunggah file...</span>
+                    {/if}
+                    <Button type="submit" disabled={$form.processing || uploadState.isUploading}>
                         {#if $form.processing}
                             Menyimpan...
                         {:else}

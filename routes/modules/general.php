@@ -16,4 +16,5 @@ Route::middleware(['auth'])
         Route::get('notifications', [General\NotificationController::class, 'index'])->name('notifications');
 
         Route::get('changelog', [General\DashboardController::class, 'changelog'])->name('changelog');
+        Route::post('storage-upload', [General\StorageUploadController::class, 'upload'])->name('storage.upload');
     });

@@ -7,6 +7,8 @@
     import { Button } from '@/components/ui/button';
     import ProposalForm from '@/components/review-request/ProposalForm.svelte';
 
+    import { uploadState } from '@/stores/upload-state.svelte';
+
     let { studyPrograms = [], communityServiceSchemas = [], communityServiceTargets = [] } = $props();
 
     const breadcrumbs: BreadcrumbItem[] = [
@@ -24,11 +26,12 @@
         budget: null,
         community_service_schema_id: '',
         community_service_target_id: '',
-        proposal_file: null as File | null,
+        proposal_path: '', // Changed from proposal_file
         members: [] as { name: string }[],
     });
 
     function submit() {
+        if (uploadState.isUploading) return;
         $form.post(route('apply.community_service.proposal.store'), {
             forceFormData: true,
         });
@@ -54,7 +57,7 @@
                 class="space-y-6"
             >
                 <ProposalForm
-                    form={$form}
+                    bind:form={$form}
                     type="community-service"
                     mode="create"
                     data={{
@@ -64,8 +67,11 @@
                     }}
                 />
 
-                <div class="flex justify-end">
-                    <Button type="submit" disabled={$form.processing}>
+                <div class="flex justify-end items-center gap-4">
+                    {#if uploadState.isUploading}
+                        <span class="text-sm text-muted-foreground animate-pulse">Mengunggah file...</span>
+                    {/if}
+                    <Button type="submit" disabled={$form.processing || uploadState.isUploading}>
                         {#if $form.processing}
                             Menyimpan...
                         {:else}

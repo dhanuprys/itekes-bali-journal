@@ -8,7 +8,7 @@ export const roles = {
     OPERATOR: 'operator',
     REVIEWER_RESEARCH: 'reviewer-research',
     REVIEWER_COMMUNITY_SERVICE: 'reviewer-community-service',
-};
+} as const;
 
 export const permissions = {
     MANAGE_USERS: 'manage users',
@@ -26,4 +26,4 @@ export const permissions = {
     VIEW_ALL_COMMUNITY_SERVICE: 'view all community service',
     VIEW_ALL_ETHICS: 'view all ethics',
     VIEW_USER_LOGS: 'view user logs',
-};
+} as const;

@@ -16,8 +16,18 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
+use App\Enums\StorageUploadAction;
+use App\Services\StorageUploadService;
+
 class ProposalController extends Controller
 {
+    protected $uploadService;
+
+    public function __construct(StorageUploadService $uploadService)
+    {
+        $this->uploadService = $uploadService;
+    }
+
     public function index()
     {
         $submissions = CommunityServiceSubmission::with(['latestDetail'])
@@ -35,7 +45,6 @@ class ProposalController extends Controller
     {
         return Inertia::render('review-request/community-service/proposal/Create', [
             'studyPrograms' => StudyProgram::all(),
-            'communityServiceSchemas' => CommunityServiceSchema::all(),
             'communityServiceTargets' => CommunityServiceTarget::all(),
         ]);
     }
@@ -44,13 +53,11 @@ class ProposalController extends Controller
     {
         $validated = $request->validate([
             'leader_name' => 'required|string|max:255',
-            'leader_nidn' => 'required|string|max:50',
             'study_program_id' => 'required|exists:study_programs,id',
             'title' => 'required|string',
             'budget' => 'nullable|numeric',
-            'community_service_schema_id' => 'nullable|exists:community_service_schema,id',
             'community_service_target_id' => 'nullable|exists:community_service_targets,id',
-            'proposal_file' => 'required|file|mimes:pdf,doc,docx|max:10240',
+            'proposal_path' => 'required|string|max:2048', // Changed from proposal_file
             'members' => 'nullable|array',
             'members.*.name' => 'required|string|max:255',
         ]);
@@ -62,16 +69,16 @@ class ProposalController extends Controller
                 'stage' => CommunityServiceReviewStage::PROPOSAL,
             ]);
 
-            $path = $request->file('proposal_file')->store('community-service-proposals', 'public');
+            // Mark the pre-uploaded file as used
+            $path = $validated['proposal_path'];
+            $this->uploadService->markAsUsed($path);
 
             $detail = CommunityServiceSubmissionDetail::create([
                 'community_service_submission_id' => $submission->id,
                 'leader_name' => $validated['leader_name'],
-                'leader_nidn' => $validated['leader_nidn'],
                 'study_program_id' => $validated['study_program_id'],
                 'title' => $validated['title'],
                 'budget' => $validated['budget'] ?? 0,
-                'community_service_schema_id' => $validated['community_service_schema_id'],
                 'community_service_target_id' => $validated['community_service_target_id'],
                 'proposal_path' => $path,
             ]);
@@ -93,7 +100,6 @@ class ProposalController extends Controller
     {
         $submission = CommunityServiceSubmission::with([
             'latestDetail.studyProgram',
-            'latestDetail.schema',
             'latestDetail.target',
             'latestDetail.members'
         ])
@@ -121,7 +127,6 @@ class ProposalController extends Controller
             'submission' => $submission,
             'detail' => $submission->latestDetail,
             'studyPrograms' => StudyProgram::all(),
-            'communityServiceSchemas' => CommunityServiceSchema::all(),
             'communityServiceTargets' => CommunityServiceTarget::all(),
         ]);
     }
@@ -132,33 +137,27 @@ class ProposalController extends Controller
 
         $validated = $request->validate([
             'leader_name' => 'required|string|max:255',
-            'leader_nidn' => 'required|string|max:50',
             'study_program_id' => 'required|exists:study_programs,id',
             'title' => 'required|string',
             'budget' => 'nullable|numeric',
-            'community_service_schema_id' => 'nullable|exists:community_service_schema,id',
             'community_service_target_id' => 'nullable|exists:community_service_targets,id',
-            'proposal_file' => 'nullable|file|mimes:pdf,doc,docx|max:10240',
+            'proposal_path' => 'required|string|max:2048',
             'members' => 'nullable|array',
             'members.*.name' => 'required|string|max:255',
         ]);
 
         DB::transaction(function () use ($validated, $request, $submission) {
             $latestDetail = $submission->latestDetail;
-            $path = $latestDetail->proposal_path;
-
-            if ($request->hasFile('proposal_file')) {
-                $path = $request->file('proposal_file')->store('community-service-proposals', 'public');
-            }
+            // Mark the file as used
+            $path = $validated['proposal_path'];
+            $this->uploadService->markAsUsed($path);
 
             $newDetail = CommunityServiceSubmissionDetail::create([
                 'community_service_submission_id' => $submission->id,
                 'leader_name' => $validated['leader_name'],
-                'leader_nidn' => $validated['leader_nidn'],
                 'study_program_id' => $validated['study_program_id'],
                 'title' => $validated['title'],
                 'budget' => $validated['budget'] ?? 0,
-                'community_service_schema_id' => $validated['community_service_schema_id'],
                 'community_service_target_id' => $validated['community_service_target_id'],
                 'proposal_path' => $path,
             ]);

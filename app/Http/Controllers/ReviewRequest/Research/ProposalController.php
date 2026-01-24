@@ -15,9 +15,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use App\Enums\StorageUploadAction;
+use App\Services\StorageUploadService;
 
 class ProposalController extends Controller
 {
+    protected $uploadService;
+
+    public function __construct(StorageUploadService $uploadService)
+    {
+        $this->uploadService = $uploadService;
+    }
+
     public function index()
     {
         $submissions = ResearchSubmission::with(['latestDetail'])
@@ -35,7 +44,6 @@ class ProposalController extends Controller
     {
         return Inertia::render('review-request/research/proposal/Create', [
             'studyPrograms' => StudyProgram::all(),
-            'researchSchemas' => ResearchSchema::all(),
             'researchTargets' => ResearchTarget::all(),
         ]);
     }
@@ -44,13 +52,11 @@ class ProposalController extends Controller
     {
         $validated = $request->validate([
             'leader_name' => 'required|string|max:255',
-            'leader_nidn' => 'required|string|max:50',
             'study_program_id' => 'required|exists:study_programs,id',
             'title' => 'required|string',
             'budget' => 'nullable|numeric',
-            'research_schema_id' => 'nullable|exists:research_schema,id',
             'research_target_id' => 'nullable|exists:research_targets,id',
-            'proposal_file' => 'required|file|mimes:pdf,doc,docx|max:10240',
+            'proposal_path' => 'required|string|max:2048', // Changed from proposal_file
             'members' => 'nullable|array',
             'members.*.name' => 'required|string|max:255',
         ]);
@@ -62,16 +68,16 @@ class ProposalController extends Controller
                 'stage' => ResearchReviewStage::PROPOSAL,
             ]);
 
-            $path = $request->file('proposal_file')->store('research-proposals', 'public');
+            // Mark the pre-uploaded file as used
+            $path = $validated['proposal_path'];
+            $this->uploadService->markAsUsed($path);
 
             $detail = ResearchSubmissionDetail::create([
                 'research_submission_id' => $submission->id,
                 'leader_name' => $validated['leader_name'],
-                'leader_nidn' => $validated['leader_nidn'],
                 'study_program_id' => $validated['study_program_id'],
                 'title' => $validated['title'],
                 'budget' => $validated['budget'] ?? 0,
-                'research_schema_id' => $validated['research_schema_id'],
                 'research_target_id' => $validated['research_target_id'],
                 'proposal_path' => $path,
             ]);
@@ -93,7 +99,6 @@ class ProposalController extends Controller
     {
         $submission = ResearchSubmission::with([
             'latestDetail.studyProgram',
-            'latestDetail.researchSchema',
             'latestDetail.researchTarget',
             'latestDetail.members'
         ])
@@ -121,7 +126,6 @@ class ProposalController extends Controller
             'submission' => $submission,
             'detail' => $submission->latestDetail,
             'studyPrograms' => StudyProgram::all(),
-            'researchSchemas' => ResearchSchema::all(),
             'researchTargets' => ResearchTarget::all(),
         ]);
     }
@@ -132,33 +136,30 @@ class ProposalController extends Controller
 
         $validated = $request->validate([
             'leader_name' => 'required|string|max:255',
-            'leader_nidn' => 'required|string|max:50',
             'study_program_id' => 'required|exists:study_programs,id',
             'title' => 'required|string',
             'budget' => 'nullable|numeric',
-            'research_schema_id' => 'nullable|exists:research_schema,id',
             'research_target_id' => 'nullable|exists:research_targets,id',
-            'proposal_file' => 'nullable|file|mimes:pdf,doc,docx|max:10240',
+            'proposal_path' => 'required|string|max:2048',
             'members' => 'nullable|array',
             'members.*.name' => 'required|string|max:255',
         ]);
 
         DB::transaction(function () use ($validated, $request, $submission) {
             $latestDetail = $submission->latestDetail;
-            $path = $latestDetail->proposal_path;
-
-            if ($request->hasFile('proposal_file')) {
-                $path = $request->file('proposal_file')->store('research-proposals', 'public');
-            }
+            // Mark the file as used if it changed?
+            // Actually, simply mark whatever path is sent as used is safe enough.
+            // Ideally we check if it's different, but calling markAsUsed on an already used file is idempotent-ish 
+            // (update sets is_used=true, which it already is).
+            $path = $validated['proposal_path'];
+            $this->uploadService->markAsUsed($path);
 
             $newDetail = ResearchSubmissionDetail::create([
                 'research_submission_id' => $submission->id,
                 'leader_name' => $validated['leader_name'],
-                'leader_nidn' => $validated['leader_nidn'],
                 'study_program_id' => $validated['study_program_id'],
                 'title' => $validated['title'],
                 'budget' => $validated['budget'] ?? 0,
-                'research_schema_id' => $validated['research_schema_id'],
                 'research_target_id' => $validated['research_target_id'],
                 'proposal_path' => $path,
             ]);
