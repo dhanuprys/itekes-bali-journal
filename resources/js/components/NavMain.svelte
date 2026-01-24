@@ -12,7 +12,7 @@
         useSidebar,
     } from '@/components/ui/sidebar';
     import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-    import type { NavGroup } from '@/types';
+    import type { NavGroup, NavItem } from '@/types';
     import { Link, page, router } from '@inertiajs/svelte';
     import { ChevronRightIcon } from 'lucide-svelte';
 
@@ -23,6 +23,46 @@
     let { group }: Props = $props();
     const { setOpen } = useSidebar();
     const filteredItems = $derived(group.items.filter((item) => item !== null));
+
+    // Normalize path to ignore trailing slashes for consistent comparison
+    const normalizePath = (path: string) => (path.length > 1 && path.endsWith('/') ? path.slice(0, -1) : path);
+
+    // Derived active path from current URL (ignoring query params)
+    let currentPath = $derived(normalizePath($page.url.split('?')[0]));
+
+    /**
+     * Checks if a navigation item is active based on the current path.
+     * Implements strict path matching to avoid false positives (e.g., /user matching /users).
+     */
+    function isActive(item: NavItem): boolean {
+        if (!item.href || item.href === '#') return false;
+
+        // 1. Priority: Custom match pattern
+        if (item.match) {
+            return currentPath.startsWith(item.match);
+        }
+
+        const itemPath = normalizePath(item.href);
+
+        // 2. Exact match
+        if (itemPath === currentPath) return true;
+
+        // 3. Nested path match (ensuring boundary with '/')
+        // Only valid if item is not root '/'
+        if (itemPath !== '/' && currentPath.startsWith(`${itemPath}/`)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Recursively checks if any child item matches the active state.
+     * Used for auto-expanding parent menus.
+     */
+    function hasActiveChild(items: NavItem[] = []): boolean {
+        return items.some((item) => isActive(item) || hasActiveChild(item.items));
+    }
 </script>
 
 <SidebarGroup class="px-2 py-0">
@@ -32,7 +72,7 @@
     <SidebarMenu>
         {#each filteredItems as item (item.title)}
             {#if item.items}
-                <Collapsible open={item.isActive} class="group/collapsible">
+                <Collapsible open={isActive(item) || hasActiveChild(item.items)} class="group/collapsible">
                     {#snippet child({ props })}
                         <SidebarMenuItem {...props}>
                             <CollapsibleTrigger>
@@ -50,7 +90,7 @@
                                             setOpen(true);
                                         }}
                                     >
-                                        <SidebarMenuButton {...props} tooltipContent={item.title}>
+                                        <SidebarMenuButton {...props} tooltipContent={item.title} isActive={isActive(item)}>
                                             {#if item.icon}
                                                 <item.icon />
                                             {/if}
@@ -69,7 +109,7 @@
                                 <SidebarMenuSub>
                                     {#each item.items ?? [] as subItem (subItem.title)}
                                         <SidebarMenuSubItem>
-                                            <SidebarMenuSubButton>
+                                            <SidebarMenuSubButton isActive={isActive(subItem)}>
                                                 {#snippet child({ props })}
                                                     <Link class="flex items-center justify-between" href={subItem.href} {...props}>
                                                         <div class="flex items-center gap-x-2">
@@ -94,7 +134,7 @@
             {:else}
                 <SidebarMenuItem>
                     <Link href={item.href} class="block w-full">
-                        <SidebarMenuButton isActive={item.href === $page.url}>
+                        <SidebarMenuButton isActive={isActive(item)}>
                             {#snippet tooltipContent()}
                                 {item.title}
                             {/snippet}

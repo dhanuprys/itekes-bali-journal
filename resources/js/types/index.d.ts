@@ -17,6 +17,7 @@ export interface NavItem {
     badge?: string;
     isActive?: boolean;
     items?: NavItem[];
+    match?: string;
 }
 
 export interface NavGroup {
