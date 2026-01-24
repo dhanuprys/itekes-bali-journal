@@ -12,7 +12,7 @@
 
     const breadcrumbItems: BreadcrumbItem[] = [
         {
-            title: 'Password settings',
+            title: 'Password Akun',
             href: '/settings/password',
         },
     ];
@@ -22,13 +22,13 @@
 </script>
 
 <svelte:head>
-    <title>Password Settings</title>
+    <title>Password Akun</title>
 </svelte:head>
 
 <AppLayout breadcrumbs={breadcrumbItems}>
     <SettingsLayout>
         <div class="space-y-6">
-            <HeadingSmall title="Update Password" description="Ensure your account is using a long, random password to stay secure" />
+            <HeadingSmall title="Update Password" description="Pastikan akun Anda menggunakan password yang panjang dan acak untuk tetap aman" />
 
             <Form
                 method="put"
@@ -47,46 +47,37 @@
                 resetOnError={['password', 'password_confirmation', 'current_password']}
                 class="space-y-6"
             >
-                {#snippet children({
-                    errors,
-                    processing,
-                    recentlySuccessful,
-                }: {
-                    errors: Record<string, string>;
-                    processing: boolean;
-                    recentlySuccessful: boolean;
-                })}
+                {#snippet children({ errors, processing, recentlySuccessful }: { errors: Record; processing: boolean; recentlySuccessful: boolean })}
                     <div class="grid gap-2">
-                        <Label for="current_password">Current password</Label>
+                        <Label for="current_password">Password saat ini</Label>
                         <Input
                             ref={currentPasswordInput}
                             name="current_password"
                             type="password"
                             class="mt-1 block w-full"
                             autocomplete="current-password"
-                            placeholder="Current password"
+                            placeholder="Password saat ini"
                         />
 
-                            <InputError message={errors.current_password} />
-
+                        <InputError message={errors.current_password} />
                     </div>
 
                     <div class="grid gap-2">
-                        <Label for="password">New password</Label>
+                        <Label for="password">Password baru</Label>
                         <Input
                             ref={passwordInput}
                             name="password"
                             type="password"
                             class="mt-1 block w-full"
                             autocomplete="new-password"
-                            placeholder="New password"
+                            placeholder="Password baru"
                         />
 
                         <InputError message={errors.password} />
                     </div>
 
                     <div class="grid gap-2">
-                        <Label for="password_confirmation">Confirm password</Label>
+                        <Label for="password_confirmation">Konfirmasi password</Label>
                         <Input
                             name="password_confirmation"
                             type="password"
@@ -99,7 +90,7 @@
                     </div>
 
                     <div class="flex items-center gap-4">
-                        <Button type="submit" disabled={processing}>Save Password</Button>
+                        <Button type="submit" disabled={processing}>Simpan Password</Button>
 
                         {#if recentlySuccessful}
                             <p class="text-sm text-neutral-600" transition:fade={{ duration: 150 }}>Saved.</p>

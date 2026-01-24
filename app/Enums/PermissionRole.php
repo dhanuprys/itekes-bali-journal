@@ -31,4 +31,16 @@ enum PermissionRole: string
     case P_VIEW_ALL_COMMUNITY_SERVICE = 'view all community service';
     case P_VIEW_ALL_ETHICS = 'view all ethics';
     case P_VIEW_USER_LOGS = 'view user logs';
+
+    public static function getRoleAsArray()
+    {
+        return [
+            self::R_ADMIN,
+            self::R_LECTURE,
+            self::R_GUEST,
+            self::R_OPERATOR,
+            self::R_REVIEWER_RESEARCH,
+            self::R_REVIEWER_COMMUNITY_SERVICE,
+        ];
+    }
 }

@@ -8,28 +8,57 @@ use Inertia\Inertia;
 
 class StudyProgramController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Inertia::render('base-system/study-program/Index');
+        $limit = $request->input('limit', 10);
+
+        $studyPrograms = \App\Models\StudyProgram::query()
+            ->when($request->search, function ($query, $search) {
+                $query->where('name', 'like', "%{$search}%");
+            })
+            ->latest()
+            ->paginate($limit)
+            ->withQueryString();
+
+        return Inertia::render('base-system/study-program/Index', [
+            'studyPrograms' => $studyPrograms,
+            'filters' => $request->only(['search', 'limit']),
+        ]);
     }
 
-    public function show()
+    public function show(\App\Models\StudyProgram $studyProgram)
     {
-        return Inertia::render('base-system/study-program/Show');
+        return Inertia::render('base-system/study-program/Show', [
+            'studyProgram' => $studyProgram,
+        ]);
     }
 
-    public function store()
+    public function store(Request $request)
     {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255', 'unique:study_programs'],
+        ]);
 
+        \App\Models\StudyProgram::create($validated);
+
+        return redirect()->back()->with('success', 'Study Program created successfully.');
     }
 
-    public function update()
+    public function update(Request $request, \App\Models\StudyProgram $studyProgram)
     {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255', 'unique:study_programs,name,' . $studyProgram->id],
+        ]);
 
+        $studyProgram->update($validated);
+
+        return redirect()->back()->with('success', 'Study Program updated successfully.');
     }
 
-    public function destroy()
+    public function destroy(\App\Models\StudyProgram $studyProgram)
     {
+        $studyProgram->delete();
 
+        return redirect()->back()->with('success', 'Study Program deleted successfully.');
     }
 }

@@ -42,7 +42,10 @@
                                         class="w-full"
                                         onclick={() => {
                                             if (item.href !== '#') {
-                                                router.visit(item.href);
+                                                router.visit(item.href, {
+                                                    preserveState: true,
+                                                    preserveScroll: true,
+                                                });
                                             }
                                             setOpen(true);
                                         }}

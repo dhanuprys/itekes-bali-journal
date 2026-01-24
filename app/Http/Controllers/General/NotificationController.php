@@ -8,8 +8,16 @@ use Inertia\Inertia;
 
 class NotificationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Inertia::render('general/notification/Index');
+        $notifications = $request->user()
+            ->notifications()
+            ->latest()
+            ->limit(20)
+            ->get();
+
+        return Inertia::render('general/notification/Index', [
+            'notifications' => $notifications,
+        ]);
     }
 }

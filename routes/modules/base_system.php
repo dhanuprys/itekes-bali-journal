@@ -19,10 +19,10 @@ Route::middleware(['auth', 'permission:' . PermissionRole::P_MANAGE_FORM->value]
                 ['prefix' => 'research-target', 'as' => 'research_target.'],
                 function () {
                     Route::get('', [ResearchTargetController::class, 'index'])->name('index');
-                    Route::get('{id}', [ResearchTargetController::class, 'show'])->name('show');
+                    Route::get('{researchTarget}', [ResearchTargetController::class, 'show'])->name('show');
                     Route::post('', [ResearchTargetController::class, 'store'])->name('store');
-                    Route::put('{id}', [ResearchTargetController::class, 'update'])->name('update');
-                    Route::delete('{id}', [ResearchTargetController::class, 'destroy'])->name('destroy');
+                    Route::put('{researchTarget}', [ResearchTargetController::class, 'update'])->name('update');
+                    Route::delete('{researchTarget}', [ResearchTargetController::class, 'destroy'])->name('destroy');
                 }
             );
 
@@ -30,10 +30,10 @@ Route::middleware(['auth', 'permission:' . PermissionRole::P_MANAGE_FORM->value]
                 ['prefix' => 'research-schema', 'as' => 'research_schema.'],
                 function () {
                     Route::get('', [ResearchSchemaController::class, 'index'])->name('index');
-                    Route::get('{id}', [ResearchSchemaController::class, 'show'])->name('show');
+                    Route::get('{researchSchema}', [ResearchSchemaController::class, 'show'])->name('show');
                     Route::post('', [ResearchSchemaController::class, 'store'])->name('store');
-                    Route::put('{id}', [ResearchSchemaController::class, 'update'])->name('update');
-                    Route::delete('{id}', [ResearchSchemaController::class, 'destroy'])->name('destroy');
+                    Route::put('{researchSchema}', [ResearchSchemaController::class, 'update'])->name('update');
+                    Route::delete('{researchSchema}', [ResearchSchemaController::class, 'destroy'])->name('destroy');
                 }
             );
 
@@ -41,10 +41,10 @@ Route::middleware(['auth', 'permission:' . PermissionRole::P_MANAGE_FORM->value]
                 ['prefix' => 'community-service-target', 'as' => 'community_service_target.'],
                 function () {
                     Route::get('', [CommunityServiceTargetController::class, 'index'])->name('index');
-                    Route::get('{id}', [CommunityServiceTargetController::class, 'show'])->name('show');
+                    Route::get('{communityServiceTarget}', [CommunityServiceTargetController::class, 'show'])->name('show');
                     Route::post('', [CommunityServiceTargetController::class, 'store'])->name('store');
-                    Route::put('{id}', [CommunityServiceTargetController::class, 'update'])->name('update');
-                    Route::delete('{id}', [CommunityServiceTargetController::class, 'destroy'])->name('destroy');
+                    Route::put('{communityServiceTarget}', [CommunityServiceTargetController::class, 'update'])->name('update');
+                    Route::delete('{communityServiceTarget}', [CommunityServiceTargetController::class, 'destroy'])->name('destroy');
                 }
             );
 
@@ -52,10 +52,10 @@ Route::middleware(['auth', 'permission:' . PermissionRole::P_MANAGE_FORM->value]
                 ['prefix' => 'community-service-schema', 'as' => 'community_service_schema.'],
                 function () {
                     Route::get('', [CommunityServiceSchemaController::class, 'index'])->name('index');
-                    Route::get('{id}', [CommunityServiceSchemaController::class, 'show'])->name('show');
+                    Route::get('{communityServiceSchema}', [CommunityServiceSchemaController::class, 'show'])->name('show');
                     Route::post('', [CommunityServiceSchemaController::class, 'store'])->name('store');
-                    Route::put('{id}', [CommunityServiceSchemaController::class, 'update'])->name('update');
-                    Route::delete('{id}', [CommunityServiceSchemaController::class, 'destroy'])->name('destroy');
+                    Route::put('{communityServiceSchema}', [CommunityServiceSchemaController::class, 'update'])->name('update');
+                    Route::delete('{communityServiceSchema}', [CommunityServiceSchemaController::class, 'destroy'])->name('destroy');
                 }
             );
 
@@ -63,10 +63,10 @@ Route::middleware(['auth', 'permission:' . PermissionRole::P_MANAGE_FORM->value]
                 ['prefix' => 'ethic-subject', 'as' => 'ethic_subject.'],
                 function () {
                     Route::get('', [EthicSubjectController::class, 'index'])->name('index');
-                    Route::get('{id}', [EthicSubjectController::class, 'show'])->name('show');
+                    Route::get('{ethicalClearanceSubject}', [EthicSubjectController::class, 'show'])->name('show');
                     Route::post('', [EthicSubjectController::class, 'store'])->name('store');
-                    Route::put('{id}', [EthicSubjectController::class, 'update'])->name('update');
-                    Route::delete('{id}', [EthicSubjectController::class, 'destroy'])->name('destroy');
+                    Route::put('{ethicalClearanceSubject}', [EthicSubjectController::class, 'update'])->name('update');
+                    Route::delete('{ethicalClearanceSubject}', [EthicSubjectController::class, 'destroy'])->name('destroy');
                 }
             );
         }
@@ -78,10 +78,10 @@ Route::middleware(['auth', 'permission:' . PermissionRole::P_MANAGE_BASE->value]
     ->group(
         function () {
             Route::get('', [StudyProgramController::class, 'index'])->name('index');
-            Route::get('{id}', [StudyProgramController::class, 'show'])->name('show');
+            Route::get('{studyProgram}', [StudyProgramController::class, 'show'])->name('show');
             Route::post('', [StudyProgramController::class, 'store'])->name('store');
-            Route::put('{id}', [StudyProgramController::class, 'update'])->name('update');
-            Route::delete('{id}', [StudyProgramController::class, 'destroy'])->name('destroy');
+            Route::put('{studyProgram}', [StudyProgramController::class, 'update'])->name('update');
+            Route::delete('{studyProgram}', [StudyProgramController::class, 'destroy'])->name('destroy');
         }
     );
 

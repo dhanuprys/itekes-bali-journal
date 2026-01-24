@@ -190,26 +190,30 @@ export function createMenu(user: User): Record<string, NavGroup> {
             ],
         },
 
-        masterMenu: {
-            label: 'Sistem Dasar',
+        userManagement: {
+            label: 'Manajemen Pengguna',
             items: [
                 validate(permissions.MANAGE_USERS, {
                     title: 'Pengguna',
                     href: '/users',
                     icon: UsersIcon,
-                    items: [
-                        {
-                            title: 'Role',
-                            href: '/users/role',
-                            icon: ShieldIcon,
-                        },
-                        {
-                            title: 'Permission',
-                            href: '/users/permission',
-                            icon: ZapIcon,
-                        },
-                    ],
                 }),
+                validate(permissions.MANAGE_USERS, {
+                    title: 'Role',
+                    href: '/roles',
+                    icon: ShieldIcon,
+                }),
+                validate(permissions.MANAGE_USERS, {
+                    title: 'Permission',
+                    href: '/permissions',
+                    icon: ZapIcon,
+                }),
+            ],
+        },
+
+        masterMenu: {
+            label: 'Sistem Dasar',
+            items: [
                 validate(permissions.MANAGE_BASE, {
                     title: 'Program Studi',
                     href: '/study-program',

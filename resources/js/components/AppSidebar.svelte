@@ -39,6 +39,7 @@
         <NavMain group={menu.applyForReview} />
         <NavMain group={menu.reviewerMenu} />
         <NavMain group={menu.assignmentMenu} />
+        <NavMain group={menu.userManagement} />
         <NavMain group={menu.masterMenu} />
     </SidebarContent>
 

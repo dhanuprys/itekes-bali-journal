@@ -17,7 +17,11 @@
             href: '/settings/password',
         },
         {
-            title: 'Appearance',
+            title: 'Riwayat Login',
+            href: '/settings/login-logs',
+        },
+        {
+            title: 'Tampilan',
             href: '/settings/appearance',
         },
     ];
@@ -26,13 +30,14 @@
 
     interface Props {
         children?: Snippet;
+        isFullWidth?: boolean;
     }
 
-    let { children }: Props = $props();
+    let { children, isFullWidth = false }: Props = $props();
 </script>
 
 <div class="px-4 py-6">
-    <Heading title="Settings" description="Manage your profile and account settings" />
+    <Heading title="Pengaturan" description="Kelola profil dan pengaturan akun Anda" />
 
     <div class="flex flex-col lg:flex-row lg:space-x-12">
         <aside class="w-full max-w-xl lg:w-48">
@@ -54,8 +59,8 @@
 
         <Separator class="my-6 lg:hidden" />
 
-        <div class="flex-1 md:max-w-2xl">
-            <section class="max-w-xl space-y-12">
+        <div class="flex-1 {isFullWidth ? 'w-full' : 'md:max-w-2xl'}">
+            <section class="{isFullWidth ? 'max-w-full' : 'max-w-xl'} space-y-12">
                 {@render children?.()}
             </section>
         </div>

@@ -60,4 +60,15 @@ class ProfileController extends Controller
 
         return redirect('/');
     }
+
+    public function loginLogs(Request $request): Response
+    {
+        $user = $request->user();
+
+        $loginLogs = $user->loginLogs()->latest()->paginate(10);
+
+        return Inertia::render('settings/LoginLogs', [
+            'loginLogs' => $loginLogs,
+        ]);
+    }
 }
