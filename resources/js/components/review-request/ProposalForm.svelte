@@ -7,7 +7,7 @@
     import { Trash2Icon, PlusIcon } from 'lucide-svelte';
     import FileUpload from '@/components/FileUpload.svelte';
     import { StorageUploadAction } from '@/data/storage-upload';
-    import { uploadState } from '@/stores/upload-state.svelte';
+    import * as Select from '@/components/ui/select';
 
     let { form = $bindable(), data, type = 'research', mode = 'create' } = $props();
 
@@ -62,16 +62,16 @@
 
                         <Field.Field>
                             <Field.Label for="study_program_id">Program Studi</Field.Label>
-                            <select
-                                id="study_program_id"
-                                bind:value={form.study_program_id}
-                                class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                            >
-                                <option value="">Pilih Program Studi</option>
-                                {#each data.studyPrograms as program}
-                                    <option value={program.id}>{program.name}</option>
-                                {/each}
-                            </select>
+                            <Select.Root type="single" bind:value={form.study_program_id} name="study_program_id">
+                                <Select.Trigger class="w-full">
+                                    {data.studyPrograms.find((s: any) => s.id === form.study_program_id)?.name ?? 'Pilih Program Studi'}
+                                </Select.Trigger>
+                                <Select.Content>
+                                    {#each data.studyPrograms as program}
+                                        <Select.Item value={program.id} label={program.name}>{program.name}</Select.Item>
+                                    {/each}
+                                </Select.Content>
+                            </Select.Root>
                             {#if form.errors?.study_program_id}
                                 <Field.Error>{form.errors?.study_program_id}</Field.Error>
                             {/if}
@@ -131,30 +131,30 @@
                         <Field.Field>
                             <Field.Label for="target_id">{targetLabel}</Field.Label>
                             {#if isResearch}
-                                <select
-                                    id="target_id"
-                                    bind:value={form.research_target_id}
-                                    class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                                >
-                                    <option value="">Pilih Target</option>
-                                    {#each targets as target}
-                                        <option value={target.id}>{target.name}</option>
-                                    {/each}
-                                </select>
+                                <Select.Root type="single" bind:value={form.research_target_id} name="research_target_id">
+                                    <Select.Trigger class="w-full">
+                                        {targets.find((t: any) => t.id === form.research_target_id)?.title ?? 'Pilih Target'}
+                                    </Select.Trigger>
+                                    <Select.Content>
+                                        {#each targets as target}
+                                            <Select.Item value={target.id} label={target.title}>{target.title}</Select.Item>
+                                        {/each}
+                                    </Select.Content>
+                                </Select.Root>
                                 {#if form.errors?.research_target_id}
                                     <Field.Error>{form.errors?.research_target_id}</Field.Error>
                                 {/if}
                             {:else}
-                                <select
-                                    id="target_id"
-                                    bind:value={form.community_service_target_id}
-                                    class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                                >
-                                    <option value="">Pilih Target</option>
-                                    {#each targets as target}
-                                        <option value={target.id}>{target.name}</option>
-                                    {/each}
-                                </select>
+                                <Select.Root type="single" bind:value={form.community_service_target_id} name="community_service_target_id">
+                                    <Select.Trigger class="w-full">
+                                        {targets.find((t: any) => t.id === form.community_service_target_id)?.title ?? 'Pilih Target'}
+                                    </Select.Trigger>
+                                    <Select.Content>
+                                        {#each targets as target}
+                                            <Select.Item value={target.id} label={target.title}>{target.title}</Select.Item>
+                                        {/each}
+                                    </Select.Content>
+                                </Select.Root>
                                 {#if form.errors?.community_service_target_id}
                                     <Field.Error>{form.errors?.community_service_target_id}</Field.Error>
                                 {/if}

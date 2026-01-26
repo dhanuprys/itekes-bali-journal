@@ -4,6 +4,7 @@
     import * as Card from '@/components/ui/card';
     import FileUpload from '@/components/FileUpload.svelte';
     import { StorageUploadAction } from '@/data/storage-upload';
+    import * as Select from '@/components/ui/select';
 
     let { form = $bindable(), data, type = 'research', mode = 'create' } = $props();
 
@@ -54,16 +55,16 @@
 
                         <Field.Field>
                             <Field.Label for="schema_id">Skema</Field.Label>
-                            <select
-                                id="schema_id"
-                                bind:value={form.schema_id}
-                                class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                            >
-                                <option value="">Pilih Skema</option>
-                                {#each data.schemas as schema}
-                                    <option value={schema.id}>{schema.name}</option>
-                                {/each}
-                            </select>
+                            <Select.Root type="single" bind:value={form.schema_id} name="schema_id">
+                                <Select.Trigger class="w-full">
+                                    {data.schemas.find((s: any) => s.id === form.schema_id)?.title ?? 'Pilih Skema'}
+                                </Select.Trigger>
+                                <Select.Content>
+                                    {#each data.schemas as schema}
+                                        <Select.Item value={schema.id} label={schema.title}>{schema.title}</Select.Item>
+                                    {/each}
+                                </Select.Content>
+                            </Select.Root>
                             {#if form.errors?.schema_id}
                                 <Field.Error>{form.errors?.schema_id}</Field.Error>
                             {/if}

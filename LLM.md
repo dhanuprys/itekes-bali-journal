@@ -201,7 +201,7 @@ You should use shadcn-svelte idiomatic like on the official documentation. The s
 
 Always use the new `field` component instead of traditional form when you want to make a form. Why? because the developer now already stop the `form` component and start on the `field` component.
 
-Prefer to use `native-select` component over `select` component. Because it more lightweight and user friendly.
+Prefer to use `select` component over `native-select` component. Because it more stable on theming and user friendly.
 
 ##### Sheet Component Guidelines
 
