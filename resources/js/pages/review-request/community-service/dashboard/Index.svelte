@@ -9,9 +9,9 @@
     import { Badge } from '@/components/ui/badge';
     import * as DropdownMenu from '@/components/ui/dropdown-menu';
     import { router } from '@inertiajs/svelte';
-    import { MoreHorizontalIcon } from 'lucide-svelte';
+    import { MoreHorizontalIcon, FileTextIcon, ActivityIcon, CheckCircleIcon } from 'lucide-svelte';
 
-    let { submissions } = $props();
+    let { submissions, counts } = $props();
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Permintaan Review', href: '#' },
@@ -50,6 +50,38 @@
         {/snippet}
 
         {#snippet children()}
+            <div class="grid gap-4 md:grid-cols-3 mb-8">
+                <Card.Root>
+                    <Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <Card.Title class="text-sm font-medium">Proposal</Card.Title>
+                        <FileTextIcon class="h-4 w-4 text-muted-foreground" />
+                    </Card.Header>
+                    <Card.Content>
+                        <div class="text-2xl font-bold">{counts.proposal}</div>
+                        <p class="text-xs text-muted-foreground">Pengajuan Proposal</p>
+                    </Card.Content>
+                </Card.Root>
+                <Card.Root>
+                    <Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <Card.Title class="text-sm font-medium">Laporan Kemajuan</Card.Title>
+                        <ActivityIcon class="h-4 w-4 text-muted-foreground" />
+                    </Card.Header>
+                    <Card.Content>
+                        <div class="text-2xl font-bold">{counts.progress_report}</div>
+                        <p class="text-xs text-muted-foreground">Laporan Berjalan</p>
+                    </Card.Content>
+                </Card.Root>
+                <Card.Root>
+                    <Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <Card.Title class="text-sm font-medium">Laporan Akhir</Card.Title>
+                        <CheckCircleIcon class="h-4 w-4 text-muted-foreground" />
+                    </Card.Header>
+                    <Card.Content>
+                        <div class="text-2xl font-bold">{counts.final_report}</div>
+                        <p class="text-xs text-muted-foreground">Laporan Selesai</p>
+                    </Card.Content>
+                </Card.Root>
+            </div>
             <Card.Root>
                 <Card.Header>
                     <Card.Title>Riwayat Pengajuan</Card.Title>

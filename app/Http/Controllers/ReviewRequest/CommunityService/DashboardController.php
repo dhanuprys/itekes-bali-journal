@@ -16,8 +16,21 @@ class DashboardController extends Controller
             ->latest()
             ->paginate(10);
 
+        $counts = [
+            'proposal' => CommunityServiceSubmission::where('user_id', Auth::id())
+                ->where('stage', 'proposal')
+                ->count(),
+            'progress_report' => CommunityServiceSubmission::where('user_id', Auth::id())
+                ->where('stage', 'progress_report')
+                ->count(),
+            'final_report' => CommunityServiceSubmission::where('user_id', Auth::id())
+                ->where('stage', 'final_report')
+                ->count(),
+        ];
+
         return Inertia::render('review-request/community-service/dashboard/Index', [
             'submissions' => $submissions,
+            'counts' => $counts,
         ]);
     }
 

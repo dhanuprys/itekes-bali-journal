@@ -17,8 +17,21 @@ class DashboardController extends Controller
             ->latest()
             ->paginate(10);
 
+        $counts = [
+            'proposal' => ResearchSubmission::where('user_id', Auth::id())
+                ->where('stage', 'proposal')
+                ->count(),
+            'progress_report' => ResearchSubmission::where('user_id', Auth::id())
+                ->where('stage', 'progress_report')
+                ->count(),
+            'final_report' => ResearchSubmission::where('user_id', Auth::id())
+                ->where('stage', 'final_report')
+                ->count(),
+        ];
+
         return Inertia::render('review-request/research/dashboard/Index', [
             'submissions' => $submissions,
+            'counts' => $counts,
         ]);
     }
 
