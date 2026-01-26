@@ -203,6 +203,31 @@ Always use the new `field` component instead of traditional form when you want t
 
 Prefer to use `native-select` component over `select` component. Because it more lightweight and user friendly.
 
+##### Sheet Component Guidelines
+
+When implementing a Sheet (side modal), we follow a strict padding convention to ensure UI consistency and avoid double-padding or edge-touching issues:
+
+1.  **Sheet Content Container**: Must reset default padding.
+
+    ```svelte
+    <Sheet.Content class="... p-0 gap-0">
+    ```
+
+2.  **Sheet Header**: Apply consistent top/side padding, with reduced bottom padding.
+
+    ```svelte
+    <Sheet.Header class="p-6 pb-2">
+    ```
+
+3.  **Sheet Body/Form**: Apply consistent side/bottom padding, with reduced top padding.
+    ```svelte
+    <form class="... p-6 pt-2">
+    <!-- or div -->
+    <div class="p-6 pt-2 space-y-6">
+    ```
+
+**Why?** The default `Sheet.Content` has `p-6`. If you add padding to the header or body, it doubles up (e.g., 48px). If you remove it (`p-0`), content touches the edge. This split approach (`pb-2` + `pt-2`) creates a visually balanced `1rem` gap between header and body while maintaining a clean `1.5rem` (24px) border around the entire content area.
+
 ### Database
 
 On the database this system using MySQL. You should always use the best practice of database development. So we can have the best performance for this application.

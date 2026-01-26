@@ -18,6 +18,9 @@
 
     <!-- Sticky Bottom Input -->
     <div class="border-t bg-background p-6">
+        <p class="text-xs text-muted-foreground mb-3 px-1">
+            * Anda tetap dapat mengirim komentar diskusi meskipun sudah memberikan keputusan review.
+        </p>
         <CommentForm submitRoute={commentSubmitRoute}>
             {#snippet extraActions()}
                 <ReviewActions {canReview} submitRoute={actionSubmitRoute} />
