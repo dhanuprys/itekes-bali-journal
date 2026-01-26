@@ -27,6 +27,7 @@ export interface NavGroup {
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
     name: string;
+    version: string;
     quote: { message: string; author: string };
     auth: Auth;
     [key: string]: unknown;

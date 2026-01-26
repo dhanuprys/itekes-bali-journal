@@ -1,5 +1,6 @@
 <script lang="ts">
     import AppLogoIcon from '@/components/AppLogoIcon.svelte';
+    import { page } from '@inertiajs/svelte';
 </script>
 
 <div class="inline-flex items-center gap-3">
@@ -8,6 +9,6 @@
     </div>
     <div class="flex flex-col">
         <span class="truncate text-sm font-semibold">ITEKES Journal</span>
-        <span class="text-[0.7rem] text-muted-foreground">v0.0.1-beta</span>
+        <span class="text-[0.7rem] text-muted-foreground">{$page.props.version}</span>
     </div>
 </div>
