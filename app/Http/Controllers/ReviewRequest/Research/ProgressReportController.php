@@ -15,6 +15,12 @@ use Inertia\Inertia;
 
 class ProgressReportController extends Controller
 {
+    protected $notificationService;
+
+    public function __construct(\App\Services\NotificationService $notificationService)
+    {
+        $this->notificationService = $notificationService;
+    }
     public function index()
     {
         $submissions = ResearchSubmission::with(['latestDetail'])
@@ -99,6 +105,22 @@ class ProgressReportController extends Controller
             $submission->update([
                 'status' => ResearchStatus::NEED_REVIEW->value,
             ]);
+
+            // Notify Reviewers
+            $reviewers = $submission->reviewers;
+            foreach ($reviewers as $reviewer) {
+                $this->notificationService->send(
+                    $reviewer->user_id,
+                    Auth::user()->name . " telah mengunggah Laporan Kemajuan: " . $validated['final_title'] . ". Mohon direview.",
+                    new \App\DTO\NotificationPayload(
+                        title: "Laporan Kemajuan Baru",
+                        url: route('review.research.progress_report.show', $submission->id),
+                        type: 'info',
+                        metadata: ['submission_id' => $submission->id]
+                    ),
+                    true
+                );
+            }
         });
 
         return redirect()->route('apply.research.progress_report.index')
@@ -193,6 +215,22 @@ class ProgressReportController extends Controller
             $submission->update([
                 'status' => ResearchStatus::NEED_REVIEW->value,
             ]);
+
+            // Notify Reviewers
+            $reviewers = $submission->reviewers;
+            foreach ($reviewers as $reviewer) {
+                $this->notificationService->send(
+                    $reviewer->user_id,
+                    Auth::user()->name . " telah menyelesaikan revisi Laporan Kemajuan: " . $validated['final_title'] . ". Mohon divalidasi kembali.",
+                    new \App\DTO\NotificationPayload(
+                        title: "Revisi Laporan Kemajuan",
+                        url: route('review.research.progress_report.show', $submission->id),
+                        type: 'info',
+                        metadata: ['submission_id' => $submission->id]
+                    ),
+                    true
+                );
+            }
         });
 
         return redirect()->route('apply.research.progress_report.index')

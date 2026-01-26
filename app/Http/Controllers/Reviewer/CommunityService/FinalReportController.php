@@ -60,7 +60,7 @@ class FinalReportController extends Controller
     {
         $submission = $this->checkAssignment($id);
 
-        if ($submission->status !== CommunityServiceStatus::NEED_REVIEW->value) {
+        if (!in_array($submission->status, [CommunityServiceStatus::NEED_REVIEW->value, CommunityServiceStatus::REVISION_NEEDED->value])) {
             abort(403, 'Review not active.');
         }
 

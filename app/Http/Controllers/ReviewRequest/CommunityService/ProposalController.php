@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\ReviewRequest\CommunityService;
 
 use App\Enums\CommunityServiceReviewStage;
+use App\Enums\PermissionRole;
 use App\Enums\CommunityServiceStatus;
 use App\Http\Controllers\Controller;
 use App\Models\CommunityServiceMember;
@@ -22,10 +23,12 @@ use App\Services\StorageUploadService;
 class ProposalController extends Controller
 {
     protected $uploadService;
+    protected $notificationService;
 
-    public function __construct(StorageUploadService $uploadService)
+    public function __construct(StorageUploadService $uploadService, \App\Services\NotificationService $notificationService)
     {
         $this->uploadService = $uploadService;
+        $this->notificationService = $notificationService;
     }
 
     public function index()
@@ -91,6 +94,17 @@ class ProposalController extends Controller
                     ]);
                 }
             }
+            // Notify Admins
+            $this->notificationService->sendToPermission(
+                PermissionRole::P_ASSIGN_REVIEWER_COMMUNITY_SERVICE,
+                Auth::user()->name . " mengajukan proposal pengabdian baru: " . $validated['title'] . ". Mohon segera tugaskan reviewer.",
+                new \App\DTO\NotificationPayload(
+                    title: "Proposal Baru",
+                    url: route('reviewer_assignment.community_service.index'),
+                    type: 'info',
+                    metadata: ['submission_id' => $submission->id]
+                )
+            );
         });
 
         return redirect()->route('apply.community_service.index')->with('success', 'Proposal submitted successfully.');
@@ -176,6 +190,21 @@ class ProposalController extends Controller
             $submission->update([
                 'status' => CommunityServiceStatus::NEED_REVIEW->value,
             ]);
+            // Notify Reviewers
+            $reviewers = $submission->reviewers;
+            foreach ($reviewers as $reviewer) {
+                $this->notificationService->send(
+                    $reviewer->user_id,
+                    Auth::user()->name . " telah menyelesaikan revisi proposal: " . $validated['title'] . ". Mohon divalidasi kembali.",
+                    new \App\DTO\NotificationPayload(
+                        title: "Revisi Proposal",
+                        url: route('review.community_service.proposal.show', $submission->id),
+                        type: 'info',
+                        metadata: ['submission_id' => $submission->id]
+                    ),
+                    true
+                );
+            }
         });
 
         return redirect()->route('apply.community_service.index')->with('success', 'Proposal revision submitted.');

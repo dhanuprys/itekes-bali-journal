@@ -34,17 +34,23 @@
     function getStatusConfig(status: string) {
         switch (status) {
             case 'approved':
-                return { color: 'bg-green-500/10 text-green-600 hover:bg-green-500/20', label: 'Disetujui', icon: CheckCircleIcon };
+                return { color: 'bg-green-500/10 text-green-600 hover:bg-green-500/20 border-green-200', label: 'Disetujui', icon: CheckCircleIcon };
             case 'rejected':
-                return { color: 'bg-red-500/10 text-red-600 hover:bg-red-500/20', label: 'Ditolak', icon: AlertCircleIcon };
+                return { color: 'bg-red-500/10 text-red-600 hover:bg-red-500/20 border-red-200', label: 'Ditolak', icon: AlertCircleIcon };
             case 'revision_needed':
-                return 'destructive';
+                return {
+                    color: 'bg-orange-500/10 text-orange-600 hover:bg-orange-500/20 border-orange-200',
+                    label: 'Perlu Revisi',
+                    icon: AlertCircleIcon,
+                };
             case 'need_review':
-                return 'secondary';
+                return { color: 'bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 border-blue-200', label: 'Menunggu Review', icon: ClockIcon };
             default:
-                return 'outline';
+                return { color: 'bg-muted text-muted-foreground', label: status.replace('_', ' ').toUpperCase(), icon: FileTextIcon };
         }
     }
+
+    let statusConfig = $derived(getStatusConfig(submission.status));
 </script>
 
 <svelte:head>
@@ -54,12 +60,14 @@
 <AppLayout {breadcrumbs}>
     <LayoutComposer>
         {#snippet header()}
-            <div class="flex items-center justify-between">
-                <Heading title="Detail Laporan" description="Informasi lengkap laporan kemajuan/akhir." />
-                <Badge variant={getStatusVariant(submission.status)} class="text-sm px-3 py-1">
-                    {submission.status.replace('_', ' ').toUpperCase()}
-                </Badge>
-            </div>
+            <Heading title="Detail Laporan" description="Informasi lengkap laporan kemajuan/akhir." />
+        {/snippet}
+
+        {#snippet actions()}
+            <Badge variant="outline" class={'px-3 py-1 gap-2 flex items-center ' + statusConfig.color}>
+                <statusConfig.icon class="h-4 w-4" />
+                {statusConfig.label}
+            </Badge>
         {/snippet}
 
         {#snippet children()}

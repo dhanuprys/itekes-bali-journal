@@ -20,6 +20,8 @@
         AlertCircleIcon,
     } from 'lucide-svelte';
 
+    import { getStatusConfig } from '@/lib/review-status';
+
     let { submission } = $props();
     let detail = $derived(submission.latest_detail);
     let members = $derived(detail.members || []);
@@ -31,19 +33,6 @@
         { title: 'Detail', href: '#' },
     ];
 
-    function getStatusConfig(status: string) {
-        switch (status) {
-            case 'approved':
-                return { color: 'bg-green-500/10 text-green-600 hover:bg-green-500/20', label: 'Disetujui', icon: CheckCircleIcon };
-            default:
-                return {
-                    color: 'bg-muted text-muted-foreground',
-                    label: status.replace('_', ' ').toUpperCase(),
-                    icon: FileTextIcon,
-                };
-        }
-    }
-
     let statusConfig = $derived(getStatusConfig(submission.status));
 </script>
 
@@ -54,10 +43,14 @@
 <AppLayout {breadcrumbs}>
     <LayoutComposer>
         {#snippet header()}
-            <div class="flex items-center justify-between">
-                <Heading title="Detail Laporan Akhir" description="Informasi lengkap laporan akhir pengabdian." />
-                <Badge variant="default" class="text-sm px-3 py-1">DISETUJUI</Badge>
-            </div>
+            <Heading title="Detail Laporan Akhir" description="Informasi lengkap laporan akhir pengabdian." />
+        {/snippet}
+
+        {#snippet actions()}
+            <Badge variant="outline" class={'px-3 py-1 gap-2 flex items-center ' + statusConfig.color}>
+                <statusConfig.icon class="h-4 w-4" />
+                {statusConfig.label}
+            </Badge>
         {/snippet}
 
         {#snippet children()}

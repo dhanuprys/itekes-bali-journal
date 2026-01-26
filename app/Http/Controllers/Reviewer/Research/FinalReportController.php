@@ -60,7 +60,7 @@ class FinalReportController extends Controller
     {
         $submission = $this->checkAssignment($id);
 
-        if ($submission->status !== ResearchStatus::NEED_REVIEW->value) {
+        if (!in_array($submission->status, [ResearchStatus::NEED_REVIEW->value, ResearchStatus::REVISION_NEEDED->value])) {
             abort(403, 'Review not active.');
         }
 

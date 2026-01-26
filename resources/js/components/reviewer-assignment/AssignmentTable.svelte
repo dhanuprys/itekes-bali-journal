@@ -7,7 +7,7 @@
     import * as Avatar from '@/components/ui/avatar';
     import * as Tooltip from '@/components/ui/tooltip';
     import * as Select from '@/components/ui/select';
-    import ReviewerAssignmentDialog from './ReviewerAssignmentDialog.svelte';
+    import ReviewerAssignmentSheet from './ReviewerAssignmentSheet.svelte';
     import { router } from '@inertiajs/svelte';
     import { debounce } from 'lodash-es';
 
@@ -283,5 +283,5 @@
 </div>
 
 {#if selectedSubmission}
-    <ReviewerAssignmentDialog bind:open={dialogOpen} submission={selectedSubmission} {reviewers} {assignRouteName} />
+    <ReviewerAssignmentSheet bind:open={dialogOpen} submission={selectedSubmission} {reviewers} {assignRouteName} />
 {/if}

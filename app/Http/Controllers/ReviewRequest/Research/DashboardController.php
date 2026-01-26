@@ -39,7 +39,7 @@ class DashboardController extends Controller
             ->findOrFail($id);
 
         $detail = $submission->details()
-            ->with(['comments.user', 'members', 'studyProgram', 'researchSchema', 'researchTarget'])
+            ->with(['comments.user', 'members', 'studyProgram', 'researchSchema', 'researchTarget', 'reviewers.user'])
             ->findOrFail($revisionId);
 
         return Inertia::render('review-request/research/dashboard/ShowRevision', [

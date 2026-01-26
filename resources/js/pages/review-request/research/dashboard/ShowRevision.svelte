@@ -131,6 +131,30 @@
                     </Card.Root>
                 {/if}
 
+                {#if detail.reviewers && detail.reviewers.length > 0}
+                    <Card.Root>
+                        <Card.Header>
+                            <Card.Title>Reviewer Terafiliasi</Card.Title>
+                            <Card.Description>Reviewer yang ditugaskan untuk revisi ini.</Card.Description>
+                        </Card.Header>
+                        <Card.Content>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                {#each detail.reviewers as reviewer}
+                                    <div class="flex items-center gap-3 p-3 border rounded-lg bg-card shadow-sm">
+                                        <div class="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
+                                            {reviewer.user?.name?.charAt(0) || 'R'}
+                                        </div>
+                                        <div>
+                                            <p class="font-medium">{reviewer.user?.name || 'Reviewer'}</p>
+                                            <p class="text-xs text-muted-foreground">{reviewer.user?.email || '-'}</p>
+                                        </div>
+                                    </div>
+                                {/each}
+                            </div>
+                        </Card.Content>
+                    </Card.Root>
+                {/if}
+
                 {#if detail.comments && detail.comments.length > 0}
                     <Card.Root>
                         <Card.Header>

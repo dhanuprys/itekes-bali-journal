@@ -21,10 +21,12 @@ use App\Services\StorageUploadService;
 class ProposalController extends Controller
 {
     protected $uploadService;
+    protected $notificationService;
 
-    public function __construct(StorageUploadService $uploadService)
+    public function __construct(StorageUploadService $uploadService, \App\Services\NotificationService $notificationService)
     {
         $this->uploadService = $uploadService;
+        $this->notificationService = $notificationService;
     }
 
     public function index()
@@ -90,6 +92,17 @@ class ProposalController extends Controller
                     ]);
                 }
             }
+            // Notify Admins
+            $this->notificationService->sendToPermission(
+                \App\Enums\PermissionRole::P_ASSIGN_REVIEWER_RESEARCH,
+                Auth::user()->name . " mengajukan proposal penelitian baru: " . $validated['title'] . ". Segera tugaskan reviewer.",
+                new \App\DTO\NotificationPayload(
+                    title: "Proposal Baru",
+                    url: route('reviewer_assignment.research.index'),
+                    type: 'info',
+                    metadata: ['submission_id' => $submission->id]
+                )
+            );
         });
 
         return redirect()->route('apply.research.index')->with('success', 'Proposal submitted successfully.');
@@ -150,7 +163,7 @@ class ProposalController extends Controller
             $latestDetail = $submission->latestDetail;
             // Mark the file as used if it changed?
             // Actually, simply mark whatever path is sent as used is safe enough.
-            // Ideally we check if it's different, but calling markAsUsed on an already used file is idempotent-ish 
+            // Ideally we check if it's different, but calling markAsUsed on an already used file is idempotent-ish
             // (update sets is_used=true, which it already is).
             $path = $validated['proposal_path'];
             $this->uploadService->markAsUsed($path);
@@ -177,6 +190,21 @@ class ProposalController extends Controller
             $submission->update([
                 'status' => ResearchStatus::NEED_REVIEW->value,
             ]);
+            // Notify Reviewers
+            $reviewers = $submission->reviewers;
+            foreach ($reviewers as $reviewer) {
+                $this->notificationService->send(
+                    $reviewer->user_id, // Use user_id directly
+                    Auth::user()->name . " telah menyelesaikan revisi proposal: " . $validated['title'] . ". Mohon divalidasi kembali.",
+                    new \App\DTO\NotificationPayload(
+                        title: "Revisi Proposal",
+                        url: route('review.research.proposal.show', $submission->id),
+                        type: 'info',
+                        metadata: ['submission_id' => $submission->id]
+                    ),
+                    true
+                );
+            }
         });
 
         return redirect()->route('apply.research.index')->with('success', 'Proposal revision submitted.');

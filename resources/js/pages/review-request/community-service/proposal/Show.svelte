@@ -20,6 +20,8 @@
         AlertCircleIcon,
     } from 'lucide-svelte';
 
+    import { getStatusConfig } from '@/lib/review-status';
+
     let { submission } = $props();
 
     let detail = $derived(submission.latest_detail);
@@ -31,28 +33,6 @@
         { title: 'Proposal', href: '/apply/community-service/proposal' },
         { title: 'Detail', href: '#' },
     ];
-
-    // Status Helper
-    function getStatusConfig(status: string) {
-        switch (status) {
-            case 'draft':
-                return { color: 'bg-muted', label: 'Draft', icon: FileTextIcon };
-            case 'pending':
-                return { color: 'bg-yellow-500/10 text-yellow-600 hover:bg-yellow-500/20', label: 'Menunggu Review', icon: ClockIcon };
-            case 'revision_needed':
-                return { color: 'bg-orange-500/10 text-orange-600 hover:bg-orange-500/20', label: 'Perlu Revisi', icon: AlertCircleIcon };
-            case 'approved':
-                return { color: 'bg-green-500/10 text-green-600 hover:bg-green-500/20', label: 'Disetujui', icon: CheckCircleIcon };
-            case 'rejected':
-                return { color: 'bg-red-500/10 text-red-600 hover:bg-red-500/20', label: 'Ditolak', icon: AlertCircleIcon };
-            default:
-                return {
-                    color: 'border-transparent bg-primary text-primary-foreground hover:bg-primary/80',
-                    label: status.replace('_', ' '),
-                    icon: FileTextIcon,
-                };
-        }
-    }
 
     let statusConfig = $derived(getStatusConfig(submission.status));
 </script>
@@ -67,16 +47,20 @@
             <Heading title="Detail Proposal" description="Informasi lengkap proposal pengabdian." />
         {/snippet}
 
+        {#snippet actions()}
+            <Badge variant="outline" class={'px-3 py-1 gap-2 flex items-center ' + statusConfig.color}>
+                <statusConfig.icon class="h-4 w-4" />
+                {statusConfig.label}
+            </Badge>
+        {/snippet}
+
         {#snippet children()}
             <div class="space-y-6">
                 <Card.Root>
                     <Card.Header>
-                        <div class="flex items-center justify-between">
-                            <div class="space-y-1">
-                                <Card.Title>{detail.title}</Card.Title>
-                                <Card.Description>Diajukan pada {new Date(submission.created_at).toLocaleDateString('id-ID')}</Card.Description>
-                            </div>
-                            <Badge variant="outline" class="text-base px-4 py-1 uppercase">{submission.status.replace('_', ' ')}</Badge>
+                        <div class="space-y-1">
+                            <Card.Title>{detail.title}</Card.Title>
+                            <Card.Description>Diajukan pada {new Date(submission.created_at).toLocaleDateString('id-ID')}</Card.Description>
                         </div>
                     </Card.Header>
                     <Card.Content class="space-y-4">

@@ -1,0 +1,67 @@
+<?php
+
+namespace App\Mail;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Queue\SerializesModels;
+
+class GeneralNotificationMail extends Mailable
+{
+    use Queueable, SerializesModels;
+
+    /**
+     * Create a new message instance.
+     */
+    public string $content;
+    public string $subjectStr;
+    public ?string $actionUrl;
+
+    /**
+     * Create a new message instance.
+     */
+    public function __construct(string $subject, string $content, ?string $actionUrl = null)
+    {
+        $this->subjectStr = $subject;
+        $this->content = $content;
+        $this->actionUrl = $actionUrl;
+    }
+
+    /**
+     * Get the message envelope.
+     */
+    public function envelope(): Envelope
+    {
+        return new Envelope(
+            subject: $this->subjectStr,
+        );
+    }
+
+    /**
+     * Get the message content definition.
+     */
+    public function content(): Content
+    {
+        return new Content(
+            markdown: 'emails.notification',
+            with: [
+                'content' => $this->content,
+                'actionUrl' => $this->actionUrl,
+                'subject' => $this->subjectStr,
+            ],
+        );
+    }
+
+    /**
+     * Get the attachments for the message.
+     *
+     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     */
+    public function attachments(): array
+    {
+        return [];
+    }
+}

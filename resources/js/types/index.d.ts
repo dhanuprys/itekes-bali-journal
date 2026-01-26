@@ -105,3 +105,26 @@ export interface CommunityServiceSubmissionDetail {
     created_at: string;
     updated_at: string;
 }
+
+export interface NotificationPayload {
+    title: string;
+    url?: string;
+    type: 'info' | 'success' | 'warning' | 'error';
+    metadata?: Record<string, any>;
+}
+
+export interface Notification {
+    id: string;
+    type: string;
+    notifiable_type: string;
+    notifiable_id: number;
+    data: {
+        message: string;
+        payload?: NotificationPayload;
+    };
+    content: string; // aggregated from data.message
+    extra?: NotificationPayload; // aggregated from data.payload
+    read_at: string | null;
+    created_at: string;
+    updated_at: string;
+}

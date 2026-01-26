@@ -12,6 +12,13 @@ use Inertia\Inertia;
 
 class CommunityServiceController extends Controller
 {
+    protected $notificationService;
+
+    public function __construct(\App\Services\NotificationService $notificationService)
+    {
+        $this->notificationService = $notificationService;
+    }
+
     public function index(Request $request)
     {
         $query = CommunityServiceSubmission::query()
@@ -50,6 +57,8 @@ class CommunityServiceController extends Controller
         ]);
     }
 
+
+
     public function store(Request $request, $id)
     {
         $validated = $request->validate([
@@ -57,14 +66,31 @@ class CommunityServiceController extends Controller
             'reviewers.*' => 'exists:users,id',
         ]);
 
-        $submission = CommunityServiceSubmission::findOrFail($id);
+        $submission = CommunityServiceSubmission::with('latestDetail')->findOrFail($id);
 
         DB::transaction(function () use ($submission, $validated) {
+            // Get existing reviewer IDs to compare
+            $existingReviewers = $submission->reviewers()->pluck('user_id')->toArray();
+
             $submission->reviewers()->delete();
 
             if (!empty($validated['reviewers'])) {
                 foreach ($validated['reviewers'] as $userId) {
                     $submission->reviewers()->create(['user_id' => $userId]);
+
+                    // Notify only new reviewers
+                    if (!in_array($userId, $existingReviewers)) {
+                        $this->notificationService->send(
+                            $userId,
+                            "Anda ditugaskan sebagai Reviewer untuk proposal pengabdian: " . ($submission->latestDetail->title ?? 'Judul Tidak Tersedia') . ". Silakan mulai mereview.",
+                            new \App\DTO\NotificationPayload(
+                                title: "Tugas Review Baru",
+                                url: route('review.community_service.proposal.index'),
+                                type: 'info'
+                            ),
+                            true
+                        );
+                    }
                 }
             }
         });

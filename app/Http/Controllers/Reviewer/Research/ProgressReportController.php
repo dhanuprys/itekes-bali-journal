@@ -14,6 +14,12 @@ use Inertia\Inertia;
 
 class ProgressReportController extends Controller
 {
+    protected $notificationService;
+
+    public function __construct(\App\Services\NotificationService $notificationService)
+    {
+        $this->notificationService = $notificationService;
+    }
     public function index()
     {
         $submissions = ResearchSubmission::with(['latestDetail', 'user'])
@@ -60,7 +66,7 @@ class ProgressReportController extends Controller
     {
         $submission = $this->checkAssignment($id);
 
-        if ($submission->status !== ResearchStatus::NEED_REVIEW->value) {
+        if (!in_array($submission->status, [ResearchStatus::NEED_REVIEW->value, ResearchStatus::REVISION_NEEDED->value])) {
             abort(403, 'Review not active.');
         }
 
@@ -117,6 +123,19 @@ class ProgressReportController extends Controller
             'status' => $isApproved ? ResearchStatus::APPROVED->value : $newStatus,
             'stage' => $isApproved ? ResearchReviewStage::FINAL_REPORT->value : $submission->stage,
         ]);
+
+        // Notify User
+        $this->notificationService->send(
+            $submission->user,
+            "Reviewer memperbarui status Laporan Kemajuan penelitian Anda: " . $submission->latestDetail->title . " menjadi " . strtoupper(str_replace('_', ' ', $request->input('status'))) . ". Silakan cek detailnya.",
+            new \App\DTO\NotificationPayload(
+                title: "Status Laporan Kemajuan Diperbarui",
+                url: route('apply.research.progress_report.show', $submission->id),
+                type: 'info',
+                metadata: ['submission_id' => $submission->id, 'status' => $request->input('status')]
+            ),
+            true
+        );
 
         return redirect()->route('review.research.index')->with('success', 'Status berhasil diperbarui.');
     }

@@ -169,7 +169,7 @@ In this application, we follow a strong convention when writing a page content (
         {/snippet}
 
         {#snippet actions()}
-            <!-- button like "create" button  -->
+            <!-- button like "create" button, or a info badge -->
         {/snippet}
 
         {#snippet filters()}

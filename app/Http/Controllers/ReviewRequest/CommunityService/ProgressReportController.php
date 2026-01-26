@@ -15,6 +15,12 @@ use Inertia\Inertia;
 
 class ProgressReportController extends Controller
 {
+    protected $notificationService;
+
+    public function __construct(\App\Services\NotificationService $notificationService)
+    {
+        $this->notificationService = $notificationService;
+    }
     public function index()
     {
         $submissions = CommunityServiceSubmission::with(['latestDetail'])
@@ -99,6 +105,22 @@ class ProgressReportController extends Controller
             $submission->update([
                 'status' => CommunityServiceStatus::NEED_REVIEW->value,
             ]);
+
+            // Notify Reviewers
+            $reviewers = $submission->reviewers;
+            foreach ($reviewers as $reviewer) {
+                $this->notificationService->send(
+                    $reviewer->user_id,
+                    "Laporan Kemajuan Pengabdian Baru: " . $validated['final_title'] . " oleh " . Auth::user()->name,
+                    new \App\DTO\NotificationPayload(
+                        title: "Laporan Kemajuan Baru",
+                        url: route('review.community_service.progress_report.show', $submission->id),
+                        type: 'info',
+                        metadata: ['submission_id' => $submission->id]
+                    ),
+                    true
+                );
+            }
         });
 
         return redirect()->route('apply.community_service.progress_report.index')
@@ -197,6 +219,22 @@ class ProgressReportController extends Controller
             $submission->update([
                 'status' => CommunityServiceStatus::NEED_REVIEW->value,
             ]);
+
+            // Notify Reviewers
+            $reviewers = $submission->reviewers;
+            foreach ($reviewers as $reviewer) {
+                $this->notificationService->send(
+                    $reviewer->user_id,
+                    "Revisi Laporan Kemajuan Pengabdian: " . $validated['final_title'] . " oleh " . Auth::user()->name,
+                    new \App\DTO\NotificationPayload(
+                        title: "Revisi Laporan Kemajuan",
+                        url: route('review.community_service.progress_report.show', $submission->id),
+                        type: 'info',
+                        metadata: ['submission_id' => $submission->id]
+                    ),
+                    true
+                );
+            }
         });
 
         return redirect()->route('apply.community_service.progress_report.index')
