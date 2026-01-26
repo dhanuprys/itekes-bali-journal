@@ -20,7 +20,7 @@ class FinalReportController extends Controller
             ->whereHas('reviewers', function ($query) {
                 $query->where('user_id', Auth::id());
             })
-            ->where('stage', ResearchReviewStage::FINAL_REPORT)
+            ->where('stage', ResearchReviewStage::FINAL_REPORT->value)
             ->latest()
             ->paginate(10);
 
@@ -34,7 +34,7 @@ class FinalReportController extends Controller
         return ResearchSubmission::whereHas('reviewers', function ($query) {
             $query->where('user_id', Auth::id());
         })
-            ->where('stage', ResearchReviewStage::FINAL_REPORT)
+            ->where('stage', ResearchReviewStage::FINAL_REPORT->value)
             ->findOrFail($id);
     }
 
@@ -60,7 +60,7 @@ class FinalReportController extends Controller
     {
         $submission = $this->checkAssignment($id);
 
-        if ($submission->status !== ResearchStatus::NEED_REVIEW) {
+        if ($submission->status !== ResearchStatus::NEED_REVIEW->value) {
             abort(403, 'Review not active.');
         }
 
@@ -88,7 +88,7 @@ class FinalReportController extends Controller
     {
         $submission = $this->checkAssignment($id);
 
-        if ($submission->status !== ResearchStatus::NEED_REVIEW) {
+        if ($submission->status !== ResearchStatus::NEED_REVIEW->value) {
             abort(403, 'Review not active.');
         }
 
@@ -97,9 +97,9 @@ class FinalReportController extends Controller
         ]);
 
         $statusMap = [
-            'approved' => ResearchStatus::APPROVED, // Final approval
-            'rejected' => ResearchStatus::REJECTED,
-            'revision_needed' => ResearchStatus::REVISION_NEEDED,
+            'approved' => ResearchStatus::APPROVED->value, // Final approval
+            'rejected' => ResearchStatus::REJECTED->value,
+            'revision_needed' => ResearchStatus::REVISION_NEEDED->value,
         ];
 
         $newStatus = $statusMap[$request->input('status')];

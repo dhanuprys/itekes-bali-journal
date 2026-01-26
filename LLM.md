@@ -32,6 +32,10 @@ STATUS=APPROVED STAGE=FINAL-REPORT
 
 STATUS=APPROVED STAGE=FINAL-REPORT
 
+### Form Fields
+
+Every form fields is strictly and should exact the stage needs. You don't allowed to change or modify it. I already add a comment on submission detail fillable that explain the stage needs.
+
 ## Roles & Permissions
 
 This system has several reserved role, such as:
@@ -79,9 +83,38 @@ I already created the InertiaJS props share on the `app/Http/Middleware/HandleIn
 
 In the current phase, we still store the logic on the controller. But in the future we will develop the better solution. So, you can put the logic on the controller for now.
 
+#### Route Files
+
+There are some modules of route files that separated by its functionality.
+
+- `routes/web.php`: The main route file that handle the inertia page rendering.
+- `routes/modules/general.php`: The route file that handle the general functionality.
+- `routes/modules/review_request.php`: The route file that handle the review request functionality.
+- `routes/modules/reviewer.php`: The route file that handle the reviewer functionality.
+- `routes/modules/reviewer_assignment.php`: The route file for assign the reviewer of an submission.
+- `routes/modules/base_system.php`: The route for handling base data of this system. It sometimes just a simple CRUD.
+- `routes/modules/settigs.php`: The user settings page.
+- `routes/modules/users.php`: The users management route. It include role and permissions too.
+
+#### File Upload
+
+We use centralized file upload system. The route is on `/storage-upload` and the controller is on `app/Http/Controllers/General/StorageUploadController.php`. It requires two parameters: `action` used for identifier of what validation should applied and where the file should stored. And the second one is the `file` parameter. You can see the action list on `app/Enums/StorageUploadAction.php`.
+
+> See the frontend file upload docs below (on frontend section).
+
 ### Frontend
 
 On the frontend this system using InertiaJS + Svelte version 5, Shadcn Svelte, lucide-icon, TailwindCSS. Also, on the frontend you always should use Bahasa Indonesia. But some words that technically need to be English, you should use English.
+
+#### Frontend UI/UX
+
+You should always create a good UI/UX, not too fancy but has stable functionality. The design should be simple and clean with too many stacking cards. The responsiveness is the priority for the design. If you need to create a confirmation or modal, please use the shadcn provided component such as: `dialog`, `alert-dialog`.
+
+#### File Upload
+
+You always should use the file upload system on the backend. See the docs above (on backend section).
+
+I already setup the file upload component on the frontend. You can see it on `resources/js/components/UploadFile.svelte`. That component will retrieve a prop named as "action". For the action list you check on `resources/js/data/storage-upload.ts`.
 
 #### The term of frontend development
 

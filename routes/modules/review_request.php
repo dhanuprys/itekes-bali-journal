@@ -32,6 +32,7 @@ Route::middleware(['auth', 'permission:' . PermissionRole::P_REQUEST_RESEARCH_RE
                     Route::get('create', [ReviewRequest\Research\ProgressReportController::class, 'create'])->name('create');
                     Route::post('', [ReviewRequest\Research\ProgressReportController::class, 'store'])->name('store');
                     Route::get('{id}', [ReviewRequest\Research\ProgressReportController::class, 'show'])->name('show');
+                    Route::get('{id}/edit', [ReviewRequest\Research\ProgressReportController::class, 'edit'])->name('edit');
                     Route::post('{id}/revise', [ReviewRequest\Research\ProgressReportController::class, 'revise'])->name('revise');
 
                     Route::post('{id}/comment', [ReviewRequest\Research\ProgressReportController::class, 'comment'])->name('comment');
@@ -75,6 +76,7 @@ Route::middleware(['auth', 'permission:' . PermissionRole::P_REQUEST_COMMUNITY_S
                     Route::get('create', [ReviewRequest\CommunityService\ProgressReportController::class, 'create'])->name('create');
                     Route::post('', [ReviewRequest\CommunityService\ProgressReportController::class, 'store'])->name('store');
                     Route::get('{id}', [ReviewRequest\CommunityService\ProgressReportController::class, 'show'])->name('show');
+                    Route::get('{id}/edit', [ReviewRequest\CommunityService\ProgressReportController::class, 'edit'])->name('edit');
                     Route::post('{id}/revise', [ReviewRequest\CommunityService\ProgressReportController::class, 'revise'])->name('revise');
 
                     Route::post('{id}/comment', [ReviewRequest\CommunityService\ProgressReportController::class, 'comment'])->name('comment');

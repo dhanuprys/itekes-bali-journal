@@ -3,14 +3,26 @@
     import AppLayout from '@/layouts/AppLayout.svelte';
     import { type BreadcrumbItem } from '@/types';
     import Heading from '@/components/Heading.svelte';
+    import { Button } from '@/components/ui/button';
     import * as Card from '@/components/ui/card';
     import { Badge } from '@/components/ui/badge';
-    import { Button } from '@/components/ui/button';
     import { Separator } from '@/components/ui/separator';
-    import { FileTextIcon } from 'lucide-svelte';
+    import {
+        FileTextIcon,
+        UserIcon,
+        UsersIcon,
+        BookOpenIcon,
+        TargetIcon,
+        BanknoteIcon,
+        CalendarIcon,
+        ClockIcon,
+        CheckCircleIcon,
+        AlertCircleIcon,
+    } from 'lucide-svelte';
 
     let { submission } = $props();
     let detail = $derived(submission.latest_detail);
+    let members = $derived(detail.members || []);
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Permintaan Review', href: '#' },
@@ -18,10 +30,25 @@
         { title: 'Laporan Akhir', href: route('apply.community_service.final_report.index') },
         { title: 'Detail', href: '#' },
     ];
+
+    function getStatusConfig(status: string) {
+        switch (status) {
+            case 'approved':
+                return { color: 'bg-green-500/10 text-green-600 hover:bg-green-500/20', label: 'Disetujui', icon: CheckCircleIcon };
+            default:
+                return {
+                    color: 'bg-muted text-muted-foreground',
+                    label: status.replace('_', ' ').toUpperCase(),
+                    icon: FileTextIcon,
+                };
+        }
+    }
+
+    let statusConfig = $derived(getStatusConfig(submission.status));
 </script>
 
 <svelte:head>
-    <title>Detail Laporan Akhir</title>
+    <title>Detail Laporan Akhir - {detail?.final_title || 'Laporan'}</title>
 </svelte:head>
 
 <AppLayout {breadcrumbs}>
@@ -60,6 +87,23 @@
                             <div>
                                 <dt class="text-sm font-medium text-muted-foreground">Program Studi</dt>
                                 <dd class="text-base font-semibold">{detail?.study_program?.name || '-'}</dd>
+                            </div>
+
+                            <div>
+                                <dt class="text-sm font-medium text-muted-foreground">Skema Pengabdian</dt>
+                                <dd class="text-base font-semibold">{detail?.schema?.name || '-'}</dd>
+                            </div>
+
+                            <div>
+                                <dt class="text-sm font-medium text-muted-foreground">Target Luaran</dt>
+                                <dd class="text-base font-semibold">{detail?.target?.name || '-'}</dd>
+                            </div>
+
+                            <div>
+                                <dt class="text-sm font-medium text-muted-foreground">Anggaran Disetujui</dt>
+                                <dd class="text-base font-semibold">
+                                    {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(detail?.budget || 0)}
+                                </dd>
                             </div>
 
                             <div class="sm:col-span-2">

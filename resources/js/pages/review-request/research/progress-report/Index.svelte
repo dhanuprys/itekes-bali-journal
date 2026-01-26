@@ -7,7 +7,9 @@
     import * as Table from '@/components/ui/table';
     import * as Card from '@/components/ui/card';
     import { Badge } from '@/components/ui/badge';
-    import { Link } from '@inertiajs/svelte';
+    import * as DropdownMenu from '@/components/ui/dropdown-menu';
+    import { Link, router } from '@inertiajs/svelte';
+    import { MoreHorizontalIcon } from 'lucide-svelte';
 
     let { submissions } = $props();
 
@@ -79,29 +81,42 @@
                                         </Table.Cell>
                                         <Table.Cell>{new Date(submission.created_at).toLocaleDateString('id-ID')}</Table.Cell>
                                         <Table.Cell class="text-right">
-                                            {#if !hasSubmittedReport(submission)}
-                                                <Button
-                                                    size="sm"
-                                                    href={route('apply.research.progress_report.create', { submission_id: submission.id })}
+                                            <DropdownMenu.Root>
+                                                <DropdownMenu.Trigger
+                                                    class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-background text-sm font-medium hover:bg-accent hover:text-accent-foreground"
                                                 >
-                                                    Buat Laporan
-                                                </Button>
-                                            {:else if submission.status === 'revision_needed'}
-                                                <!-- Revisions for progress report not usually separate route unless we make one, reusing create/edit logic? -->
-                                                <!-- Typically revisions reuse the 'edit' or dedicated 'revise' page. -->
-                                                <!-- For now, linking to show, assuming revisit flow is handled there or we add revise route logic -->
-                                                <Button
-                                                    variant="outline"
-                                                    size="sm"
-                                                    href={route('apply.research.progress_report.show', submission.id)}
-                                                >
-                                                    Lihat / Revisi
-                                                </Button>
-                                            {:else}
-                                                <Button variant="ghost" size="sm" href={route('apply.research.progress_report.show', submission.id)}>
-                                                    Detail
-                                                </Button>
-                                            {/if}
+                                                    <span class="sr-only">Open menu</span>
+                                                    <MoreHorizontalIcon class="h-4 w-4" />
+                                                </DropdownMenu.Trigger>
+                                                <DropdownMenu.Content align="end">
+                                                    <DropdownMenu.Item onclick={() => router.visit(route('apply.research.revisions', submission.id))}>
+                                                        Riwayat Revisi
+                                                    </DropdownMenu.Item>
+                                                    {#if !hasSubmittedReport(submission)}
+                                                        <DropdownMenu.Item
+                                                            onclick={() =>
+                                                                router.visit(
+                                                                    route('apply.research.progress_report.create', { submission_id: submission.id }),
+                                                                )}
+                                                        >
+                                                            Buat Laporan
+                                                        </DropdownMenu.Item>
+                                                    {:else if submission.status === 'revision_needed'}
+                                                        <DropdownMenu.Item
+                                                            onclick={() => router.visit(route('apply.research.progress_report.edit', submission.id))}
+                                                        >
+                                                            Revisi
+                                                        </DropdownMenu.Item>
+                                                    {/if}
+                                                    {#if hasSubmittedReport(submission)}
+                                                        <DropdownMenu.Item
+                                                            onclick={() => router.visit(route('apply.research.progress_report.show', submission.id))}
+                                                        >
+                                                            Detail
+                                                        </DropdownMenu.Item>
+                                                    {/if}
+                                                </DropdownMenu.Content>
+                                            </DropdownMenu.Root>
                                         </Table.Cell>
                                     </Table.Row>
                                 {/each}

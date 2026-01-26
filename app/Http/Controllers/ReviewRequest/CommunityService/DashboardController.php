@@ -37,7 +37,9 @@ class DashboardController extends Controller
         $submission = CommunityServiceSubmission::where('user_id', Auth::id())
             ->findOrFail($id);
 
-        $detail = $submission->details()->findOrFail($revisionId);
+        $detail = $submission->details()
+            ->with(['comments.user', 'members', 'studyProgram', 'schema', 'target'])
+            ->findOrFail($revisionId);
 
         return Inertia::render('review-request/community-service/dashboard/ShowRevision', [
             'submission' => $submission,

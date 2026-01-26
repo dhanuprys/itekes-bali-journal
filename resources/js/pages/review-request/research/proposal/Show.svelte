@@ -7,18 +7,55 @@
     import { Badge } from '@/components/ui/badge';
     import { Button } from '@/components/ui/button';
     import { Separator } from '@/components/ui/separator';
+    import {
+        CalendarIcon,
+        UserIcon,
+        UsersIcon,
+        FileTextIcon,
+        BanknoteIcon,
+        BookOpenIcon,
+        TargetIcon,
+        CheckCircleIcon,
+        ClockIcon,
+        AlertCircleIcon,
+    } from 'lucide-svelte';
 
     let { submission } = $props();
 
     // Derived from submission.latest_detail
     let detail = $derived(submission.latest_detail);
+    let members = $derived(detail.members || []);
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Permintaan Review', href: '#' },
         { title: 'Penelitian', href: '#' },
-        { title: 'Proposal', href: '/apply/research' },
+        { title: 'Proposal', href: '/apply/research/proposal' },
         { title: 'Detail', href: '#' },
     ];
+
+    // Status Helper
+    function getStatusConfig(status: string) {
+        switch (status) {
+            case 'draft':
+                return { color: 'bg-muted', label: 'Draft', icon: FileTextIcon };
+            case 'pending':
+                return { color: 'bg-yellow-500/10 text-yellow-600 hover:bg-yellow-500/20', label: 'Menunggu Review', icon: ClockIcon };
+            case 'revision_needed':
+                return { color: 'bg-orange-500/10 text-orange-600 hover:bg-orange-500/20', label: 'Perlu Revisi', icon: AlertCircleIcon };
+            case 'approved':
+                return { color: 'bg-green-500/10 text-green-600 hover:bg-green-500/20', label: 'Disetujui', icon: CheckCircleIcon };
+            case 'rejected':
+                return { color: 'bg-red-500/10 text-red-600 hover:bg-red-500/20', label: 'Ditolak', icon: AlertCircleIcon };
+            default:
+                return {
+                    color: 'border-transparent bg-primary text-primary-foreground hover:bg-primary/80',
+                    label: status.replace('_', ' '),
+                    icon: FileTextIcon,
+                };
+        }
+    }
+
+    let statusConfig = $derived(getStatusConfig(submission.status));
 </script>
 
 <svelte:head>

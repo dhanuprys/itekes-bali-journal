@@ -15,7 +15,7 @@ class FinalReportController extends Controller
     {
         $submissions = ResearchSubmission::with(['latestDetail'])
             ->where('user_id', Auth::id())
-            ->where('status', ResearchStatus::APPROVED)
+            ->where('status', ResearchStatus::APPROVED->value)
             ->latest()
             ->paginate(10);
 
@@ -30,10 +30,11 @@ class FinalReportController extends Controller
             'latestDetail.studyProgram',
             'latestDetail.researchSchema',
             'latestDetail.researchTarget',
-            'latestDetail.members'
+            'latestDetail.members',
+            'latestDetail.comments.user'
         ])
             ->where('user_id', Auth::id())
-            ->where('status', ResearchStatus::APPROVED)
+            ->where('status', ResearchStatus::APPROVED->value)
             ->findOrFail($id);
 
         return Inertia::render('review-request/research/final-report/Show', [

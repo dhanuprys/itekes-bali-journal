@@ -7,7 +7,9 @@
     import * as Table from '@/components/ui/table';
     import * as Card from '@/components/ui/card';
     import { Badge } from '@/components/ui/badge';
-    import { Link } from '@inertiajs/svelte';
+    import * as DropdownMenu from '@/components/ui/dropdown-menu';
+    import { router } from '@inertiajs/svelte';
+    import { MoreHorizontalIcon } from 'lucide-svelte';
 
     let { submissions } = $props();
 
@@ -81,23 +83,34 @@
                                         </Table.Cell>
                                         <Table.Cell>{new Date(submission.created_at).toLocaleDateString('id-ID')}</Table.Cell>
                                         <Table.Cell class="text-right">
-                                            {#if submission.status === 'revision_needed'}
-                                                <Button
-                                                    variant="outline"
-                                                    size="sm"
-                                                    href={route('apply.community_service.proposal.edit', submission.id)}
+                                            <DropdownMenu.Root>
+                                                <DropdownMenu.Trigger
+                                                    class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-background text-sm font-medium hover:bg-accent hover:text-accent-foreground"
                                                 >
-                                                    Revisi
-                                                </Button>
-                                            {:else}
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    href={route('apply.community_service.proposal.show', submission.id)}
-                                                >
-                                                    Detail
-                                                </Button>
-                                            {/if}
+                                                    <span class="sr-only">Open menu</span>
+                                                    <MoreHorizontalIcon class="h-4 w-4" />
+                                                </DropdownMenu.Trigger>
+                                                <DropdownMenu.Content align="end">
+                                                    <DropdownMenu.Item
+                                                        onclick={() => router.visit(route('apply.community_service.revisions', submission.id))}
+                                                    >
+                                                        Riwayat Revisi
+                                                    </DropdownMenu.Item>
+                                                    {#if submission.status === 'revision_needed'}
+                                                        <DropdownMenu.Item
+                                                            onclick={() =>
+                                                                router.visit(route('apply.community_service.proposal.edit', submission.id))}
+                                                        >
+                                                            Revisi
+                                                        </DropdownMenu.Item>
+                                                    {/if}
+                                                    <DropdownMenu.Item
+                                                        onclick={() => router.visit(route('apply.community_service.proposal.show', submission.id))}
+                                                    >
+                                                        Detail
+                                                    </DropdownMenu.Item>
+                                                </DropdownMenu.Content>
+                                            </DropdownMenu.Root>
                                         </Table.Cell>
                                     </Table.Row>
                                 {/each}

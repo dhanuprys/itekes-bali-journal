@@ -20,7 +20,7 @@ class FinalReportController extends Controller
             ->whereHas('reviewers', function ($query) {
                 $query->where('user_id', Auth::id());
             })
-            ->where('stage', CommunityServiceReviewStage::FINAL_REPORT)
+            ->where('stage', CommunityServiceReviewStage::FINAL_REPORT->value)
             ->latest()
             ->paginate(10);
 
@@ -34,7 +34,7 @@ class FinalReportController extends Controller
         return CommunityServiceSubmission::whereHas('reviewers', function ($query) {
             $query->where('user_id', Auth::id());
         })
-            ->where('stage', CommunityServiceReviewStage::FINAL_REPORT)
+            ->where('stage', CommunityServiceReviewStage::FINAL_REPORT->value)
             ->findOrFail($id);
     }
 
@@ -60,7 +60,7 @@ class FinalReportController extends Controller
     {
         $submission = $this->checkAssignment($id);
 
-        if ($submission->status !== CommunityServiceStatus::NEED_REVIEW) {
+        if ($submission->status !== CommunityServiceStatus::NEED_REVIEW->value) {
             abort(403, 'Review not active.');
         }
 
@@ -88,7 +88,7 @@ class FinalReportController extends Controller
     {
         $submission = $this->checkAssignment($id);
 
-        if ($submission->status !== CommunityServiceStatus::NEED_REVIEW) {
+        if ($submission->status !== CommunityServiceStatus::NEED_REVIEW->value) {
             abort(403, 'Review not active.');
         }
 
@@ -97,9 +97,9 @@ class FinalReportController extends Controller
         ]);
 
         $statusMap = [
-            'approved' => CommunityServiceStatus::APPROVED,
-            'rejected' => CommunityServiceStatus::REJECTED,
-            'revision_needed' => CommunityServiceStatus::REVISION_NEEDED,
+            'approved' => CommunityServiceStatus::APPROVED->value,
+            'rejected' => CommunityServiceStatus::REJECTED->value,
+            'revision_needed' => CommunityServiceStatus::REVISION_NEEDED->value,
         ];
 
         $newStatus = $statusMap[$request->input('status')];

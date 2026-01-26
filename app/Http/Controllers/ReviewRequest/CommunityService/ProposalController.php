@@ -32,7 +32,7 @@ class ProposalController extends Controller
     {
         $submissions = CommunityServiceSubmission::with(['latestDetail'])
             ->where('user_id', Auth::id())
-            ->where('stage', CommunityServiceReviewStage::PROPOSAL)
+            ->where('stage', CommunityServiceReviewStage::PROPOSAL->value)
             ->latest()
             ->paginate(10);
 
@@ -57,7 +57,7 @@ class ProposalController extends Controller
             'title' => 'required|string',
             'budget' => 'nullable|numeric',
             'community_service_target_id' => 'nullable|exists:community_service_targets,id',
-            'proposal_path' => 'required|string|max:2048', // Changed from proposal_file
+            'proposal_path' => 'required|string|max:2048',
             'members' => 'nullable|array',
             'members.*.name' => 'required|string|max:255',
         ]);
@@ -65,8 +65,8 @@ class ProposalController extends Controller
         DB::transaction(function () use ($validated, $request) {
             $submission = CommunityServiceSubmission::create([
                 'user_id' => Auth::id(),
-                'status' => CommunityServiceStatus::NEED_REVIEW,
-                'stage' => CommunityServiceReviewStage::PROPOSAL,
+                'status' => CommunityServiceStatus::NEED_REVIEW->value,
+                'stage' => CommunityServiceReviewStage::PROPOSAL->value,
             ]);
 
             // Mark the pre-uploaded file as used
@@ -101,7 +101,8 @@ class ProposalController extends Controller
         $submission = CommunityServiceSubmission::with([
             'latestDetail.studyProgram',
             'latestDetail.target',
-            'latestDetail.members'
+            'latestDetail.members',
+            'latestDetail.comments.user' // Eager load comments
         ])
             ->where('user_id', Auth::id())
             ->findOrFail($id);
@@ -128,6 +129,7 @@ class ProposalController extends Controller
             'detail' => $submission->latestDetail,
             'studyPrograms' => StudyProgram::all(),
             'communityServiceTargets' => CommunityServiceTarget::all(),
+            'communityServiceSchemas' => CommunityServiceSchema::all(), // Pass schemes
         ]);
     }
 
@@ -172,7 +174,7 @@ class ProposalController extends Controller
             }
 
             $submission->update([
-                'status' => CommunityServiceStatus::NEED_REVIEW,
+                'status' => CommunityServiceStatus::NEED_REVIEW->value,
             ]);
         });
 

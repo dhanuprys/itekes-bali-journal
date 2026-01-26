@@ -76,8 +76,12 @@
                                         </Table.Cell>
                                         <Table.Cell>{new Date(submission.updated_at).toLocaleDateString('id-ID')}</Table.Cell>
                                         <Table.Cell class="text-right">
-                                            <Button size="sm" href={route('review.community_service.progress_report.show', submission.id)}>
-                                                Review
+                                            <Button
+                                                size="sm"
+                                                variant={submission.status === 'need_review' ? 'default' : 'outline'}
+                                                href={route('review.community_service.progress_report.show', submission.id)}
+                                            >
+                                                {submission.status === 'need_review' ? 'Review' : 'Detail'}
                                             </Button>
                                         </Table.Cell>
                                     </Table.Row>

@@ -7,6 +7,7 @@ use App\Models\StorageUpload;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class StorageUploadService
 {
@@ -21,19 +22,21 @@ class StorageUploadService
      */
     public function upload(UploadedFile $file, string $path, StorageUploadAction $action, string $disk = 'public'): StorageUpload
     {
-        $fileName = $file->getClientOriginalName();
+        $originalName = $file->getClientOriginalName();
+        $extension = $file->getClientOriginalExtension();
+        $storedName = (string) Str::uuid() . '.' . $extension;
         $fileSize = $file->getSize();
         $mimeType = $file->getMimeType();
 
         // Store the file
-        $fullPath = $file->storeAs($path, $fileName, $disk);
+        $fullPath = $file->storeAs($path, $storedName, $disk);
 
         // create record
         return StorageUpload::create([
             'user_id' => Auth::id(),
             'action' => $action->value,
             'file_path' => $fullPath,
-            'file_name' => $fileName,
+            'file_name' => $originalName,
             'file_size' => $fileSize,
             'mime_type' => $mimeType,
             'disk' => $disk,

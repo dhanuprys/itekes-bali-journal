@@ -11,7 +11,7 @@
 
     interface Props {
         action: string;
-        value?: string | null;
+        value?: string | null | undefined;
         error?: string;
         accept?: string;
         maxSize?: number; // in bytes
@@ -20,14 +20,15 @@
 
     let {
         action,
-        value = $bindable(null),
+        value = $bindable(),
         error = undefined,
         accept = '.pdf,.doc,.docx',
         maxSize = 10 * 1024 * 1024, // 10MB default
         label = 'Upload File',
     }: Props = $props();
 
-    let isDragging = $state(false);
+    let isLocalDragging = $state(false);
+    let isUploading = $state(false);
     let progress = $state(0);
     let localError = $state<string | null>(null);
     let fileName = $state<string | null>(null);
@@ -44,7 +45,6 @@
             localError = `File size exceeds ${maxSize / 1024 / 1024}MB limit.`;
             return false;
         }
-        // Basic extension check could be added here if needed, but 'accept' attribute handles the dialog
         return true;
     }
 
@@ -52,6 +52,7 @@
         localError = null;
         if (!validateFile(file)) return;
 
+        isUploading = true;
         uploadState.start();
         progress = 0;
         fileName = file.name;
@@ -76,22 +77,24 @@
             value = response.data.path;
 
             await tick(); // Force DOM update
+            isUploading = false;
             uploadState.finish();
         } catch (err: any) {
             console.error(err);
             const msg = err.response?.data?.message || 'Upload failed. Please try again.';
             localError = msg;
+            isUploading = false;
             uploadState.fail(msg);
-            value = null; // Clear value on error
+            value = undefined; // Clear value on error
             fileName = null;
         }
     }
 
     function handleDrop(e: DragEvent) {
         e.preventDefault();
-        isDragging = false;
+        isLocalDragging = false;
 
-        if (uploadState.isUploading) return;
+        if (isUploading) return;
 
         if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
             uploadFile(e.dataTransfer.files[0]);
@@ -100,13 +103,13 @@
 
     function handleDragOver(e: DragEvent) {
         e.preventDefault();
-        if (!uploadState.isUploading) {
-            isDragging = true;
+        if (!isUploading) {
+            isLocalDragging = true;
         }
     }
 
     function handleDragLeave() {
-        isDragging = false;
+        isLocalDragging = false;
     }
 
     function handleFileSelect(e: Event) {
@@ -117,11 +120,10 @@
     }
 
     function removeFile() {
-        value = null;
+        value = undefined;
         fileName = null;
         progress = 0;
         localError = null;
-        // Optionally notify backend to delete/unused the file if needed, but for now just clear local state
     }
 </script>
 
@@ -153,21 +155,21 @@
         <div
             role="button"
             tabindex="0"
-            onkeydown={(e) => e.key === 'Enter' && document.getElementById('file-upload-input')?.click()}
+            onkeydown={(e) => e.key === 'Enter' && document.getElementById('file-upload-input-' + label)?.click()}
             ondrop={handleDrop}
             ondragover={handleDragOver}
             ondragleave={handleDragLeave}
-            onclick={() => document.getElementById('file-upload-input')?.click()}
+            onclick={() => document.getElementById('file-upload-input-' + label)?.click()}
             class={cn(
                 'relative flex flex-col items-center justify-center w-full p-8 border-2 border-dashed rounded-lg transition-colors cursor-pointer',
-                isDragging ? 'border-primary bg-primary/5' : 'border-muted-foreground/25 hover:bg-muted/50',
-                uploadState.isUploading && 'pointer-events-none opacity-60',
+                isLocalDragging ? 'border-primary bg-primary/5' : 'border-muted-foreground/25 hover:bg-muted/50',
+                isUploading && 'pointer-events-none opacity-60',
                 (localError || error) && 'border-destructive/50 bg-destructive/5',
             )}
         >
-            <input id="file-upload-input" type="file" class="hidden" onchange={handleFileSelect} {accept} disabled={uploadState.isUploading} />
+            <input id={'file-upload-input-' + label} type="file" class="hidden" onchange={handleFileSelect} {accept} disabled={isUploading} />
 
-            {#if uploadState.isUploading && progress < 100}
+            {#if isUploading && progress < 100}
                 <div class="w-full max-w-xs space-y-4 text-center">
                     <div class="p-4 mx-auto rounded-full bg-muted">
                         <UploadCloudIcon size={32} class="text-muted-foreground animate-pulse" />
@@ -191,7 +193,7 @@
                     </div>
                     <div class="space-y-1">
                         <p class="text-sm font-medium">
-                            {#if isDragging}
+                            {#if isLocalDragging}
                                 Drop files here
                             {:else if localError || error}
                                 <span class="text-destructive">Upload Failed</span>

@@ -14,6 +14,7 @@
     // Derived states
     let isResearch = $derived(type === 'research');
     let targetLabel = $derived(isResearch ? 'Target Luaran' : 'Target Luaran');
+    let schemaLabel = 'Skema';
     let titleLabel = $derived(isResearch ? 'Judul Penelitian' : 'Judul Pengabdian');
     let leaderLabel = $derived(isResearch ? 'Nama Ketua Peneliti' : 'Nama Ketua Pengabdi');
 

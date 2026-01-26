@@ -13,8 +13,8 @@
 
         <Resizable.Handle withHandle />
 
-        <Resizable.Pane defaultSize={30} minSize={20}>
-            <div class="h-full overflow-y-auto p-6 bg-muted/10 border-l space-y-6">
+        <Resizable.Pane defaultSize={40} minSize={20}>
+            <div class="h-full flex flex-col overflow-hidden bg-muted/10 border-l">
                 {@render actions()}
             </div>
         </Resizable.Pane>

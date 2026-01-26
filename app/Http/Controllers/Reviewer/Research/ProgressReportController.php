@@ -20,7 +20,7 @@ class ProgressReportController extends Controller
             ->whereHas('reviewers', function ($query) {
                 $query->where('user_id', Auth::id());
             })
-            ->where('stage', ResearchReviewStage::PROGRESS_REPORT)
+            ->where('stage', ResearchReviewStage::PROGRESS_REPORT->value)
             ->latest()
             ->paginate(10);
 
@@ -34,7 +34,7 @@ class ProgressReportController extends Controller
         return ResearchSubmission::whereHas('reviewers', function ($query) {
             $query->where('user_id', Auth::id());
         })
-            ->where('stage', ResearchReviewStage::PROGRESS_REPORT)
+            ->where('stage', ResearchReviewStage::PROGRESS_REPORT->value)
             ->findOrFail($id);
     }
 
@@ -60,7 +60,7 @@ class ProgressReportController extends Controller
     {
         $submission = $this->checkAssignment($id);
 
-        if ($submission->status !== ResearchStatus::NEED_REVIEW) {
+        if ($submission->status !== ResearchStatus::NEED_REVIEW->value) {
             abort(403, 'Review not active.');
         }
 
@@ -88,7 +88,7 @@ class ProgressReportController extends Controller
     {
         $submission = $this->checkAssignment($id);
 
-        if ($submission->status !== ResearchStatus::NEED_REVIEW) {
+        if ($submission->status !== ResearchStatus::NEED_REVIEW->value) {
             abort(403, 'Review not active.');
         }
 
@@ -97,9 +97,9 @@ class ProgressReportController extends Controller
         ]);
 
         $statusMap = [
-            'approved' => ResearchStatus::APPROVED,
-            'rejected' => ResearchStatus::REJECTED,
-            'revision_needed' => ResearchStatus::REVISION_NEEDED,
+            'approved' => ResearchStatus::APPROVED->value,
+            'rejected' => ResearchStatus::REJECTED->value,
+            'revision_needed' => ResearchStatus::REVISION_NEEDED->value,
         ];
 
         $newStatus = $statusMap[$request->input('status')];
@@ -109,8 +109,13 @@ class ProgressReportController extends Controller
             'research_submission_detail_id' => $submission->latestDetail->id,
         ]);
 
+        // If approved, move to next stage (Final Report) and set status to Approved
+        // Otherwise use the selected status (Rejected/Revision Needed) and keep current stage
+        $isApproved = $request->input('status') === 'approved';
+
         $submission->update([
-            'status' => $newStatus,
+            'status' => $isApproved ? ResearchStatus::APPROVED->value : $newStatus,
+            'stage' => $isApproved ? ResearchReviewStage::FINAL_REPORT->value : $submission->stage,
         ]);
 
         return redirect()->route('review.research.index')->with('success', 'Status berhasil diperbarui.');

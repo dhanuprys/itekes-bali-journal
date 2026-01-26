@@ -6,10 +6,23 @@
     import { Button } from '@/components/ui/button';
     import * as Card from '@/components/ui/card';
     import { Badge } from '@/components/ui/badge';
-    import { FileTextIcon } from 'lucide-svelte';
+    import { Separator } from '@/components/ui/separator';
+    import {
+        FileTextIcon,
+        UserIcon,
+        UsersIcon,
+        BookOpenIcon,
+        TargetIcon,
+        BanknoteIcon,
+        CalendarIcon,
+        ClockIcon,
+        CheckCircleIcon,
+        AlertCircleIcon,
+    } from 'lucide-svelte';
 
     let { submission } = $props();
     let detail = $derived(submission.latest_detail);
+    let members = $derived(detail.members || []);
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Permintaan Review', href: '#' },
@@ -18,12 +31,12 @@
         { title: 'Detail', href: '#' },
     ];
 
-    function getStatusVariant(status: string) {
+    function getStatusConfig(status: string) {
         switch (status) {
             case 'approved':
-                return 'default';
+                return { color: 'bg-green-500/10 text-green-600 hover:bg-green-500/20', label: 'Disetujui', icon: CheckCircleIcon };
             case 'rejected':
-                return 'destructive';
+                return { color: 'bg-red-500/10 text-red-600 hover:bg-red-500/20', label: 'Ditolak', icon: AlertCircleIcon };
             case 'revision_needed':
                 return 'destructive';
             case 'need_review':

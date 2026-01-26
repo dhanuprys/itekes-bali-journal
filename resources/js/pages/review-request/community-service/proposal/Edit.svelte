@@ -9,8 +9,9 @@
     import ProposalForm from '@/components/review-request/ProposalForm.svelte';
     import RevisionCommentSheet from '@/components/review-request/RevisionCommentSheet.svelte';
     import { uploadState } from '@/stores/upload-state.svelte';
+    import { toast } from 'svelte-sonner';
 
-    let { submission, detail, studyPrograms = [], communityServiceSchemas = [], communityServiceTargets = [] } = $props();
+    let { submission, detail, studyPrograms = [], communityServiceTargets = [] } = $props();
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Permintaan Review', href: '#' },
@@ -25,7 +26,7 @@
         study_program_id: detail.study_program_id || '',
         title: detail.title || '',
         budget: detail.budget || null,
-        community_service_schema_id: detail.community_service_schema_id || '',
+
         community_service_target_id: detail.community_service_target_id || '',
         proposal_path: detail.proposal_path || '',
         members: detail.members ? detail.members.map((m: any) => ({ name: m.name })) : [],
@@ -35,6 +36,12 @@
         if (uploadState.isUploading) return;
         $form.post(route('apply.community_service.proposal.revise', submission.id), {
             forceFormData: true,
+            onSuccess: () => {
+                toast.success('Revisi proposal berhasil dikirim.');
+            },
+            onError: () => {
+                toast.error('Gagal mengirim revisi. Periksa kembali input Anda.');
+            },
         });
     }
 </script>
@@ -48,8 +55,11 @@
         {#snippet header()}
             <div class="flex items-center justify-between">
                 <Heading title="Revisi Proposal" description="Perbarui proposal Anda berdasarkan masukan reviewer." />
-                <RevisionCommentSheet comments={detail?.comments} />
             </div>
+        {/snippet}
+
+        {#snippet actions()}
+            <RevisionCommentSheet comments={detail?.comments} />
         {/snippet}
 
         {#snippet children()}
@@ -77,7 +87,6 @@
                     mode="revise"
                     data={{
                         studyPrograms,
-                        schemas: communityServiceSchemas,
                         targets: communityServiceTargets,
                     }}
                 />

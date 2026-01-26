@@ -99,7 +99,13 @@
                                         </Table.Cell>
                                         <Table.Cell>{new Date(submission.updated_at).toLocaleDateString('id-ID')}</Table.Cell>
                                         <Table.Cell class="text-right">
-                                            <Button size="sm" href={getReviewRoute(submission)}>Review</Button>
+                                            <Button
+                                                size="sm"
+                                                variant={submission.status === 'need_review' ? 'default' : 'outline'}
+                                                href={getReviewRoute(submission)}
+                                            >
+                                                {submission.status === 'need_review' ? 'Review' : 'Detail'}
+                                            </Button>
                                         </Table.Cell>
                                     </Table.Row>
                                 {/each}

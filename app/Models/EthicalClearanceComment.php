@@ -10,10 +10,15 @@ class EthicalClearanceComment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['ethical_clearance_subdetail_id', 'title', 'content'];
+    protected $fillable = ['ethical_clearance_subdetail_id', 'user_id', 'title', 'content'];
 
     public function detail(): BelongsTo
     {
         return $this->belongsTo(EthicalClearanceDetail::class, 'ethical_clearance_subdetail_id');
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

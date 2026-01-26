@@ -15,7 +15,7 @@ class FinalReportController extends Controller
     {
         $submissions = CommunityServiceSubmission::with(['latestDetail'])
             ->where('user_id', Auth::id())
-            ->where('status', CommunityServiceStatus::APPROVED)
+            ->where('status', CommunityServiceStatus::APPROVED->value)
             ->latest()
             ->paginate(10);
 
@@ -30,10 +30,11 @@ class FinalReportController extends Controller
             'latestDetail.studyProgram',
             'latestDetail.schema',
             'latestDetail.target',
-            'latestDetail.members'
+            'latestDetail.members',
+            'latestDetail.comments.user'
         ])
             ->where('user_id', Auth::id())
-            ->where('status', CommunityServiceStatus::APPROVED)
+            ->where('status', CommunityServiceStatus::APPROVED->value)
             ->findOrFail($id);
 
         return Inertia::render('review-request/community-service/final-report/Show', [

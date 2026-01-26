@@ -38,7 +38,9 @@ class DashboardController extends Controller
         $submission = ResearchSubmission::where('user_id', Auth::id())
             ->findOrFail($id);
 
-        $detail = $submission->details()->findOrFail($revisionId);
+        $detail = $submission->details()
+            ->with(['comments.user', 'members', 'studyProgram', 'researchSchema', 'researchTarget'])
+            ->findOrFail($revisionId);
 
         return Inertia::render('review-request/research/dashboard/ShowRevision', [
             'submission' => $submission,

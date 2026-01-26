@@ -7,8 +7,9 @@
     import { useForm } from '@inertiajs/svelte';
     import { Button } from '@/components/ui/button';
     import { toast } from 'svelte-sonner';
+    import { uploadState } from '@/stores/upload-state.svelte';
 
-    let { submission, detail } = $props();
+    let { submission, detail, schemas } = $props();
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Permintaan Review', href: '#' },
@@ -25,12 +26,13 @@
         leader_nidn: detail.leader_nidn,
         // Ensure members is an array
         members: detail.members ? detail.members.map((m: any) => ({ name: m.name })) : [],
-        final_report_file: null,
-        manuscript_file: null,
+        schema_id: detail.research_schema_id || '',
+        final_report_path: '',
+        manuscript_path: '',
     });
 
     function submit() {
-        form.post(route('apply.research.progress_report.store'), {
+        $form.post(route('apply.research.progress_report.store'), {
             onSuccess: () => {
                 toast.success('Laporan kemajuan berhasil disimpan.');
             },
@@ -58,12 +60,12 @@
                     submit();
                 }}
             >
-                <ProgressReportForm {form} type="research" mode="create" />
+                <ProgressReportForm bind:form={$form} data={{ schemas }} type="research" mode="create" />
 
                 <div class="mt-6 flex justify-end gap-3">
                     <Button variant="outline" href={route('apply.research.progress_report.index')}>Batal</Button>
-                    <Button type="submit" disabled={form.processing}>
-                        {#if form.processing}
+                    <Button type="submit" disabled={$form.processing || uploadState.isUploading}>
+                        {#if $form.processing}
                             Menyimpan...
                         {:else}
                             Simpan Laporan

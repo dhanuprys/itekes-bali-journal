@@ -1,8 +1,10 @@
 <script lang="ts">
-    import * as Card from '@/components/ui/card';
     import { Button } from '@/components/ui/button';
     import { useForm } from '@inertiajs/svelte';
-    import { CheckCircle2Icon, XCircleIcon, AlertTriangleIcon } from 'lucide-svelte';
+    import { CheckCircle2Icon, XCircleIcon, AlertTriangleIcon, ChevronDownIcon } from 'lucide-svelte';
+    import * as AlertDialog from '@/components/ui/alert-dialog';
+    import * as DropdownMenu from '@/components/ui/dropdown-menu';
+    import { toast } from 'svelte-sonner';
 
     let { submitRoute, canReview = false } = $props();
 
@@ -10,45 +12,75 @@
         status: '',
     });
 
-    function submit(status: string) {
-        let message = '';
-        if (status === 'approved') message = 'Apakah Anda yakin ingin MENYETUJUI usulan ini?';
-        if (status === 'revision_needed') message = 'Apakah Anda yakin ingin meminta REVISI?';
-        if (status === 'rejected') message = 'Apakah Anda yakin ingin MENOLAK usulan ini?';
+    let dialogOpen = $state(false);
+    let selectedStatus = $state('');
+    let confirmMessage = $state('');
 
-        if (!confirm(message)) return;
+    function openConfirm(status: string) {
+        selectedStatus = status;
+        if (status === 'approved') confirmMessage = 'Apakah Anda yakin ingin MENYETUJUI usulan ini?';
+        if (status === 'revision_needed') confirmMessage = 'Apakah Anda yakin ingin meminta REVISI?';
+        if (status === 'rejected') confirmMessage = 'Apakah Anda yakin ingin MENOLAK usulan ini?';
+        dialogOpen = true;
+    }
 
-        form.status = status;
-        form.post(submitRoute);
+    function confirmAction() {
+        $form.status = selectedStatus;
+        $form.post(submitRoute, {
+            onSuccess: () => {
+                toast.success('Keputusan review berhasil disimpan.');
+                dialogOpen = false;
+            },
+            onError: () => {
+                toast.error('Gagal menyimpan keputusan review.');
+                dialogOpen = false;
+            },
+        });
     }
 </script>
 
 {#if canReview}
-    <Card.Root class="border-t-4 border-t-primary">
-        <Card.Header>
-            <Card.Title>Keputusan Review</Card.Title>
-            <Card.Description>Silakan ambil keputusan berdasarkan hasil review Anda.</Card.Description>
-        </Card.Header>
-        <Card.Content class="flex flex-wrap gap-4">
-            <Button variant="default" onclick={() => submit('approved')} disabled={form.processing} class="bg-green-600 hover:bg-green-700">
-                <CheckCircle2Icon class="mr-2 h-4 w-4" />
-                Setujui
-            </Button>
+    <div class="flex items-center">
+        <DropdownMenu.Root>
+            <DropdownMenu.Trigger>
+                {#snippet child({ props })}
+                    <Button variant="outline" size="sm" {...props}>
+                        Keputusan
+                        <ChevronDownIcon class="ml-2 h-4 w-4" />
+                    </Button>
+                {/snippet}
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Content align="end">
+                <DropdownMenu.Label>Pilih Keputusan</DropdownMenu.Label>
+                <DropdownMenu.Separator />
+                <DropdownMenu.Item onclick={() => openConfirm('approved')} class="text-green-600 focus:text-green-700 focus:bg-green-50">
+                    <CheckCircle2Icon class="mr-2 h-4 w-4" />
+                    Setujui
+                </DropdownMenu.Item>
+                <DropdownMenu.Item onclick={() => openConfirm('revision_needed')} class="text-yellow-600 focus:text-yellow-700 focus:bg-yellow-50">
+                    <AlertTriangleIcon class="mr-2 h-4 w-4" />
+                    Perlu Revisi
+                </DropdownMenu.Item>
+                <DropdownMenu.Item onclick={() => openConfirm('rejected')} class="text-destructive focus:text-destructive focus:bg-destructive/10">
+                    <XCircleIcon class="mr-2 h-4 w-4" />
+                    Tolak
+                </DropdownMenu.Item>
+            </DropdownMenu.Content>
+        </DropdownMenu.Root>
+    </div>
 
-            <Button
-                variant="outline"
-                onclick={() => submit('revision_needed')}
-                disabled={form.processing}
-                class="border-yellow-600 text-yellow-600 hover:bg-yellow-50"
-            >
-                <AlertTriangleIcon class="mr-2 h-4 w-4" />
-                Perlu Revisi
-            </Button>
-
-            <Button variant="destructive" onclick={() => submit('rejected')} disabled={form.processing}>
-                <XCircleIcon class="mr-2 h-4 w-4" />
-                Tolak
-            </Button>
-        </Card.Content>
-    </Card.Root>
+    <AlertDialog.Root bind:open={dialogOpen}>
+        <AlertDialog.Content>
+            <AlertDialog.Header>
+                <AlertDialog.Title>Konfirmasi Keputusan</AlertDialog.Title>
+                <AlertDialog.Description>
+                    {confirmMessage}
+                </AlertDialog.Description>
+            </AlertDialog.Header>
+            <AlertDialog.Footer>
+                <AlertDialog.Cancel>Batal</AlertDialog.Cancel>
+                <AlertDialog.Action onclick={confirmAction}>Ya, Lanjutkan</AlertDialog.Action>
+            </AlertDialog.Footer>
+        </AlertDialog.Content>
+    </AlertDialog.Root>
 {/if}

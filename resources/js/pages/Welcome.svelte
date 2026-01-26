@@ -159,7 +159,7 @@
                 <div class="lg:col-span-5">
                     <div class="relative">
                         <div
-                            class="absolute inset-0 bg-gradient-to-tr from-blue-100 to-indigo-100 dark:from-blue-950/30 dark:to-indigo-950/30 -rotate-3"
+                            class="absolute inset-0 bg-linear-to-tr from-blue-100 to-indigo-100 dark:from-blue-950/30 dark:to-indigo-950/30 -rotate-3"
                         ></div>
                         <div class="relative bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-8">
                             <img src="/assets/images/itekes-bali.webp" alt="ITEKES Bali" class="w-full h-auto opacity-90" />

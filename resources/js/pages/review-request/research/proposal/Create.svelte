@@ -7,9 +7,10 @@
     import { Button } from '@/components/ui/button';
     import ProposalForm from '@/components/review-request/ProposalForm.svelte';
 
+    import { toast } from 'svelte-sonner';
     import { uploadState } from '@/stores/upload-state.svelte';
 
-    let { studyPrograms = [], researchSchemas = [], researchTargets = [] } = $props();
+    let { studyPrograms = [], researchTargets = [] } = $props();
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Permintaan Review', href: '#' },
@@ -24,7 +25,7 @@
         study_program_id: '',
         title: '',
         budget: null,
-        research_schema_id: '',
+
         research_target_id: '',
         proposal_path: '', // Changed from proposal_file
         members: [] as { name: string }[],
@@ -34,6 +35,12 @@
         if (uploadState.isUploading) return;
         $form.post(route('apply.research.proposal.store'), {
             forceFormData: true,
+            onSuccess: () => {
+                toast.success('Proposal berhasil disimpan.');
+            },
+            onError: () => {
+                toast.error('Gagal menyimpan proposal. Periksa kembali input Anda.');
+            },
         });
     }
 </script>
@@ -62,7 +69,6 @@
                     mode="create"
                     data={{
                         studyPrograms,
-                        schemas: researchSchemas,
                         targets: researchTargets, // This is mapped to data.targets in ProposalForm
                     }}
                 />

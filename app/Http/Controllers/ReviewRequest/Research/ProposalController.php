@@ -31,7 +31,7 @@ class ProposalController extends Controller
     {
         $submissions = ResearchSubmission::with(['latestDetail'])
             ->where('user_id', Auth::id())
-            ->where('stage', ResearchReviewStage::PROPOSAL)
+            ->where('stage', ResearchReviewStage::PROPOSAL->value)
             ->latest()
             ->paginate(10);
 
@@ -64,8 +64,8 @@ class ProposalController extends Controller
         DB::transaction(function () use ($validated, $request) {
             $submission = ResearchSubmission::create([
                 'user_id' => Auth::id(),
-                'status' => ResearchStatus::NEED_REVIEW,
-                'stage' => ResearchReviewStage::PROPOSAL,
+                'status' => ResearchStatus::NEED_REVIEW->value,
+                'stage' => ResearchReviewStage::PROPOSAL->value,
             ]);
 
             // Mark the pre-uploaded file as used
@@ -100,7 +100,8 @@ class ProposalController extends Controller
         $submission = ResearchSubmission::with([
             'latestDetail.studyProgram',
             'latestDetail.researchTarget',
-            'latestDetail.members'
+            'latestDetail.members',
+            'latestDetail.comments.user'
         ])
             ->where('user_id', Auth::id())
             ->findOrFail($id);
@@ -174,7 +175,7 @@ class ProposalController extends Controller
             }
 
             $submission->update([
-                'status' => ResearchStatus::NEED_REVIEW,
+                'status' => ResearchStatus::NEED_REVIEW->value,
             ]);
         });
 

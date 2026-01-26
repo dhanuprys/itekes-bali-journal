@@ -6,38 +6,36 @@
     import { useForm } from '@inertiajs/svelte';
     import { Button } from '@/components/ui/button';
     import * as Alert from '@/components/ui/alert';
-    import ProposalForm from '@/components/review-request/ProposalForm.svelte';
+    import ProgressReportForm from '@/components/review-request/ProgressReportForm.svelte';
     import RevisionCommentSheet from '@/components/review-request/RevisionCommentSheet.svelte';
     import { uploadState } from '@/stores/upload-state.svelte';
     import { toast } from 'svelte-sonner';
 
-    let { submission, detail, studyPrograms = [], researchTargets = [] } = $props();
+    let { submission, detail, schemas } = $props();
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Permintaan Review', href: '#' },
-        { title: 'Penelitian', href: '#' },
-        { title: 'Proposal', href: '/apply/research/proposal' },
+        { title: 'Pengabdian Masyarakat', href: '#' },
+        { title: 'Laporan Kemajuan', href: '/apply/community-service/progress-report' },
         { title: 'Revisi', href: '#' },
     ];
 
     const form = useForm({
-        leader_name: detail.leader_name || '',
+        submission_id: submission.id, // Keep submission_id for reference
         leader_nidn: detail.leader_nidn || '',
-        study_program_id: detail.study_program_id || '',
-        title: detail.title || '',
-        budget: detail.budget || null,
-
-        research_target_id: detail.research_target_id || '',
-        proposal_path: detail.proposal_path || '',
+        final_leader_name: detail.final_leader_name || '',
+        final_title: detail.final_title || '',
         members: detail.members ? detail.members.map((m: any) => ({ name: m.name })) : [],
+        schema_id: detail.community_service_schema_id || '',
+        final_report_path: detail.final_report_path || '',
+        manuscript_path: detail.manuscript_path || '',
     });
 
     function submit() {
         if (uploadState.isUploading) return;
-        $form.post(route('apply.research.proposal.revise', submission.id), {
-            forceFormData: true,
+        $form.post(route('apply.community_service.progress_report.revise', submission.id), {
             onSuccess: () => {
-                toast.success('Revisi proposal berhasil dikirim.');
+                toast.success('Revisi laporan berhasil dikirim.');
             },
             onError: () => {
                 toast.error('Gagal mengirim revisi. Periksa kembali input Anda.');
@@ -47,14 +45,14 @@
 </script>
 
 <svelte:head>
-    <title>Revisi Proposal</title>
+    <title>Revisi Laporan Kemajuan</title>
 </svelte:head>
 
 <AppLayout {breadcrumbs}>
     <LayoutComposer>
         {#snippet header()}
             <div class="flex items-center justify-between">
-                <Heading title="Revisi Proposal" description="Perbarui proposal Anda berdasarkan masukan reviewer." />
+                <Heading title="Revisi Laporan Kemajuan" description="Perbarui laporan Anda berdasarkan masukan reviewer." />
             </div>
         {/snippet}
 
@@ -68,7 +66,7 @@
                     <Alert.Root variant="destructive">
                         <Alert.Title>Perhatian</Alert.Title>
                         <Alert.Description>
-                            Proposal Anda memerlukan revisi. Silakan cek komentar reviewer melalui tombol di atas kanan dan unggah versi perbaikan.
+                            Laporan Anda memerlukan revisi. Silakan cek komentar reviewer melalui tombol di atas kanan dan unggah versi perbaikan.
                         </Alert.Description>
                     </Alert.Root>
                 </div>
@@ -79,22 +77,11 @@
                     e.preventDefault();
                     submit();
                 }}
-                class="space-y-6"
             >
-                <ProposalForm
-                    bind:form={$form}
-                    type="research"
-                    mode="revise"
-                    data={{
-                        studyPrograms,
-                        targets: researchTargets,
-                    }}
-                />
+                <ProgressReportForm bind:form={$form} data={{ schemas }} type="community-service" mode="revise" />
 
-                <div class="flex justify-end items-center gap-4">
-                    {#if uploadState.isUploading}
-                        <span class="text-sm text-muted-foreground animate-pulse">Mengunggah file...</span>
-                    {/if}
+                <div class="mt-6 flex justify-end gap-3">
+                    <Button variant="outline" href={route('apply.community_service.progress_report.index')}>Batal</Button>
                     <Button type="submit" disabled={$form.processing || uploadState.isUploading}>
                         {#if $form.processing}
                             Menyimpan...

@@ -20,7 +20,7 @@ class ProgressReportController extends Controller
             ->whereHas('reviewers', function ($query) {
                 $query->where('user_id', Auth::id());
             })
-            ->where('stage', CommunityServiceReviewStage::PROGRESS_REPORT)
+            ->where('stage', CommunityServiceReviewStage::PROGRESS_REPORT->value)
             ->latest()
             ->paginate(10);
 
@@ -34,7 +34,7 @@ class ProgressReportController extends Controller
         return CommunityServiceSubmission::whereHas('reviewers', function ($query) {
             $query->where('user_id', Auth::id());
         })
-            ->where('stage', CommunityServiceReviewStage::PROGRESS_REPORT)
+            ->where('stage', CommunityServiceReviewStage::PROGRESS_REPORT->value)
             ->findOrFail($id);
     }
 
@@ -60,7 +60,7 @@ class ProgressReportController extends Controller
     {
         $submission = $this->checkAssignment($id);
 
-        if ($submission->status !== CommunityServiceStatus::NEED_REVIEW) {
+        if ($submission->status !== CommunityServiceStatus::NEED_REVIEW->value) {
             abort(403, 'Review not active.');
         }
 
@@ -88,7 +88,7 @@ class ProgressReportController extends Controller
     {
         $submission = $this->checkAssignment($id);
 
-        if ($submission->status !== CommunityServiceStatus::NEED_REVIEW) {
+        if ($submission->status !== CommunityServiceStatus::NEED_REVIEW->value) {
             abort(403, 'Review not active.');
         }
 
@@ -97,9 +97,9 @@ class ProgressReportController extends Controller
         ]);
 
         $statusMap = [
-            'approved' => CommunityServiceStatus::APPROVED,
-            'rejected' => CommunityServiceStatus::REJECTED,
-            'revision_needed' => CommunityServiceStatus::REVISION_NEEDED,
+            'approved' => CommunityServiceStatus::APPROVED->value,
+            'rejected' => CommunityServiceStatus::REJECTED->value,
+            'revision_needed' => CommunityServiceStatus::REVISION_NEEDED->value,
         ];
 
         $newStatus = $statusMap[$request->input('status')];
@@ -109,8 +109,13 @@ class ProgressReportController extends Controller
             'community_service_subdetail_id' => $submission->latestDetail->id,
         ]);
 
+        // If approved, move to next stage (Final Report) and set status to Approved
+        // Otherwise use the selected status (Rejected/Revision Needed) and keep current stage
+        $isApproved = $request->input('status') === 'approved';
+
         $submission->update([
-            'status' => $newStatus,
+            'status' => $isApproved ? CommunityServiceStatus::APPROVED->value : $newStatus,
+            'stage' => $isApproved ? CommunityServiceReviewStage::FINAL_REPORT->value : $submission->stage,
         ]);
 
         return redirect()->route('review.community_service.index')->with('success', 'Status berhasil diperbarui.');

@@ -8,8 +8,9 @@
     import ProposalForm from '@/components/review-request/ProposalForm.svelte';
 
     import { uploadState } from '@/stores/upload-state.svelte';
+    import { toast } from 'svelte-sonner';
 
-    let { studyPrograms = [], communityServiceSchemas = [], communityServiceTargets = [] } = $props();
+    let { studyPrograms = [], communityServiceTargets = [] } = $props();
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Permintaan Review', href: '#' },
@@ -24,7 +25,7 @@
         study_program_id: '',
         title: '',
         budget: null,
-        community_service_schema_id: '',
+
         community_service_target_id: '',
         proposal_path: '', // Changed from proposal_file
         members: [] as { name: string }[],
@@ -34,6 +35,12 @@
         if (uploadState.isUploading) return;
         $form.post(route('apply.community_service.proposal.store'), {
             forceFormData: true,
+            onSuccess: () => {
+                toast.success('Proposal berhasil disimpan.');
+            },
+            onError: () => {
+                toast.error('Gagal menyimpan proposal. Periksa kembali input Anda.');
+            },
         });
     }
 </script>
@@ -62,7 +69,6 @@
                     mode="create"
                     data={{
                         studyPrograms,
-                        schemas: communityServiceSchemas,
                         targets: communityServiceTargets,
                     }}
                 />

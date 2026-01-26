@@ -20,7 +20,7 @@
 <div class="min-h-screen bg-neutral-50 dark:bg-neutral-950 font-sans">
     <!-- Top Bar -->
     <div class="border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900">
-        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
             <div class="h-14 flex items-center justify-between text-xs">
                 <span class="text-neutral-600 dark:text-neutral-400">Institut Teknologi dan Kesehatan Bali</span>
                 <Link
@@ -40,7 +40,7 @@
             <!-- Background Pattern -->
             <div class="absolute inset-0 opacity-5">
                 <div
-                    class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:32px_32px]"
+                    class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[32px_32px]"
                 ></div>
             </div>
 
@@ -83,7 +83,7 @@
             </div>
 
             <!-- Decorative gradient -->
-            <div class="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tr from-blue-600/10 to-purple-600/10 blur-3xl"></div>
+            <div class="absolute bottom-0 right-0 w-96 h-96 bg-linear-to-tr from-blue-600/10 to-purple-600/10 blur-3xl"></div>
         </div>
 
         <!-- Right Column - Form -->

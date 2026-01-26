@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('community_service_comments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('community_service_subdetail_id')->constrained(table: 'community_service_submission_details', indexName: 'fk_cs_comments_subdetail_id');
+            $table->foreignId('user_id')->nullable()->constrained('users');
             $table->string('title')->nullable();
             $table->longText('content');
             $table->timestamps();

@@ -1,39 +1,16 @@
 <script lang="ts">
     import { Input } from '@/components/ui/input';
-    import { Button } from '@/components/ui/button';
     import * as Field from '@/components/ui/field';
     import * as Card from '@/components/ui/card';
-    import { Trash2Icon, PlusIcon } from 'lucide-svelte';
+    import FileUpload from '@/components/FileUpload.svelte';
+    import { StorageUploadAction } from '@/data/storage-upload';
 
-    let { form, type = 'research', mode = 'create' } = $props();
+    let { form = $bindable(), data, type = 'research', mode = 'create' } = $props();
 
     // Derived states
     let isResearch = $derived(type === 'research');
     let titleLabel = $derived(isResearch ? 'Judul Akhir Penelitian' : 'Judul Akhir Pengabdian');
     let leaderLabel = $derived(isResearch ? 'Nama Ketua Peneliti (Akhir)' : 'Nama Ketua Pengabdi (Akhir)');
-
-    function addMember() {
-        if (!form.members) form.members = [];
-        form.members = [...form.members, { name: '' }];
-    }
-
-    function removeMember(index: number) {
-        form.members = form.members.filter((_: any, i: number) => i !== index);
-    }
-
-    function handleReportFileChange(e: Event) {
-        const target = e.target as HTMLInputElement;
-        if (target.files && target.files.length > 0) {
-            form.final_report_file = target.files[0];
-        }
-    }
-
-    function handleManuscriptFileChange(e: Event) {
-        const target = e.target as HTMLInputElement;
-        if (target.files && target.files.length > 0) {
-            form.manuscript_file = target.files[0];
-        }
-    }
 </script>
 
 <Card.Root>
@@ -66,40 +43,31 @@
                         </Field.Field>
                     </div>
 
-                    <Field.Field>
-                        <Field.Label for="final_leader_name">{leaderLabel}</Field.Label>
-                        <Input id="final_leader_name" bind:value={form.final_leader_name} placeholder="Nama Lengkap dengan Gelar" />
-                        {#if form.errors?.final_leader_name}
-                            <Field.Error>{form.errors?.final_leader_name}</Field.Error>
-                        {/if}
-                    </Field.Field>
-                </Field.Group>
-            </Field.Set>
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <Field.Field>
+                            <Field.Label for="final_leader_name">{leaderLabel}</Field.Label>
+                            <Input id="final_leader_name" bind:value={form.final_leader_name} placeholder="Nama Lengkap dengan Gelar" />
+                            {#if form.errors?.final_leader_name}
+                                <Field.Error>{form.errors?.final_leader_name}</Field.Error>
+                            {/if}
+                        </Field.Field>
 
-            <Field.Set>
-                <Field.Legend>Anggota Tim (Akhir)</Field.Legend>
-                <Field.Description>Perbarui daftar anggota yang terlibat dalam pelaksanaan.</Field.Description>
-
-                <Field.Group>
-                    {#each form.members as member, i}
-                        <div class="flex items-end gap-3">
-                            <Field.Field class="flex-1">
-                                <Field.Label for={`member-${i}`}>Nama Anggota {i + 1}</Field.Label>
-                                <Input id={`member-${i}`} bind:value={member.name} placeholder="Nama Anggota" />
-                                {#if form.errors?.[`members.${i}.name`]}
-                                    <Field.Error>{form.errors?.[`members.${i}.name`]}</Field.Error>
-                                {/if}
-                            </Field.Field>
-                            <Button variant="ghost" size="icon" onclick={() => removeMember(i)} class="mb-0.5">
-                                <Trash2Icon class="h-4 w-4 text-destructive" />
-                            </Button>
-                        </div>
-                    {/each}
-
-                    <div>
-                        <Button variant="outline" size="sm" onclick={addMember} class="gap-2">
-                            <PlusIcon class="h-4 w-4" /> Tambah Anggota
-                        </Button>
+                        <Field.Field>
+                            <Field.Label for="schema_id">Skema</Field.Label>
+                            <select
+                                id="schema_id"
+                                bind:value={form.schema_id}
+                                class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                            >
+                                <option value="">Pilih Skema</option>
+                                {#each data.schemas as schema}
+                                    <option value={schema.id}>{schema.name}</option>
+                                {/each}
+                            </select>
+                            {#if form.errors?.schema_id}
+                                <Field.Error>{form.errors?.schema_id}</Field.Error>
+                            {/if}
+                        </Field.Field>
                     </div>
                 </Field.Group>
             </Field.Set>
@@ -110,19 +78,21 @@
 
                 <Field.Group>
                     <Field.Field>
-                        <Field.Label for="final_report_file">Laporan Akhir (PDF/DOC, Max 10MB)</Field.Label>
-                        <Input id="final_report_file" type="file" onchange={handleReportFileChange} accept=".pdf,.doc,.docx" />
-                        {#if form.errors?.final_report_file}
-                            <Field.Error>{form.errors?.final_report_file}</Field.Error>
-                        {/if}
+                        <FileUpload
+                            label="Laporan Akhir (PDF/DOC, Max 10MB)"
+                            action={isResearch ? StorageUploadAction.RESEARCH_FINAL_REPORT : StorageUploadAction.CS_FINAL_REPORT}
+                            bind:value={form.final_report_path}
+                            error={form.errors?.final_report_path}
+                        />
                     </Field.Field>
 
                     <Field.Field>
-                        <Field.Label for="manuscript_file">Naskah Publikasi / Manuskrip (PDF/DOC, Max 10MB)</Field.Label>
-                        <Input id="manuscript_file" type="file" onchange={handleManuscriptFileChange} accept=".pdf,.doc,.docx" />
-                        {#if form.errors?.manuscript_file}
-                            <Field.Error>{form.errors?.manuscript_file}</Field.Error>
-                        {/if}
+                        <FileUpload
+                            label="Naskah Publikasi / Manuskrip (PDF/DOC, Max 10MB)"
+                            action={isResearch ? StorageUploadAction.RESEARCH_MANUSCRIPT : StorageUploadAction.CS_MANUSCRIPT}
+                            bind:value={form.manuscript_path}
+                            error={form.errors?.manuscript_path}
+                        />
                     </Field.Field>
                 </Field.Group>
             </Field.Set>
