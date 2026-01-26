@@ -117,14 +117,14 @@
 
 <Sheet.Root bind:open>
     <Sheet.Content class="sm:max-w-[500px] flex flex-col p-0 gap-0">
-        <Sheet.Header class="p-6 border-b">
+        <Sheet.Header class="p-6 pb-2 border-b-0">
             <Sheet.Title>Atur Reviewer</Sheet.Title>
             <Sheet.Description>Kelola penugasan reviewer untuk usulan ini.</Sheet.Description>
         </Sheet.Header>
 
         {#if submission}
             <div class="flex-1 overflow-y-auto">
-                <div class="p-6 space-y-6">
+                <div class="p-6 pt-2 space-y-6">
                     <!-- Submission Details -->
                     <div class="space-y-3 p-4 bg-muted/40 rounded-lg border">
                         <div class="space-y-1">

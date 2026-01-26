@@ -51,15 +51,15 @@
 </script>
 
 <Sheet.Root bind:open>
-    <Sheet.Content class="sm:max-w-[425px] overflow-y-auto p-6">
-        <Sheet.Header>
+    <Sheet.Content class="sm:max-w-[425px] overflow-y-auto p-0 gap-0">
+        <Sheet.Header class="p-6 pb-2">
             <Sheet.Title>{isEdit ? 'Edit Program Studi' : 'Tambah Program Studi'}</Sheet.Title>
             <Sheet.Description>
                 {isEdit ? 'Perbarui informasi program studi di sini.' : 'Isi formulir untuk menambahkan program studi baru.'}
             </Sheet.Description>
         </Sheet.Header>
 
-        <form onsubmit={submit} class="space-y-4 py-4">
+        <form onsubmit={submit} class="space-y-4 p-6 pt-2">
             <Field>
                 <FieldLabel>Nama Program Studi</FieldLabel>
                 <Input id="name" bind:value={$form.name} placeholder="Nama Program Studi" />

@@ -54,15 +54,15 @@
 </script>
 
 <Sheet.Root bind:open>
-    <Sheet.Content class="sm:max-w-[500px] overflow-y-auto p-6">
-        <Sheet.Header>
+    <Sheet.Content class="sm:max-w-[500px] overflow-y-auto p-0 gap-0">
+        <Sheet.Header class="p-6 pb-2">
             <Sheet.Title>{isEdit ? 'Edit Subjek Etik' : 'Tambah Subjek Etik'}</Sheet.Title>
             <Sheet.Description>
                 {isEdit ? 'Perbarui informasi subjek etik di sini.' : 'Isi formulir untuk menambahkan subjek etik baru.'}
             </Sheet.Description>
         </Sheet.Header>
 
-        <form onsubmit={submit} class="space-y-4 py-4">
+        <form onsubmit={submit} class="space-y-4 p-6 pt-2">
             <Field>
                 <FieldLabel>Judul</FieldLabel>
                 <Input id="title" bind:value={$form.title} placeholder="Judul Subjek Etik" />

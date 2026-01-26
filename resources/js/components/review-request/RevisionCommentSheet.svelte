@@ -17,12 +17,12 @@
                 Lihat Komentar Reviewer
             </Button>
         </Sheet.Trigger>
-        <Sheet.Content side="right" class="w-[400px] sm:w-[540px] overflow-y-auto">
-            <Sheet.Header>
+        <Sheet.Content side="right" class="w-[400px] sm:w-[540px] overflow-y-auto p-0 gap-0">
+            <Sheet.Header class="p-6 pb-2">
                 <Sheet.Title>Komentar Reviewer</Sheet.Title>
                 <Sheet.Description>Berikut adalah catatan dari reviewer untuk revisi ini.</Sheet.Description>
             </Sheet.Header>
-            <div class="mt-6 space-y-6">
+            <div class="space-y-6 p-6 pt-2">
                 {#each comments as comment}
                     <div class="flex flex-col gap-2 p-4 border rounded-lg bg-muted/30">
                         <div class="flex items-center justify-between">

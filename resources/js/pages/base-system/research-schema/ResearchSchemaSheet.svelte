@@ -54,15 +54,15 @@
 </script>
 
 <Sheet.Root bind:open>
-    <Sheet.Content class="sm:max-w-[500px] overflow-y-auto p-6">
-        <Sheet.Header>
+    <Sheet.Content class="sm:max-w-[500px] overflow-y-auto p-0 gap-0">
+        <Sheet.Header class="p-6 pb-2">
             <Sheet.Title>{isEdit ? 'Edit Skema Riset' : 'Tambah Skema Riset'}</Sheet.Title>
             <Sheet.Description>
                 {isEdit ? 'Perbarui informasi skema riset di sini.' : 'Isi formulir untuk menambahkan skema riset baru.'}
             </Sheet.Description>
         </Sheet.Header>
 
-        <form onsubmit={submit} class="space-y-4 py-4">
+        <form onsubmit={submit} class="space-y-4 p-6 pt-2">
             <Field>
                 <FieldLabel>Judul</FieldLabel>
                 <Input id="title" bind:value={$form.title} placeholder="Judul Skema Riset" />
