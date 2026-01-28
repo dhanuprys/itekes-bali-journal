@@ -50,8 +50,8 @@ class ProgressReportController extends Controller
 
         $submission->load([
             'latestDetail.studyProgram',
-            'latestDetail.researchSchema',
-            'latestDetail.researchTarget',
+            'latestDetail.schema',
+            'latestDetail.target',
             'latestDetail.members',
             'latestDetail.comments.user'
         ]);

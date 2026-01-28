@@ -19,6 +19,7 @@ class StorageUpload extends Model
         'mime_type',
         'disk',
         'is_used',
+        'tag',
     ];
 
     public function user()

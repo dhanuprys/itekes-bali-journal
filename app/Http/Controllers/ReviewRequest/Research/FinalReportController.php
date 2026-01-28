@@ -28,8 +28,8 @@ class FinalReportController extends Controller
     {
         $submission = ResearchSubmission::with([
             'latestDetail.studyProgram',
-            'latestDetail.researchSchema',
-            'latestDetail.researchTarget',
+            'latestDetail.schema',
+            'latestDetail.target',
             'latestDetail.members',
             'latestDetail.comments.user'
         ])

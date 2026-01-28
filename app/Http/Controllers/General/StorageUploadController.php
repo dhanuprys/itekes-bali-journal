@@ -115,6 +115,13 @@ class StorageUploadController extends Controller
                     ],
                     'path' => 'community-service/manuscripts',
                 ];
+            case StorageUploadAction::USER_PROFILE_PHOTO:
+                return [
+                    'rules' => [
+                        'file' => 'required|file|image|max:3072',
+                    ],
+                    'path' => 'users/profile-photos',
+                ];
             default:
                 abort(422, 'Invalid action');
         }

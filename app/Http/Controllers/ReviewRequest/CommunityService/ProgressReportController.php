@@ -70,8 +70,8 @@ class ProgressReportController extends Controller
             $latestDetail = $submission->latestDetail;
 
             // Mark files as used
-            $uploadService->markAsUsed($validated['final_report_path']);
-            $uploadService->markAsUsed($validated['manuscript_path']);
+            $uploadService->markAsUsed($validated['final_report_path'], \App\Enums\StorageUploadAction::CS_FINAL_REPORT->name);
+            $uploadService->markAsUsed($validated['manuscript_path'], \App\Enums\StorageUploadAction::CS_MANUSCRIPT->name);
 
             $detail = CommunityServiceSubmissionDetail::create([
                 'community_service_submission_id' => $submission->id,
@@ -184,8 +184,8 @@ class ProgressReportController extends Controller
             $latestDetail = $submission->latestDetail;
 
             // Mark files as used
-            $uploadService->markAsUsed($validated['final_report_path']);
-            $uploadService->markAsUsed($validated['manuscript_path']);
+            $uploadService->markAsUsed($validated['final_report_path'], \App\Enums\StorageUploadAction::CS_FINAL_REPORT->name);
+            $uploadService->markAsUsed($validated['manuscript_path'], \App\Enums\StorageUploadAction::CS_MANUSCRIPT->name);
 
             $detail = CommunityServiceSubmissionDetail::create([
                 'community_service_submission_id' => $submission->id,

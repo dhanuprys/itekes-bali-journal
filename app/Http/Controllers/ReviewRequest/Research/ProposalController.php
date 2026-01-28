@@ -72,7 +72,7 @@ class ProposalController extends Controller
 
             // Mark the pre-uploaded file as used
             $path = $validated['proposal_path'];
-            $this->uploadService->markAsUsed($path);
+            $this->uploadService->markAsUsed($path, \App\Enums\StorageUploadAction::RESEARCH_PROPOSAL->name);
 
             $detail = ResearchSubmissionDetail::create([
                 'research_submission_id' => $submission->id,
@@ -112,7 +112,7 @@ class ProposalController extends Controller
     {
         $submission = ResearchSubmission::with([
             'latestDetail.studyProgram',
-            'latestDetail.researchTarget',
+            'latestDetail.target',
             'latestDetail.members',
             'latestDetail.comments.user'
         ])
@@ -166,7 +166,7 @@ class ProposalController extends Controller
             // Ideally we check if it's different, but calling markAsUsed on an already used file is idempotent-ish
             // (update sets is_used=true, which it already is).
             $path = $validated['proposal_path'];
-            $this->uploadService->markAsUsed($path);
+            $this->uploadService->markAsUsed($path, \App\Enums\StorageUploadAction::RESEARCH_PROPOSAL->name);
 
             $newDetail = ResearchSubmissionDetail::create([
                 'research_submission_id' => $submission->id,

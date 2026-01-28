@@ -38,6 +38,7 @@ export interface User {
     id: number;
     name: string;
     email: string;
+    username: string;
     avatar?: string;
     roles: string[];
     permissions: string[];
@@ -45,6 +46,7 @@ export interface User {
     two_factor_confirmed_at: string | null;
     created_at: string;
     updated_at: string;
+    photo_path: string | null;
 }
 
 export type BreadcrumbItemType = BreadcrumbItem;

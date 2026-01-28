@@ -1,7 +1,9 @@
 <script lang="ts">
     import DeleteUser from '@/components/DeleteUser.svelte';
+    import FileUpload from '@/components/FileUpload.svelte';
     import HeadingSmall from '@/components/HeadingSmall.svelte';
     import InputError from '@/components/InputError.svelte';
+    import { StorageUploadAction } from '@/data/storage-upload';
     import { Button } from '@/components/ui/button';
     import { Input } from '@/components/ui/input';
     import { Label } from '@/components/ui/label';
@@ -29,6 +31,8 @@
     ];
 
     const user = $page.props.auth.user as User;
+
+    let photoPath = $state(user.photo_path);
 </script>
 
 <svelte:head>
@@ -46,6 +50,31 @@
                         <Label for="name">Nama</Label>
                         <Input name="name" class="mt-1 block w-full" defaultValue={user.name} required autocomplete="name" placeholder="Full name" />
                         <InputError class="mt-2" message={errors.name} />
+                    </div>
+
+                    <div class="grid gap-2">
+                        <Label for="username">Username</Label>
+                        <Input
+                            name="username"
+                            class="mt-1 block w-full"
+                            defaultValue={user.username}
+                            required
+                            autocomplete="username"
+                            placeholder="Username"
+                        />
+                        <InputError class="mt-2" message={errors.username} />
+                    </div>
+
+                    <div class="grid gap-2">
+                        <FileUpload
+                            action={StorageUploadAction.USER_PROFILE_PHOTO}
+                            bind:value={photoPath}
+                            label="Photo Profile"
+                            accept=".jpg,.jpeg,.png,.webp"
+                            maxSize={3 * 1024 * 1024}
+                            error={errors.photo_path}
+                        />
+                        <input type="hidden" name="photo_path" value={photoPath} />
                     </div>
 
                     <div class="grid gap-2">

@@ -48,14 +48,19 @@ class StorageUploadService
      * Mark a file as used by its path.
      *
      * @param  string  $path
+     * @param  string|null  $tag
      * @return void
      */
-    public function markAsUsed(string $path): void
+    public function markAsUsed(string $path, ?string $tag = null): void
     {
         $upload = StorageUpload::where('file_path', $path)->first();
 
         if ($upload) {
-            $upload->update(['is_used' => true]);
+            $data = ['is_used' => true];
+            if ($tag) {
+                $data['tag'] = $tag;
+            }
+            $upload->update($data);
         }
     }
 }

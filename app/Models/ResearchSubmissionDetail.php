@@ -41,12 +41,12 @@ class ResearchSubmissionDetail extends Model
         return $this->belongsTo(StudyProgram::class);
     }
 
-    public function researchTarget(): BelongsTo
+    public function target(): BelongsTo
     {
         return $this->belongsTo(ResearchTarget::class, 'research_target_id');
     }
 
-    public function researchSchema(): BelongsTo
+    public function schema(): BelongsTo
     {
         return $this->belongsTo(ResearchSchema::class, 'research_schema_id');
     }

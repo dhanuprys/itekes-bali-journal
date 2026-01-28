@@ -172,7 +172,7 @@
                                                     </span>
                                                     <div class="flex items-center gap-2">
                                                         <Badge variant="secondary" class="text-[10px] px-1 py-0 h-4 font-normal rounded-sm">
-                                                            {file.action?.replace(/_/g, ' ') || 'Unknown'}
+                                                            {file.tag?.replace(/_/g, ' ') || 'Unknown'}
                                                         </Badge>
                                                     </div>
                                                 </div>

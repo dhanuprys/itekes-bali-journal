@@ -74,7 +74,7 @@ class ProposalController extends Controller
 
             // Mark the pre-uploaded file as used
             $path = $validated['proposal_path'];
-            $this->uploadService->markAsUsed($path);
+            $this->uploadService->markAsUsed($path, \App\Enums\StorageUploadAction::CS_PROPOSAL->name);
 
             $detail = CommunityServiceSubmissionDetail::create([
                 'community_service_submission_id' => $submission->id,
@@ -166,7 +166,7 @@ class ProposalController extends Controller
             $latestDetail = $submission->latestDetail;
             // Mark the file as used
             $path = $validated['proposal_path'];
-            $this->uploadService->markAsUsed($path);
+            $this->uploadService->markAsUsed($path, \App\Enums\StorageUploadAction::CS_PROPOSAL->name);
 
             $newDetail = CommunityServiceSubmissionDetail::create([
                 'community_service_submission_id' => $submission->id,
