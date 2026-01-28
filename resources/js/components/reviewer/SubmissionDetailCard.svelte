@@ -11,8 +11,6 @@
     }
 
     let { detail, type = 'research', stage = 'proposal' }: Props = $props();
-
-    $inspect({ detail });
 </script>
 
 <div class="space-y-6">
@@ -28,11 +26,6 @@
             <div>
                 <dt class="text-sm font-medium text-muted-foreground">Ketua Pelaksana</dt>
                 <dd class="text-base font-semibold">{detail?.leader_name}</dd>
-            </div>
-
-            <div>
-                <dt class="text-sm font-medium text-muted-foreground">NIDN/NIP</dt>
-                <dd class="text-base font-semibold">{detail?.leader_nidn}</dd>
             </div>
 
             <div>
@@ -110,6 +103,11 @@
                         <dd class="text-base font-semibold">{detail?.final_leader_name || '-'}</dd>
                     </div>
                 </dl>
+            </div>
+
+            <div>
+                <dt class="text-sm font-medium text-muted-foreground">NIDN/NIP</dt>
+                <dd class="text-base font-semibold">{detail?.leader_nidn}</dd>
             </div>
 
             <div>

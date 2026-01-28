@@ -6,14 +6,14 @@
     import * as Card from '@/components/ui/card';
     import { Badge } from '@/components/ui/badge';
     import { Button } from '@/components/ui/button';
-    import { Separator } from '@/components/ui/separator';
     import { getStatusConfig } from '@/lib/review-status';
+    import SubmissionDetailCard from '@/components/reviewer/SubmissionDetailCard.svelte';
+    import { Edit } from 'lucide-svelte';
 
     let { submission } = $props();
 
     // Derived from submission.latest_detail
     let detail = $derived(submission.latest_detail);
-    let members = $derived(detail.members || []);
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Permintaan Review', href: '#' },
@@ -36,56 +36,25 @@
         {/snippet}
 
         {#snippet actions()}
-            <Badge variant="outline" class={'px-3 py-1 gap-2 flex items-center ' + statusConfig.color}>
-                <statusConfig.icon class="h-4 w-4" />
-                {statusConfig.label}
-            </Badge>
+            <div class="flex items-center gap-2">
+                {#if submission.status === 'revision_needed'}
+                    <Button href={route('apply.research.proposal.edit', submission.id)} size="sm" class="gap-2">
+                        <Edit class="h-4 w-4" />
+                        Revisi Proposal
+                    </Button>
+                {/if}
+                <Badge variant="outline" class={'px-3 py-1 gap-2 flex items-center ' + statusConfig.color}>
+                    <statusConfig.icon class="h-4 w-4" />
+                    {statusConfig.label}
+                </Badge>
+            </div>
         {/snippet}
 
         {#snippet children()}
             <div class="space-y-6">
                 <Card.Root>
-                    <Card.Header>
-                        <div class="space-y-1">
-                            <Card.Title>{detail.title}</Card.Title>
-                            <Card.Description>Diajukan pada {new Date(submission.created_at).toLocaleDateString('id-ID')}</Card.Description>
-                        </div>
-                    </Card.Header>
-                    <Card.Content class="space-y-4">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <h4 class="text-sm font-semibold text-muted-foreground">Ketua Peneliti</h4>
-                                <p>{detail.leader_name} ({detail.leader_nidn})</p>
-                            </div>
-                            <div>
-                                <h4 class="text-sm font-semibold text-muted-foreground">Program Studi</h4>
-                                <p>{detail.study_program?.name || '-'}</p>
-                            </div>
-                            <div>
-                                <h4 class="text-sm font-semibold text-muted-foreground">Skema</h4>
-                                <p>{detail.research_schema?.name || '-'}</p>
-                            </div>
-                            <div>
-                                <h4 class="text-sm font-semibold text-muted-foreground">Target Luaran</h4>
-                                <p>{detail.research_target?.name || '-'}</p>
-                            </div>
-                            <div>
-                                <h4 class="text-sm font-semibold text-muted-foreground">Usulan Biaya</h4>
-                                <p>Rp {new Intl.NumberFormat('id-ID').format(detail.budget)}</p>
-                            </div>
-                        </div>
-
-                        <Separator />
-
-                        <div>
-                            <h4 class="text-sm font-medium mb-2">Dokumen Proposal</h4>
-                            <div class="flex items-center gap-4">
-                                <div class="p-3 border rounded bg-muted/50">
-                                    <span class="text-sm font-mono">File Proposal</span>
-                                </div>
-                                <Button href={`/storage/${detail.proposal_path}`} target="_blank" variant="outline" size="sm">Unduh File</Button>
-                            </div>
-                        </div>
+                    <Card.Content class="pt-6">
+                        <SubmissionDetailCard {detail} type="research" stage="proposal" />
                     </Card.Content>
                 </Card.Root>
 

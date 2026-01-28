@@ -136,7 +136,7 @@
                 </Card.Root>
             </div>
 
-            <Alert class="mb-4">
+            <Alert class="mb-4" variant="destructive">
                 <InfoIcon class="h-4 w-4" />
                 <AlertTitle>Informasi Penyimpanan</AlertTitle>
                 <AlertDescription>
