@@ -3,8 +3,6 @@
     import AppLayout from '@/layouts/AppLayout.svelte';
     import { type BreadcrumbItem } from '@/types';
     import Heading from '@/components/Heading.svelte';
-    import { Button } from '@/components/ui/button';
-    import { Separator } from '@/components/ui/separator';
     import { FileTextIcon, ClockIcon, CheckCircleIcon, AlertCircleIcon } from 'lucide-svelte';
     import ReviewerSplitLayout from '@/components/reviewer/ReviewerSplitLayout.svelte';
     import ReviewerChatPanel from '@/components/reviewer/ReviewerChatPanel.svelte';
@@ -60,21 +58,19 @@
             </Badge>
         {/snippet}
 
-        {#snippet children()}
-            <ReviewerSplitLayout>
-                {#snippet details()}
-                    <SubmissionDetailCard {detail} type="community-service" stage="final_report" />
-                {/snippet}
+        <ReviewerSplitLayout>
+            {#snippet details()}
+                <SubmissionDetailCard {detail} type="community-service" stage="final_report" />
+            {/snippet}
 
-                {#snippet actions()}
-                    <ReviewerChatPanel
-                        {comments}
-                        {canReview}
-                        commentSubmitRoute={route('review.community_service.final_report.comment', submission.id)}
-                        actionSubmitRoute={route('review.community_service.final_report.change-state', submission.id)}
-                    />
-                {/snippet}
-            </ReviewerSplitLayout>
-        {/snippet}
+            {#snippet actions()}
+                <ReviewerChatPanel
+                    {comments}
+                    {canReview}
+                    commentSubmitRoute={route('review.community_service.final_report.comment', submission.id)}
+                    actionSubmitRoute={route('review.community_service.final_report.change-state', submission.id)}
+                />
+            {/snippet}
+        </ReviewerSplitLayout>
     </LayoutComposer>
 </AppLayout>

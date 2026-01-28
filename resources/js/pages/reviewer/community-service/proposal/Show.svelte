@@ -60,21 +60,19 @@
             </Badge>
         {/snippet}
 
-        {#snippet children()}
-            <ReviewerSplitLayout>
-                {#snippet details()}
-                    <SubmissionDetailCard {detail} type="community-service" stage="proposal" />
-                {/snippet}
+        <ReviewerSplitLayout>
+            {#snippet details()}
+                <SubmissionDetailCard {detail} type="community-service" stage="proposal" />
+            {/snippet}
 
-                {#snippet actions()}
-                    <ReviewerChatPanel
-                        {comments}
-                        {canReview}
-                        commentSubmitRoute={route('review.community_service.proposal.comment', submission.id)}
-                        actionSubmitRoute={route('review.community_service.proposal.change-state', submission.id)}
-                    />
-                {/snippet}
-            </ReviewerSplitLayout>
-        {/snippet}
+            {#snippet actions()}
+                <ReviewerChatPanel
+                    {comments}
+                    {canReview}
+                    commentSubmitRoute={route('review.community_service.proposal.comment', submission.id)}
+                    actionSubmitRoute={route('review.community_service.proposal.change-state', submission.id)}
+                />
+            {/snippet}
+        </ReviewerSplitLayout>
     </LayoutComposer>
 </AppLayout>

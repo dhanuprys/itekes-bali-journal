@@ -63,7 +63,7 @@
                 <CardContent>
                     {#if permission?.roles && permission.roles.length > 0}
                         <div class="flex flex-wrap gap-2">
-                            {#each permission.roles as role}
+                            {#each permission.roles as role (role.id)}
                                 <Badge variant="secondary">{role.name}</Badge>
                             {/each}
                         </div>

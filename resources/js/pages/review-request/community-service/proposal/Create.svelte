@@ -55,37 +55,35 @@
             <Heading title="Buat Proposal Baru" description="Isi form berikut untuk mengajukan proposal pengabdian masyarakat." />
         {/snippet}
 
-        {#snippet children()}
-            <form
-                onsubmit={(e) => {
-                    e.preventDefault();
-                    submit();
+        <form
+            onsubmit={(e) => {
+                e.preventDefault();
+                submit();
+            }}
+            class="space-y-6"
+        >
+            <ProposalForm
+                bind:form={$form}
+                type="community-service"
+                mode="create"
+                data={{
+                    studyPrograms,
+                    targets: communityServiceTargets,
                 }}
-                class="space-y-6"
-            >
-                <ProposalForm
-                    bind:form={$form}
-                    type="community-service"
-                    mode="create"
-                    data={{
-                        studyPrograms,
-                        targets: communityServiceTargets,
-                    }}
-                />
+            />
 
-                <div class="flex justify-end items-center gap-4">
-                    {#if uploadState.isUploading}
-                        <span class="text-sm text-muted-foreground animate-pulse">Mengunggah file...</span>
+            <div class="flex justify-end items-center gap-4">
+                {#if uploadState.isUploading}
+                    <span class="text-sm text-muted-foreground animate-pulse">Mengunggah file...</span>
+                {/if}
+                <Button type="submit" disabled={$form.processing || uploadState.isUploading}>
+                    {#if $form.processing}
+                        Menyimpan...
+                    {:else}
+                        Simpan Proposal
                     {/if}
-                    <Button type="submit" disabled={$form.processing || uploadState.isUploading}>
-                        {#if $form.processing}
-                            Menyimpan...
-                        {:else}
-                            Simpan Proposal
-                        {/if}
-                    </Button>
-                </div>
-            </form>
-        {/snippet}
+                </Button>
+            </div>
+        </form>
     </LayoutComposer>
 </AppLayout>

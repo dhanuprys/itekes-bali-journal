@@ -60,37 +60,35 @@
             <RevisionCommentSheet comments={detail?.comments} />
         {/snippet}
 
-        {#snippet children()}
-            {#if submission.status === 'revision_needed'}
-                <div class="mb-6">
-                    <Alert.Root variant="destructive">
-                        <Alert.Title>Perhatian</Alert.Title>
-                        <Alert.Description>
-                            Laporan Anda memerlukan revisi. Silakan cek komentar reviewer melalui tombol di atas kanan dan unggah versi perbaikan.
-                        </Alert.Description>
-                    </Alert.Root>
-                </div>
-            {/if}
+        {#if submission.status === 'revision_needed'}
+            <div class="mb-6">
+                <Alert.Root variant="destructive">
+                    <Alert.Title>Perhatian</Alert.Title>
+                    <Alert.Description>
+                        Laporan Anda memerlukan revisi. Silakan cek komentar reviewer melalui tombol di atas kanan dan unggah versi perbaikan.
+                    </Alert.Description>
+                </Alert.Root>
+            </div>
+        {/if}
 
-            <form
-                onsubmit={(e) => {
-                    e.preventDefault();
-                    submit();
-                }}
-            >
-                <ProgressReportForm bind:form={$form} data={{ schemas }} type="community-service" mode="revise" />
+        <form
+            onsubmit={(e) => {
+                e.preventDefault();
+                submit();
+            }}
+        >
+            <ProgressReportForm bind:form={$form} data={{ schemas }} type="community-service" mode="revise" />
 
-                <div class="mt-6 flex justify-end gap-3">
-                    <Button variant="outline" href={route('apply.community_service.progress_report.index')}>Batal</Button>
-                    <Button type="submit" disabled={$form.processing || uploadState.isUploading}>
-                        {#if $form.processing}
-                            Menyimpan...
-                        {:else}
-                            Kirim Revisi
-                        {/if}
-                    </Button>
-                </div>
-            </form>
-        {/snippet}
+            <div class="mt-6 flex justify-end gap-3">
+                <Button variant="outline" href={route('apply.community_service.progress_report.index')}>Batal</Button>
+                <Button type="submit" disabled={$form.processing || uploadState.isUploading}>
+                    {#if $form.processing}
+                        Menyimpan...
+                    {:else}
+                        Kirim Revisi
+                    {/if}
+                </Button>
+            </div>
+        </form>
     </LayoutComposer>
 </AppLayout>

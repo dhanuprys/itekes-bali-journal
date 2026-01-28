@@ -3,7 +3,7 @@
     import { Button } from '@/components/ui/button';
     import { Input } from '@/components/ui/input';
     import { useForm } from '@inertiajs/svelte';
-    import { onMount, untrack } from 'svelte';
+    import { untrack } from 'svelte';
     import { Field, FieldLabel, FieldError } from '@/components/ui/field';
     import { toast } from 'svelte-sonner';
     let { open = $bindable(false), selectedUser = null, roles = [] } = $props();
@@ -98,7 +98,7 @@
             <Field>
                 <FieldLabel>Role</FieldLabel>
                 <div class="flex flex-col gap-2 border rounded-md p-3">
-                    {#each roles as role}
+                    {#each roles as role (role.value)}
                         <label class="flex items-center space-x-2">
                             <input
                                 type="checkbox"

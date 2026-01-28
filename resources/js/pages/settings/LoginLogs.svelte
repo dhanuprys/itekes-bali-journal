@@ -3,7 +3,7 @@
     import { type BreadcrumbItem } from '@/types';
     import AppLayout from '@/layouts/AppLayout.svelte';
     import SettingsLayout from '@/layouts/settings/Layout.svelte';
-    import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+    import { Card, CardContent } from '@/components/ui/card';
     import * as Empty from '@/components/ui/empty';
     import { History } from 'lucide-svelte';
     import Pagination from '@/components/Pagination.svelte';
@@ -40,7 +40,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="[&_tr:last-child]:border-0">
-                                    {#each loginLogs.data as log}
+                                    {#each loginLogs.data as log (log.id)}
                                         <tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                                             <td class="p-4 align-middle">
                                                 <div class="flex flex-col">

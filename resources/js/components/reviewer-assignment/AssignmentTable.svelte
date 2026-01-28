@@ -57,13 +57,13 @@
 
     // Watch for search changes with debounce
     $effect(() => {
-        localSearch;
+        void localSearch;
         debouncedSearch();
     });
 
     // Watch for status filter changes (instant)
     $effect(() => {
-        localStatus;
+        void localStatus;
         applyFilters();
     });
 
@@ -129,7 +129,7 @@
                 {statusFilterLabel}
             </Select.Trigger>
             <Select.Content>
-                {#each statusOptions as option}
+                {#each statusOptions as option (option.value)}
                     <Select.Item value={option.value} label={option.label}>
                         {option.label}
                     </Select.Item>
@@ -169,7 +169,7 @@
                         </Table.Cell>
                     </Table.Row>
                 {:else}
-                    {#each submissions.data as submission}
+                    {#each submissions.data as submission (submission.id)}
                         <Table.Row class="group hover:bg-muted/50 transition-colors">
                             <Table.Cell class="font-medium">
                                 <div class="max-w-md">
@@ -207,7 +207,7 @@
                                         </div>
                                     {:else}
                                         <div class="flex -space-x-2">
-                                            {#each submission.reviewers.slice(0, 3) as reviewer}
+                                            {#each submission.reviewers.slice(0, 3) as reviewer (reviewer.id)}
                                                 <Tooltip.Root>
                                                     <Tooltip.Trigger>
                                                         <Avatar.Root class="h-8 w-8 border-2 border-background ring-1 ring-border">
@@ -233,7 +233,7 @@
                                                     </Tooltip.Trigger>
                                                     <Tooltip.Content>
                                                         <p class="text-xs font-medium mb-1">Reviewer lainnya:</p>
-                                                        {#each submission.reviewers.slice(3) as reviewer}
+                                                        {#each submission.reviewers.slice(3) as reviewer (reviewer.id)}
                                                             <p class="text-xs">{reviewer.user.name}</p>
                                                         {/each}
                                                     </Tooltip.Content>
@@ -270,9 +270,10 @@
                 Halaman {submissions.current_page} dari {submissions.last_page}
             </div>
             <div class="flex gap-2">
-                {#each submissions.links as link}
+                {#each submissions.links as link, i (i)}
                     {#if link.url}
                         <Button variant={link.active ? 'default' : 'outline'} size="sm" onclick={() => router.visit(link.url)} disabled={!link.url}>
+                            <!-- eslint-disable-next-line svelte/no-at-html-tags -->
                             {@html link.label}
                         </Button>
                     {/if}

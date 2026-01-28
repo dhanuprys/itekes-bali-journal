@@ -62,48 +62,46 @@
             <RevisionCommentSheet comments={detail?.comments} />
         {/snippet}
 
-        {#snippet children()}
-            {#if submission.status === 'revision_needed'}
-                <div class="mb-6">
-                    <Alert.Root variant="destructive">
-                        <Alert.Title>Perhatian</Alert.Title>
-                        <Alert.Description>
-                            Proposal Anda memerlukan revisi. Silakan cek komentar reviewer melalui tombol di atas kanan dan unggah versi perbaikan.
-                        </Alert.Description>
-                    </Alert.Root>
-                </div>
-            {/if}
+        {#if submission.status === 'revision_needed'}
+            <div class="mb-6">
+                <Alert.Root variant="destructive">
+                    <Alert.Title>Perhatian</Alert.Title>
+                    <Alert.Description>
+                        Proposal Anda memerlukan revisi. Silakan cek komentar reviewer melalui tombol di atas kanan dan unggah versi perbaikan.
+                    </Alert.Description>
+                </Alert.Root>
+            </div>
+        {/if}
 
-            <form
-                onsubmit={(e) => {
-                    e.preventDefault();
-                    submit();
+        <form
+            onsubmit={(e) => {
+                e.preventDefault();
+                submit();
+            }}
+            class="space-y-6"
+        >
+            <ProposalForm
+                bind:form={$form}
+                type="research"
+                mode="revise"
+                data={{
+                    studyPrograms,
+                    targets: researchTargets,
                 }}
-                class="space-y-6"
-            >
-                <ProposalForm
-                    bind:form={$form}
-                    type="research"
-                    mode="revise"
-                    data={{
-                        studyPrograms,
-                        targets: researchTargets,
-                    }}
-                />
+            />
 
-                <div class="flex justify-end items-center gap-4">
-                    {#if uploadState.isUploading}
-                        <span class="text-sm text-muted-foreground animate-pulse">Mengunggah file...</span>
+            <div class="flex justify-end items-center gap-4">
+                {#if uploadState.isUploading}
+                    <span class="text-sm text-muted-foreground animate-pulse">Mengunggah file...</span>
+                {/if}
+                <Button type="submit" disabled={$form.processing || uploadState.isUploading}>
+                    {#if $form.processing}
+                        Menyimpan...
+                    {:else}
+                        Kirim Revisi
                     {/if}
-                    <Button type="submit" disabled={$form.processing || uploadState.isUploading}>
-                        {#if $form.processing}
-                            Menyimpan...
-                        {:else}
-                            Kirim Revisi
-                        {/if}
-                    </Button>
-                </div>
-            </form>
-        {/snippet}
+                </Button>
+            </div>
+        </form>
     </LayoutComposer>
 </AppLayout>

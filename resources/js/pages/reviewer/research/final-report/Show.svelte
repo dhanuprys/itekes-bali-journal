@@ -58,21 +58,19 @@
             </Badge>
         {/snippet}
 
-        {#snippet children()}
-            <ReviewerSplitLayout>
-                {#snippet details()}
-                    <SubmissionDetailCard {detail} type="research" stage="final_report" />
-                {/snippet}
+        <ReviewerSplitLayout>
+            {#snippet details()}
+                <SubmissionDetailCard {detail} type="research" stage="final_report" />
+            {/snippet}
 
-                {#snippet actions()}
-                    <ReviewerChatPanel
-                        {comments}
-                        {canReview}
-                        commentSubmitRoute={route('review.research.final_report.comment', submission.id)}
-                        actionSubmitRoute={route('review.research.final_report.change-state', submission.id)}
-                    />
-                {/snippet}
-            </ReviewerSplitLayout>
-        {/snippet}
+            {#snippet actions()}
+                <ReviewerChatPanel
+                    {comments}
+                    {canReview}
+                    commentSubmitRoute={route('review.research.final_report.comment', submission.id)}
+                    actionSubmitRoute={route('review.research.final_report.change-state', submission.id)}
+                />
+            {/snippet}
+        </ReviewerSplitLayout>
     </LayoutComposer>
 </AppLayout>

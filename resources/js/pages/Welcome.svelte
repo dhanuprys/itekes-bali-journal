@@ -7,14 +7,6 @@
 
     let { canRegister }: Props = $props();
     let user = $derived($page.props.auth.user);
-
-    let scrollY = $state(0);
-
-    if (typeof window !== 'undefined') {
-        window.addEventListener('scroll', () => {
-            scrollY = window.scrollY;
-        });
-    }
 </script>
 
 <svelte:head>

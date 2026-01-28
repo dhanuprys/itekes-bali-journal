@@ -3,7 +3,6 @@
     import { Button } from '@/components/ui/button';
     import * as Field from '@/components/ui/field';
     import * as Card from '@/components/ui/card';
-    import * as Alert from '@/components/ui/alert';
     import { Trash2Icon, PlusIcon } from 'lucide-svelte';
     import FileUpload from '@/components/FileUpload.svelte';
     import { StorageUploadAction } from '@/data/storage-upload';
@@ -14,7 +13,7 @@
     // Derived states
     let isResearch = $derived(type === 'research');
     let targetLabel = $derived(isResearch ? 'Target Luaran' : 'Target Luaran');
-    let schemaLabel = 'Skema';
+
     let titleLabel = $derived(isResearch ? 'Judul Penelitian' : 'Judul Pengabdian');
     let leaderLabel = $derived(isResearch ? 'Nama Ketua Peneliti' : 'Nama Ketua Pengabdi');
 
@@ -67,7 +66,7 @@
                                     {data.studyPrograms.find((s: any) => s.id === form.study_program_id)?.name ?? 'Pilih Program Studi'}
                                 </Select.Trigger>
                                 <Select.Content>
-                                    {#each data.studyPrograms as program}
+                                    {#each data.studyPrograms as program (program.id)}
                                         <Select.Item value={program.id} label={program.name}>{program.name}</Select.Item>
                                     {/each}
                                 </Select.Content>
@@ -98,7 +97,7 @@
 
                     <div class="space-y-3">
                         <Field.Label>Anggota Tim</Field.Label>
-                        {#each form.members as member, i}
+                        {#each form.members as member, i (i)}
                             <div class="flex items-end gap-3">
                                 <Field.Field class="flex-1">
                                     <Input id={`member-${i}`} bind:value={member.name} placeholder={`Nama Anggota ${i + 1}`} />
@@ -136,7 +135,7 @@
                                         {targets.find((t: any) => t.id === form.research_target_id)?.title ?? 'Pilih Target'}
                                     </Select.Trigger>
                                     <Select.Content>
-                                        {#each targets as target}
+                                        {#each targets as target (target.id)}
                                             <Select.Item value={target.id} label={target.title}>{target.title}</Select.Item>
                                         {/each}
                                     </Select.Content>
@@ -150,7 +149,7 @@
                                         {targets.find((t: any) => t.id === form.community_service_target_id)?.title ?? 'Pilih Target'}
                                     </Select.Trigger>
                                     <Select.Content>
-                                        {#each targets as target}
+                                        {#each targets as target (target.id)}
                                             <Select.Item value={target.id} label={target.title}>{target.title}</Select.Item>
                                         {/each}
                                     </Select.Content>

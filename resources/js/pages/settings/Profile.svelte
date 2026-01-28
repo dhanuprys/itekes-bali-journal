@@ -1,5 +1,4 @@
 <script lang="ts">
-    import DeleteUser from '@/components/DeleteUser.svelte';
     import FileUpload from '@/components/FileUpload.svelte';
     import HeadingSmall from '@/components/HeadingSmall.svelte';
     import InputError from '@/components/InputError.svelte';
@@ -130,7 +129,7 @@
                     <div>
                         <div class="text-sm font-medium mb-2">Role</div>
                         <div class="flex flex-wrap gap-2">
-                            {#each user.roles as role}
+                            {#each user.roles as role (role)}
                                 <Badge>{role}</Badge>
                             {/each}
                         </div>
@@ -140,7 +139,7 @@
                         <div>
                             <div class="text-sm font-medium mb-2">Izin Khusus</div>
                             <div class="flex flex-wrap gap-2">
-                                {#each user.permissions as permission}
+                                {#each user.permissions as permission (permission)}
                                     <Badge variant="outline">{permission}</Badge>
                                 {/each}
                             </div>

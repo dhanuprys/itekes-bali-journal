@@ -54,56 +54,53 @@
             </div>
         {/snippet}
 
-        {#snippet children()}
-            <div class="rounded-md border bg-card">
-                <Table.Root>
-                    <Table.Header>
+        <div class="rounded-md border bg-card">
+            <Table.Root>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.Head class="w-[50px]">No</Table.Head>
+                        <Table.Head>Nama</Table.Head>
+                        <Table.Head>Guard</Table.Head>
+                        <Table.Head>Dibuat</Table.Head>
+                        <Table.Head class="text-right">Aksi</Table.Head>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    {#if permissions.data.length === 0}
                         <Table.Row>
-                            <Table.Head class="w-[50px]">No</Table.Head>
-                            <Table.Head>Nama</Table.Head>
-                            <Table.Head>Guard</Table.Head>
-                            <Table.Head>Dibuat</Table.Head>
-                            <Table.Head class="text-right">Aksi</Table.Head>
+                            <Table.Cell colspan={5} class="text-center h-24 text-muted-foreground">Tidak ada data permission.</Table.Cell>
                         </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                        {#if permissions.data.length === 0}
+                    {:else}
+                        {#each permissions.data as permission, i (permission.id)}
                             <Table.Row>
-                                <Table.Cell colspan={5} class="text-center h-24 text-muted-foreground">Tidak ada data permission.</Table.Cell>
-                            </Table.Row>
-                        {:else}
-                            {#each permissions.data as permission, i}
-                                <Table.Row>
-                                    <Table.Cell>{(permissions.current_page - 1) * permissions.per_page + i + 1}</Table.Cell>
-                                    <Table.Cell class="font-medium">{permission.name}</Table.Cell>
-                                    <Table.Cell>{permission.guard_name}</Table.Cell>
-                                    <Table.Cell>{new Date(permission.created_at).toLocaleDateString()}</Table.Cell>
-                                    <Table.Cell class="text-right">
-                                        <DropdownMenu.Root>
-                                            <DropdownMenu.Trigger
-                                                class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-background text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                                <Table.Cell>{(permissions.current_page - 1) * permissions.per_page + i + 1}</Table.Cell>
+                                <Table.Cell class="font-medium">{permission.name}</Table.Cell>
+                                <Table.Cell>{permission.guard_name}</Table.Cell>
+                                <Table.Cell>{new Date(permission.created_at).toLocaleDateString()}</Table.Cell>
+                                <Table.Cell class="text-right">
+                                    <DropdownMenu.Root>
+                                        <DropdownMenu.Trigger
+                                            class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-background text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                                        >
+                                            <span class="sr-only">Open menu</span>
+                                            <MoreHorizontal class="h-4 w-4" />
+                                        </DropdownMenu.Trigger>
+                                        <DropdownMenu.Content align="end">
+                                            <DropdownMenu.Label>Aksi</DropdownMenu.Label>
+                                            <DropdownMenu.Item onclick={() => router.visit(`/permissions/${permission.id}`)}>Detail</DropdownMenu.Item
                                             >
-                                                <span class="sr-only">Open menu</span>
-                                                <MoreHorizontal class="h-4 w-4" />
-                                            </DropdownMenu.Trigger>
-                                            <DropdownMenu.Content align="end">
-                                                <DropdownMenu.Label>Aksi</DropdownMenu.Label>
-                                                <DropdownMenu.Item onclick={() => router.visit(`/permissions/${permission.id}`)}
-                                                    >Detail</DropdownMenu.Item
-                                                >
-                                            </DropdownMenu.Content>
-                                        </DropdownMenu.Root>
-                                    </Table.Cell>
-                                </Table.Row>
-                            {/each}
-                        {/if}
-                    </Table.Body>
-                </Table.Root>
-            </div>
+                                        </DropdownMenu.Content>
+                                    </DropdownMenu.Root>
+                                </Table.Cell>
+                            </Table.Row>
+                        {/each}
+                    {/if}
+                </Table.Body>
+            </Table.Root>
+        </div>
 
-            <div class="mt-4">
-                <Pagination links={permissions.links} meta={permissions} />
-            </div>
-        {/snippet}
+        <div class="mt-4">
+            <Pagination links={permissions.links} meta={permissions} />
+        </div>
     </LayoutComposer>
 </AppLayout>

@@ -38,30 +38,28 @@
             <Heading title={ethicalClearanceSubject?.title || 'Detail Subjek Etik'} description="Detail informasi subjek etik" />
         {/snippet}
 
-        {#snippet children()}
-            <div class="grid gap-6 md:grid-cols-2">
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Informasi Dasar</CardTitle>
-                    </CardHeader>
-                    <CardContent class="space-y-4">
-                        <div class="grid grid-cols-3 gap-4">
-                            <div class="text-sm font-medium text-muted-foreground">Judul</div>
-                            <div class="col-span-2 text-sm">{ethicalClearanceSubject?.title || '-'}</div>
+        <div class="grid gap-6 md:grid-cols-2">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Informasi Dasar</CardTitle>
+                </CardHeader>
+                <CardContent class="space-y-4">
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="text-sm font-medium text-muted-foreground">Judul</div>
+                        <div class="col-span-2 text-sm">{ethicalClearanceSubject?.title || '-'}</div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="text-sm font-medium text-muted-foreground">Deskripsi</div>
+                        <div class="col-span-2 text-sm">{ethicalClearanceSubject?.description || '-'}</div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="text-sm font-medium text-muted-foreground">Dibuat</div>
+                        <div class="col-span-2 text-sm">
+                            {ethicalClearanceSubject?.created_at ? new Date(ethicalClearanceSubject.created_at).toLocaleDateString() : '-'}
                         </div>
-                        <div class="grid grid-cols-3 gap-4">
-                            <div class="text-sm font-medium text-muted-foreground">Deskripsi</div>
-                            <div class="col-span-2 text-sm">{ethicalClearanceSubject?.description || '-'}</div>
-                        </div>
-                        <div class="grid grid-cols-3 gap-4">
-                            <div class="text-sm font-medium text-muted-foreground">Dibuat</div>
-                            <div class="col-span-2 text-sm">
-                                {ethicalClearanceSubject?.created_at ? new Date(ethicalClearanceSubject.created_at).toLocaleDateString() : '-'}
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-        {/snippet}
+                    </div>
+                </CardContent>
+            </Card>
+        </div>
     </LayoutComposer>
 </AppLayout>

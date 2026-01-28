@@ -23,10 +23,8 @@
             <Heading title="Atur Reviewer Pengabdian" description="Tetapkan reviewer untuk setiap usulan pengabdian." />
         {/snippet}
 
-        {#snippet children()}
-            <div class="bg-background shadow-sm rounded-lg">
-                <AssignmentTable {submissions} {reviewers} {filters} assignRouteName="reviewer_assignment.community_service.store" />
-            </div>
-        {/snippet}
+        <div class="bg-background shadow-sm rounded-lg">
+            <AssignmentTable {submissions} {reviewers} {filters} assignRouteName="reviewer_assignment.community_service.store" />
+        </div>
     </LayoutComposer>
 </AppLayout>

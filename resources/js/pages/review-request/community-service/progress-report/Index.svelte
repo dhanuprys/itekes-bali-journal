@@ -3,12 +3,11 @@
     import AppLayout from '@/layouts/AppLayout.svelte';
     import { type BreadcrumbItem } from '@/types';
     import Heading from '@/components/Heading.svelte';
-    import { Button } from '@/components/ui/button';
     import * as Table from '@/components/ui/table';
     import * as Card from '@/components/ui/card';
     import { Badge } from '@/components/ui/badge';
     import * as DropdownMenu from '@/components/ui/dropdown-menu';
-    import { Link, router } from '@inertiajs/svelte';
+    import { router } from '@inertiajs/svelte';
     import { MoreHorizontalIcon } from 'lucide-svelte';
 
     let { submissions } = $props();
@@ -49,88 +48,86 @@
             <Heading title="Laporan Kemajuan" description="Kelola laporan kemajuan pengabdian Anda." />
         {/snippet}
 
-        {#snippet children()}
-            <Card.Root>
-                <Card.Header>
-                    <Card.Title>Daftar Laporan</Card.Title>
-                    <Card.Description>Proposal yang telah disetujui dan menunggu laporan kemajuan/akhir.</Card.Description>
-                </Card.Header>
-                <Card.Content>
-                    {#if submissions.data.length === 0}
-                        <div class="text-center py-10 text-muted-foreground">Belum ada proposal yang masuk tahap laporan kemajuan.</div>
-                    {:else}
-                        <Table.Root>
-                            <Table.Header>
+        <Card.Root>
+            <Card.Header>
+                <Card.Title>Daftar Laporan</Card.Title>
+                <Card.Description>Proposal yang telah disetujui dan menunggu laporan kemajuan/akhir.</Card.Description>
+            </Card.Header>
+            <Card.Content>
+                {#if submissions.data.length === 0}
+                    <div class="text-center py-10 text-muted-foreground">Belum ada proposal yang masuk tahap laporan kemajuan.</div>
+                {:else}
+                    <Table.Root>
+                        <Table.Header>
+                            <Table.Row>
+                                <Table.Head>Judul</Table.Head>
+                                <Table.Head>Status</Table.Head>
+                                <Table.Head>Tanggal</Table.Head>
+                                <Table.Head class="text-right">Aksi</Table.Head>
+                            </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                            {#each submissions.data as submission (submission.id)}
                                 <Table.Row>
-                                    <Table.Head>Judul</Table.Head>
-                                    <Table.Head>Status</Table.Head>
-                                    <Table.Head>Tanggal</Table.Head>
-                                    <Table.Head class="text-right">Aksi</Table.Head>
-                                </Table.Row>
-                            </Table.Header>
-                            <Table.Body>
-                                {#each submissions.data as submission}
-                                    <Table.Row>
-                                        <Table.Cell class="font-medium">
-                                            {submission.latest_detail?.final_title || submission.latest_detail?.title || 'Judul Tidak Tersedia'}
-                                        </Table.Cell>
-                                        <Table.Cell>
-                                            <Badge variant={getStatusVariant(submission.status)}>
-                                                {submission.status.replace('_', ' ').toUpperCase()}
-                                            </Badge>
-                                        </Table.Cell>
-                                        <Table.Cell>{new Date(submission.created_at).toLocaleDateString('id-ID')}</Table.Cell>
-                                        <Table.Cell class="text-right">
-                                            <DropdownMenu.Root>
-                                                <DropdownMenu.Trigger
-                                                    class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-background text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                                    <Table.Cell class="font-medium">
+                                        {submission.latest_detail?.final_title || submission.latest_detail?.title || 'Judul Tidak Tersedia'}
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                        <Badge variant={getStatusVariant(submission.status)}>
+                                            {submission.status.replace('_', ' ').toUpperCase()}
+                                        </Badge>
+                                    </Table.Cell>
+                                    <Table.Cell>{new Date(submission.created_at).toLocaleDateString('id-ID')}</Table.Cell>
+                                    <Table.Cell class="text-right">
+                                        <DropdownMenu.Root>
+                                            <DropdownMenu.Trigger
+                                                class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-background text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                                            >
+                                                <span class="sr-only">Open menu</span>
+                                                <MoreHorizontalIcon class="h-4 w-4" />
+                                            </DropdownMenu.Trigger>
+                                            <DropdownMenu.Content align="end">
+                                                <DropdownMenu.Item
+                                                    onclick={() => router.visit(route('apply.community_service.revisions', submission.id))}
                                                 >
-                                                    <span class="sr-only">Open menu</span>
-                                                    <MoreHorizontalIcon class="h-4 w-4" />
-                                                </DropdownMenu.Trigger>
-                                                <DropdownMenu.Content align="end">
+                                                    Riwayat Revisi
+                                                </DropdownMenu.Item>
+                                                {#if !hasSubmittedReport(submission)}
                                                     <DropdownMenu.Item
-                                                        onclick={() => router.visit(route('apply.community_service.revisions', submission.id))}
+                                                        onclick={() =>
+                                                            router.visit(
+                                                                route('apply.community_service.progress_report.create', {
+                                                                    submission_id: submission.id,
+                                                                }),
+                                                            )}
                                                     >
-                                                        Riwayat Revisi
+                                                        Buat Laporan
                                                     </DropdownMenu.Item>
-                                                    {#if !hasSubmittedReport(submission)}
-                                                        <DropdownMenu.Item
-                                                            onclick={() =>
-                                                                router.visit(
-                                                                    route('apply.community_service.progress_report.create', {
-                                                                        submission_id: submission.id,
-                                                                    }),
-                                                                )}
-                                                        >
-                                                            Buat Laporan
-                                                        </DropdownMenu.Item>
-                                                    {:else if submission.status === 'revision_needed'}
-                                                        <DropdownMenu.Item
-                                                            onclick={() =>
-                                                                router.visit(route('apply.community_service.progress_report.edit', submission.id))}
-                                                        >
-                                                            Revisi
-                                                        </DropdownMenu.Item>
-                                                    {/if}
-                                                    {#if hasSubmittedReport(submission)}
-                                                        <DropdownMenu.Item
-                                                            onclick={() =>
-                                                                router.visit(route('apply.community_service.progress_report.show', submission.id))}
-                                                        >
-                                                            Detail
-                                                        </DropdownMenu.Item>
-                                                    {/if}
-                                                </DropdownMenu.Content>
-                                            </DropdownMenu.Root>
-                                        </Table.Cell>
-                                    </Table.Row>
-                                {/each}
-                            </Table.Body>
-                        </Table.Root>
-                    {/if}
-                </Card.Content>
-            </Card.Root>
-        {/snippet}
+                                                {:else if submission.status === 'revision_needed'}
+                                                    <DropdownMenu.Item
+                                                        onclick={() =>
+                                                            router.visit(route('apply.community_service.progress_report.edit', submission.id))}
+                                                    >
+                                                        Revisi
+                                                    </DropdownMenu.Item>
+                                                {/if}
+                                                {#if hasSubmittedReport(submission)}
+                                                    <DropdownMenu.Item
+                                                        onclick={() =>
+                                                            router.visit(route('apply.community_service.progress_report.show', submission.id))}
+                                                    >
+                                                        Detail
+                                                    </DropdownMenu.Item>
+                                                {/if}
+                                            </DropdownMenu.Content>
+                                        </DropdownMenu.Root>
+                                    </Table.Cell>
+                                </Table.Row>
+                            {/each}
+                        </Table.Body>
+                    </Table.Root>
+                {/if}
+            </Card.Content>
+        </Card.Root>
     </LayoutComposer>
 </AppLayout>

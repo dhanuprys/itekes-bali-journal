@@ -1,6 +1,5 @@
 <script lang="ts">
     import { uploadState } from '@/stores/upload-state.svelte';
-    import { StorageUploadAction } from '@/data/storage-upload';
     import { Button } from '@/components/ui/button';
     import { Label } from '@/components/ui/label';
     import { Progress } from '@/components/ui/progress';

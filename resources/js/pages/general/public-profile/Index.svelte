@@ -3,7 +3,6 @@
     import { Calendar, User } from 'lucide-svelte';
 
     interface Profile {
-        id: number;
         name: string;
         username: string;
         photo_path: string | null;

@@ -3,10 +3,9 @@
     import { Button } from '@/components/ui/button';
     import { Input } from '@/components/ui/input';
     import { useForm } from '@inertiajs/svelte';
-    import { onMount, untrack } from 'svelte';
+    import { untrack } from 'svelte';
     import { Field, FieldLabel, FieldError } from '@/components/ui/field';
     import { toast } from 'svelte-sonner';
-    import Label from '@/components/ui/label/label.svelte';
 
     let { open = $bindable(false), selectedRole = null, permissions = [] } = $props();
 
@@ -75,7 +74,7 @@
             <Field>
                 <FieldLabel>Permissions</FieldLabel>
                 <div class="flex flex-col gap-2 border rounded-md p-3 max-h-[300px] overflow-y-auto">
-                    {#each permissions as permission}
+                    {#each permissions as permission (permission.value)}
                         <label class="flex items-center space-x-2">
                             <input
                                 type="checkbox"

@@ -6,7 +6,7 @@
     import { StorageUploadAction } from '@/data/storage-upload';
     import * as Select from '@/components/ui/select';
 
-    let { form = $bindable(), data, type = 'research', mode = 'create' } = $props();
+    let { form = $bindable(), data, type = 'research' } = $props();
 
     // Derived states
     let isResearch = $derived(type === 'research');
@@ -60,7 +60,7 @@
                                     {data.schemas.find((s: any) => s.id === form.schema_id)?.title ?? 'Pilih Skema'}
                                 </Select.Trigger>
                                 <Select.Content>
-                                    {#each data.schemas as schema}
+                                    {#each data.schemas as schema (schema.id)}
                                         <Select.Item value={schema.id} label={schema.title}>{schema.title}</Select.Item>
                                     {/each}
                                 </Select.Content>

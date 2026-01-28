@@ -23,10 +23,8 @@
             <Heading title="Atur Reviewer Penelitian" description="Tetapkan reviewer untuk setiap usulan penelitian." />
         {/snippet}
 
-        {#snippet children()}
-            <div class="bg-background shadow-sm rounded-lg">
-                <AssignmentTable {submissions} {reviewers} {filters} assignRouteName="reviewer_assignment.research.store" />
-            </div>
-        {/snippet}
+        <div class="bg-background shadow-sm rounded-lg">
+            <AssignmentTable {submissions} {reviewers} {filters} assignRouteName="reviewer_assignment.research.store" />
+        </div>
     </LayoutComposer>
 </AppLayout>

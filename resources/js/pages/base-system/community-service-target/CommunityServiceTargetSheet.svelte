@@ -3,7 +3,7 @@
     import { Button } from '@/components/ui/button';
     import { Input } from '@/components/ui/input';
     import { useForm } from '@inertiajs/svelte';
-    import { onMount, untrack } from 'svelte';
+    import { untrack } from 'svelte';
     import { Field, FieldLabel, FieldError } from '@/components/ui/field';
     import { toast } from 'svelte-sonner';
     import { Textarea } from '@/components/ui/textarea';

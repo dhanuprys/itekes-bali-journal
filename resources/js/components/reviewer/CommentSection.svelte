@@ -20,7 +20,7 @@
         {#if comments.length === 0}
             <p class="text-muted-foreground text-sm py-4">Belum ada komentar.</p>
         {:else}
-            {#each comments as comment}
+            {#each comments as comment (comment.id)}
                 <div class="flex gap-4">
                     <Avatar class="h-8 w-8">
                         <AvatarFallback>{getInitials(comment.user.name)}</AvatarFallback>

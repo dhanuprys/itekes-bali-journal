@@ -6,8 +6,7 @@
     import { Checkbox } from '@/components/ui/checkbox';
     import { Badge } from '@/components/ui/badge';
     import { router } from '@inertiajs/svelte';
-    import { SearchIcon, CheckIcon, XIcon, UserIcon } from 'lucide-svelte';
-    import { ScrollArea } from '@/components/ui/scroll-area';
+    import { SearchIcon, UserIcon } from 'lucide-svelte';
     import * as Avatar from '@/components/ui/avatar';
 
     interface Reviewer {

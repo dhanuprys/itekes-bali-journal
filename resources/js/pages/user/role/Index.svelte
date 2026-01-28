@@ -96,80 +96,78 @@
             </div>
         {/snippet}
 
-        {#snippet children()}
-            <div class="rounded-md border bg-card">
-                <Table.Root>
-                    <Table.Header>
+        <div class="rounded-md border bg-card">
+            <Table.Root>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.Head class="w-[50px]">No</Table.Head>
+                        <Table.Head>Nama</Table.Head>
+                        <Table.Head>Jumlah Izin</Table.Head>
+                        <Table.Head>Dibuat</Table.Head>
+                        <Table.Head class="text-right">Aksi</Table.Head>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    {#if roles.data.length === 0}
                         <Table.Row>
-                            <Table.Head class="w-[50px]">No</Table.Head>
-                            <Table.Head>Nama</Table.Head>
-                            <Table.Head>Jumlah Izin</Table.Head>
-                            <Table.Head>Dibuat</Table.Head>
-                            <Table.Head class="text-right">Aksi</Table.Head>
+                            <Table.Cell colspan={5} class="text-center h-24 text-muted-foreground">Tidak ada data role.</Table.Cell>
                         </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                        {#if roles.data.length === 0}
+                    {:else}
+                        {#each roles.data as role, i (role.id)}
                             <Table.Row>
-                                <Table.Cell colspan={5} class="text-center h-24 text-muted-foreground">Tidak ada data role.</Table.Cell>
+                                <Table.Cell>{(roles.current_page - 1) * roles.per_page + i + 1}</Table.Cell>
+                                <Table.Cell class="font-medium">{role.name}</Table.Cell>
+                                <Table.Cell>{role.permissions_count} Izin</Table.Cell>
+                                <Table.Cell>{new Date(role.created_at).toLocaleDateString()}</Table.Cell>
+                                <Table.Cell class="text-right">
+                                    <DropdownMenu.Root>
+                                        <DropdownMenu.Trigger
+                                            class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-background text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                                        >
+                                            <span class="sr-only">Open menu</span>
+                                            <MoreHorizontal class="h-4 w-4" />
+                                        </DropdownMenu.Trigger>
+                                        <DropdownMenu.Content align="end">
+                                            <DropdownMenu.Label>Aksi</DropdownMenu.Label>
+                                            <DropdownMenu.Item onclick={() => router.visit(`/roles/${role.id}`)}>Detail</DropdownMenu.Item>
+                                            {#if !role.is_preserved}
+                                                <DropdownMenu.Item onclick={() => openEdit(role)}>Edit</DropdownMenu.Item>
+                                                <DropdownMenu.Separator />
+                                                <DropdownMenu.Item onclick={() => openDeleteDialog(role)} class="text-destructive"
+                                                    >Hapus</DropdownMenu.Item
+                                                >
+                                            {/if}
+                                        </DropdownMenu.Content>
+                                    </DropdownMenu.Root>
+                                </Table.Cell>
                             </Table.Row>
-                        {:else}
-                            {#each roles.data as role, i}
-                                <Table.Row>
-                                    <Table.Cell>{(roles.current_page - 1) * roles.per_page + i + 1}</Table.Cell>
-                                    <Table.Cell class="font-medium">{role.name}</Table.Cell>
-                                    <Table.Cell>{role.permissions_count} Izin</Table.Cell>
-                                    <Table.Cell>{new Date(role.created_at).toLocaleDateString()}</Table.Cell>
-                                    <Table.Cell class="text-right">
-                                        <DropdownMenu.Root>
-                                            <DropdownMenu.Trigger
-                                                class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-background text-sm font-medium hover:bg-accent hover:text-accent-foreground"
-                                            >
-                                                <span class="sr-only">Open menu</span>
-                                                <MoreHorizontal class="h-4 w-4" />
-                                            </DropdownMenu.Trigger>
-                                            <DropdownMenu.Content align="end">
-                                                <DropdownMenu.Label>Aksi</DropdownMenu.Label>
-                                                <DropdownMenu.Item onclick={() => router.visit(`/roles/${role.id}`)}>Detail</DropdownMenu.Item>
-                                                {#if !role.is_preserved}
-                                                    <DropdownMenu.Item onclick={() => openEdit(role)}>Edit</DropdownMenu.Item>
-                                                    <DropdownMenu.Separator />
-                                                    <DropdownMenu.Item onclick={() => openDeleteDialog(role)} class="text-destructive"
-                                                        >Hapus</DropdownMenu.Item
-                                                    >
-                                                {/if}
-                                            </DropdownMenu.Content>
-                                        </DropdownMenu.Root>
-                                    </Table.Cell>
-                                </Table.Row>
-                            {/each}
-                        {/if}
-                    </Table.Body>
-                </Table.Root>
-            </div>
+                        {/each}
+                    {/if}
+                </Table.Body>
+            </Table.Root>
+        </div>
 
-            <div class="mt-4">
-                <Pagination links={roles.links} meta={roles} />
-            </div>
+        <div class="mt-4">
+            <Pagination links={roles.links} meta={roles} />
+        </div>
 
-            <RoleSheet bind:open={sheetOpen} {selectedRole} {permissions} />
+        <RoleSheet bind:open={sheetOpen} {selectedRole} {permissions} />
 
-            <AlertDialog.Root bind:open={deleteDialogOpen}>
-                <AlertDialog.Content>
-                    <AlertDialog.Header>
-                        <AlertDialog.Title>Apakah anda yakin?</AlertDialog.Title>
-                        <AlertDialog.Description>
-                            Aksi ini tidak dapat dibatalkan. Ini akan menghapus role <strong>{roleToDelete?.name}</strong> secara permanen.
-                        </AlertDialog.Description>
-                    </AlertDialog.Header>
-                    <AlertDialog.Footer>
-                        <AlertDialog.Cancel>Batal</AlertDialog.Cancel>
-                        <AlertDialog.Action class="bg-destructive text-destructive-foreground hover:bg-destructive/90" onclick={confirmDelete}
-                            >Hapus</AlertDialog.Action
-                        >
-                    </AlertDialog.Footer>
-                </AlertDialog.Content>
-            </AlertDialog.Root>
-        {/snippet}
+        <AlertDialog.Root bind:open={deleteDialogOpen}>
+            <AlertDialog.Content>
+                <AlertDialog.Header>
+                    <AlertDialog.Title>Apakah anda yakin?</AlertDialog.Title>
+                    <AlertDialog.Description>
+                        Aksi ini tidak dapat dibatalkan. Ini akan menghapus role <strong>{roleToDelete?.name}</strong> secara permanen.
+                    </AlertDialog.Description>
+                </AlertDialog.Header>
+                <AlertDialog.Footer>
+                    <AlertDialog.Cancel>Batal</AlertDialog.Cancel>
+                    <AlertDialog.Action class="bg-destructive text-destructive-foreground hover:bg-destructive/90" onclick={confirmDelete}
+                        >Hapus</AlertDialog.Action
+                    >
+                </AlertDialog.Footer>
+            </AlertDialog.Content>
+        </AlertDialog.Root>
     </LayoutComposer>
 </AppLayout>

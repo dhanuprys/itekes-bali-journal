@@ -102,139 +102,137 @@
             <Heading title="File yang diunggah" description="Lihat daftar file yang pernah anda unggah" />
         {/snippet}
 
-        {#snippet children()}
-            <div class="grid gap-4 md:grid-cols-3 mb-4">
-                <Card.Root>
-                    <Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <Card.Title class="text-sm font-medium">Total File</Card.Title>
-                        <FilesIcon class="h-4 w-4 text-muted-foreground" />
-                    </Card.Header>
-                    <Card.Content>
-                        <div class="text-2xl font-bold">{stats.count}</div>
-                        <p class="text-xs text-muted-foreground">File telah diunggah</p>
-                    </Card.Content>
-                </Card.Root>
-                <Card.Root>
-                    <Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <Card.Title class="text-sm font-medium">Total Ukuran</Card.Title>
-                        <HardDriveIcon class="h-4 w-4 text-muted-foreground" />
-                    </Card.Header>
-                    <Card.Content>
-                        <div class="text-2xl font-bold">{formatBytes(stats.usage)}</div>
-                        <p class="text-xs text-muted-foreground">Ruang penyimpanan digunakan</p>
-                    </Card.Content>
-                </Card.Root>
-                <Card.Root>
-                    <Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <Card.Title class="text-sm font-medium">File Digunakan</Card.Title>
-                        <CheckCircleIcon class="h-4 w-4 text-muted-foreground" />
-                    </Card.Header>
-                    <Card.Content>
-                        <div class="text-2xl font-bold">{stats.used_count}</div>
-                        <p class="text-xs text-muted-foreground">File terlampir pada pengajuan</p>
-                    </Card.Content>
-                </Card.Root>
-            </div>
+        <div class="grid gap-4 md:grid-cols-3 mb-4">
+            <Card.Root>
+                <Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <Card.Title class="text-sm font-medium">Total File</Card.Title>
+                    <FilesIcon class="h-4 w-4 text-muted-foreground" />
+                </Card.Header>
+                <Card.Content>
+                    <div class="text-2xl font-bold">{stats.count}</div>
+                    <p class="text-xs text-muted-foreground">File telah diunggah</p>
+                </Card.Content>
+            </Card.Root>
+            <Card.Root>
+                <Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <Card.Title class="text-sm font-medium">Total Ukuran</Card.Title>
+                    <HardDriveIcon class="h-4 w-4 text-muted-foreground" />
+                </Card.Header>
+                <Card.Content>
+                    <div class="text-2xl font-bold">{formatBytes(stats.usage)}</div>
+                    <p class="text-xs text-muted-foreground">Ruang penyimpanan digunakan</p>
+                </Card.Content>
+            </Card.Root>
+            <Card.Root>
+                <Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <Card.Title class="text-sm font-medium">File Digunakan</Card.Title>
+                    <CheckCircleIcon class="h-4 w-4 text-muted-foreground" />
+                </Card.Header>
+                <Card.Content>
+                    <div class="text-2xl font-bold">{stats.used_count}</div>
+                    <p class="text-xs text-muted-foreground">File terlampir pada pengajuan</p>
+                </Card.Content>
+            </Card.Root>
+        </div>
 
-            <Alert class="mb-4" variant="destructive">
-                <InfoIcon class="h-4 w-4" />
-                <AlertTitle>Informasi Penyimpanan</AlertTitle>
-                <AlertDescription>
-                    File yang terlihat pudar menandakan file tersebut tidak lagi digunakan dan dijadwalkan untuk dihapus otomatis oleh sistem.
-                </AlertDescription>
-            </Alert>
+        <Alert class="mb-4" variant="destructive">
+            <InfoIcon class="h-4 w-4" />
+            <AlertTitle>Informasi Penyimpanan</AlertTitle>
+            <AlertDescription>
+                File yang terlihat pudar menandakan file tersebut tidak lagi digunakan dan dijadwalkan untuk dihapus otomatis oleh sistem.
+            </AlertDescription>
+        </Alert>
 
-            <Card.Root class="py-0">
-                <Card.Content class="p-0">
-                    <Table.Root>
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.Head class="w-[50%]">Nama File</Table.Head>
-                                <Table.Head>Tipe</Table.Head>
-                                <Table.Head>Ukuran</Table.Head>
-                                <Table.Head>Diunggah Pada</Table.Head>
-                                <Table.Head class="text-right">Aksi</Table.Head>
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                            {#if files.data.length > 0}
-                                {#each files.data as file}
-                                    {@const Icon = getFileIcon(file.mime_type)}
-                                    <Table.Row class="hover:bg-muted/40 transition-colors group {file.is_used ? '' : 'opacity-30'}">
-                                        <Table.Cell class="py-3">
-                                            <div class="flex items-center gap-3">
-                                                <div class="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
-                                                    <Icon class="h-4 w-4" />
-                                                </div>
-                                                <div class="flex flex-col">
-                                                    <span class="font-medium text-sm mb-1 truncate max-w-[400px]" title={file.file_name}>
-                                                        {file.file_name}
-                                                    </span>
-                                                    <div class="flex items-center gap-2">
-                                                        <Badge variant="secondary" class="text-[10px] px-1 py-0 h-4 font-normal rounded-sm">
-                                                            {file.tag?.replace(/_/g, ' ') || 'Unknown'}
-                                                        </Badge>
-                                                    </div>
+        <Card.Root class="py-0">
+            <Card.Content class="p-0">
+                <Table.Root>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.Head class="w-[50%]">Nama File</Table.Head>
+                            <Table.Head>Tipe</Table.Head>
+                            <Table.Head>Ukuran</Table.Head>
+                            <Table.Head>Diunggah Pada</Table.Head>
+                            <Table.Head class="text-right">Aksi</Table.Head>
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        {#if files.data.length > 0}
+                            {#each files.data as file (file.id)}
+                                {@const Icon = getFileIcon(file.mime_type)}
+                                <Table.Row class="hover:bg-muted/40 transition-colors group {file.is_used ? '' : 'opacity-30'}">
+                                    <Table.Cell class="py-3">
+                                        <div class="flex items-center gap-3">
+                                            <div class="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                                                <Icon class="h-4 w-4" />
+                                            </div>
+                                            <div class="flex flex-col">
+                                                <span class="font-medium text-sm mb-1 truncate max-w-[400px]" title={file.file_name}>
+                                                    {file.file_name}
+                                                </span>
+                                                <div class="flex items-center gap-2">
+                                                    <Badge variant="secondary" class="text-[10px] px-1 py-0 h-4 font-normal rounded-sm">
+                                                        {file.tag?.replace(/_/g, ' ') || 'Unknown'}
+                                                    </Badge>
                                                 </div>
                                             </div>
-                                        </Table.Cell>
-                                        <Table.Cell class="py-2">
-                                            <div class="flex items-center">
-                                                <Badge variant="outline" class="font-mono text-[10px] uppercase h-5">
-                                                    {file.mime_type?.split('/').pop() || 'FILE'}
-                                                </Badge>
-                                            </div>
-                                        </Table.Cell>
-                                        <Table.Cell class="font-mono text-xs py-2">
-                                            {formatBytes(file.file_size)}
-                                        </Table.Cell>
-                                        <Table.Cell class="text-muted-foreground text-xs py-2">
-                                            {formatDate(file.created_at)}
-                                        </Table.Cell>
-                                        <Table.Cell class="text-right py-2">
-                                            <div class="flex items-center justify-end gap-1">
-                                                <Button
-                                                    variant="ghost"
-                                                    size="icon"
-                                                    onclick={() => copyFileLink(file.file_path)}
-                                                    title="Salin Link"
-                                                    class="h-8 w-8 text-muted-foreground hover:text-foreground"
-                                                >
-                                                    <CopyIcon class="h-4 w-4" />
-                                                </Button>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="icon"
-                                                    onclick={() => handleDownloadClick(file)}
-                                                    title="Download"
-                                                    class="h-8 w-8 text-muted-foreground hover:text-foreground"
-                                                >
-                                                    <DownloadIcon class="h-4 w-4" />
-                                                </Button>
-                                            </div>
-                                        </Table.Cell>
-                                    </Table.Row>
-                                {/each}
-                            {:else}
-                                <Table.Row>
-                                    <Table.Cell colspan={5} class="text-center py-10 text-muted-foreground">
-                                        <div class="flex flex-col items-center gap-2">
-                                            <HardDriveIcon class="h-8 w-8 opacity-50" />
-                                            <p>No files uploaded yet.</p>
+                                        </div>
+                                    </Table.Cell>
+                                    <Table.Cell class="py-2">
+                                        <div class="flex items-center">
+                                            <Badge variant="outline" class="font-mono text-[10px] uppercase h-5">
+                                                {file.mime_type?.split('/').pop() || 'FILE'}
+                                            </Badge>
+                                        </div>
+                                    </Table.Cell>
+                                    <Table.Cell class="font-mono text-xs py-2">
+                                        {formatBytes(file.file_size)}
+                                    </Table.Cell>
+                                    <Table.Cell class="text-muted-foreground text-xs py-2">
+                                        {formatDate(file.created_at)}
+                                    </Table.Cell>
+                                    <Table.Cell class="text-right py-2">
+                                        <div class="flex items-center justify-end gap-1">
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                onclick={() => copyFileLink(file.file_path)}
+                                                title="Salin Link"
+                                                class="h-8 w-8 text-muted-foreground hover:text-foreground"
+                                            >
+                                                <CopyIcon class="h-4 w-4" />
+                                            </Button>
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                onclick={() => handleDownloadClick(file)}
+                                                title="Download"
+                                                class="h-8 w-8 text-muted-foreground hover:text-foreground"
+                                            >
+                                                <DownloadIcon class="h-4 w-4" />
+                                            </Button>
                                         </div>
                                     </Table.Cell>
                                 </Table.Row>
-                            {/if}
-                        </Table.Body>
-                    </Table.Root>
-                </Card.Content>
-                {#if files.links && files.links.length > 3}
-                    <div class="p-4 border-t">
-                        <Pagination links={files.links} />
-                    </div>
-                {/if}
-            </Card.Root>
-        {/snippet}
+                            {/each}
+                        {:else}
+                            <Table.Row>
+                                <Table.Cell colspan={5} class="text-center py-10 text-muted-foreground">
+                                    <div class="flex flex-col items-center gap-2">
+                                        <HardDriveIcon class="h-8 w-8 opacity-50" />
+                                        <p>No files uploaded yet.</p>
+                                    </div>
+                                </Table.Cell>
+                            </Table.Row>
+                        {/if}
+                    </Table.Body>
+                </Table.Root>
+            </Card.Content>
+            {#if files.links && files.links.length > 3}
+                <div class="p-4 border-t">
+                    <Pagination links={files.links} />
+                </div>
+            {/if}
+        </Card.Root>
     </LayoutComposer>
 </AppLayout>
 

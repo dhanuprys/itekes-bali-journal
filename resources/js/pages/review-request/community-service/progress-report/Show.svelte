@@ -48,12 +48,10 @@
             </div>
         {/snippet}
 
-        {#snippet children()}
-            <Card.Root>
-                <Card.Content class="pt-6">
-                    <SubmissionDetailCard {detail} type="community-service" stage="progress_report" />
-                </Card.Content>
-            </Card.Root>
-        {/snippet}
+        <Card.Root>
+            <Card.Content class="pt-6">
+                <SubmissionDetailCard {detail} type="community-service" stage="progress_report" />
+            </Card.Content>
+        </Card.Root>
     </LayoutComposer>
 </AppLayout>

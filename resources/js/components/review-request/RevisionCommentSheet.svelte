@@ -23,7 +23,7 @@
                 <Sheet.Description>Berikut adalah catatan dari reviewer untuk revisi ini.</Sheet.Description>
             </Sheet.Header>
             <div class="space-y-6 p-6 pt-2">
-                {#each comments as comment}
+                {#each comments as comment (comment.id)}
                     <div class="flex flex-col gap-2 p-4 border rounded-lg bg-muted/30">
                         <div class="flex items-center justify-between">
                             <span class="font-semibold text-sm">{comment.user.name}</span>
@@ -38,14 +38,3 @@
         </Sheet.Content>
     </Sheet.Root>
 {/if}
-
-{#snippet triggerLink()}
-    <button onclick={() => (isCommentOpen = true)} class="underline font-medium hover:text-foreground">cek komentar reviewer</button>
-{/snippet}
-
-<div class="hidden">
-    <!-- Expose trigger link for external usage if needed via slot/binding workaround, 
-         but for now we export nothing complex. The consumer just uses the component. 
-         Wait, needed for the Alert message link? 
-         Optimisation: Check if we can export the function to open. -->
-</div>

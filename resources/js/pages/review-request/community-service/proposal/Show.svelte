@@ -49,23 +49,21 @@
             </div>
         {/snippet}
 
-        {#snippet children()}
-            <div class="space-y-6">
-                <Card.Root>
-                    <Card.Content class="pt-6">
-                        <SubmissionDetailCard {detail} type="community-service" stage="proposal" />
-                    </Card.Content>
-                </Card.Root>
+        <div class="space-y-6">
+            <Card.Root>
+                <Card.Content class="pt-6">
+                    <SubmissionDetailCard {detail} type="community-service" stage="proposal" />
+                </Card.Content>
+            </Card.Root>
 
-                <Card.Root>
-                    <Card.Header>
-                        <Card.Title>Riwayat Review</Card.Title>
-                    </Card.Header>
-                    <Card.Content>
-                        <p class="text-muted-foreground text-sm">Belum ada riwayat review.</p>
-                    </Card.Content>
-                </Card.Root>
-            </div>
-        {/snippet}
+            <Card.Root>
+                <Card.Header>
+                    <Card.Title>Riwayat Review</Card.Title>
+                </Card.Header>
+                <Card.Content>
+                    <p class="text-muted-foreground text-sm">Belum ada riwayat review.</p>
+                </Card.Content>
+            </Card.Root>
+        </div>
     </LayoutComposer>
 </AppLayout>

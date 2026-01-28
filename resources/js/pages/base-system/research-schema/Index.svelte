@@ -96,80 +96,78 @@
             </div>
         {/snippet}
 
-        {#snippet children()}
-            <div class="rounded-md border bg-card">
-                <Table.Root>
-                    <Table.Header>
+        <div class="rounded-md border bg-card">
+            <Table.Root>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.Head class="w-[50px]">No</Table.Head>
+                        <Table.Head>Judul</Table.Head>
+                        <Table.Head>Deskripsi</Table.Head>
+                        <Table.Head>Dibuat</Table.Head>
+                        <Table.Head class="text-right">Aksi</Table.Head>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    {#if researchSchemas.data.length === 0}
                         <Table.Row>
-                            <Table.Head class="w-[50px]">No</Table.Head>
-                            <Table.Head>Judul</Table.Head>
-                            <Table.Head>Deskripsi</Table.Head>
-                            <Table.Head>Dibuat</Table.Head>
-                            <Table.Head class="text-right">Aksi</Table.Head>
+                            <Table.Cell colspan={5} class="text-center h-24 text-muted-foreground">Tidak ada data skema riset.</Table.Cell>
                         </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                        {#if researchSchemas.data.length === 0}
+                    {:else}
+                        {#each researchSchemas.data as schema, i (schema.id)}
                             <Table.Row>
-                                <Table.Cell colspan={5} class="text-center h-24 text-muted-foreground">Tidak ada data skema riset.</Table.Cell>
-                            </Table.Row>
-                        {:else}
-                            {#each researchSchemas.data as schema, i}
-                                <Table.Row>
-                                    <Table.Cell>{(researchSchemas.current_page - 1) * researchSchemas.per_page + i + 1}</Table.Cell>
-                                    <Table.Cell class="font-medium">{schema.title}</Table.Cell>
-                                    <Table.Cell class="truncate max-w-[300px]">{schema.description || '-'}</Table.Cell>
-                                    <Table.Cell>{new Date(schema.created_at).toLocaleDateString()}</Table.Cell>
-                                    <Table.Cell class="text-right">
-                                        <DropdownMenu.Root>
-                                            <DropdownMenu.Trigger
-                                                class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-background text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                                <Table.Cell>{(researchSchemas.current_page - 1) * researchSchemas.per_page + i + 1}</Table.Cell>
+                                <Table.Cell class="font-medium">{schema.title}</Table.Cell>
+                                <Table.Cell class="truncate max-w-[300px]">{schema.description || '-'}</Table.Cell>
+                                <Table.Cell>{new Date(schema.created_at).toLocaleDateString()}</Table.Cell>
+                                <Table.Cell class="text-right">
+                                    <DropdownMenu.Root>
+                                        <DropdownMenu.Trigger
+                                            class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-background text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                                        >
+                                            <span class="sr-only">Open menu</span>
+                                            <MoreHorizontal class="h-4 w-4" />
+                                        </DropdownMenu.Trigger>
+                                        <DropdownMenu.Content align="end">
+                                            <DropdownMenu.Label>Aksi</DropdownMenu.Label>
+                                            <DropdownMenu.Item onclick={() => router.visit(`/master/research-schema/${schema.id}`)}
+                                                >Detail</DropdownMenu.Item
                                             >
-                                                <span class="sr-only">Open menu</span>
-                                                <MoreHorizontal class="h-4 w-4" />
-                                            </DropdownMenu.Trigger>
-                                            <DropdownMenu.Content align="end">
-                                                <DropdownMenu.Label>Aksi</DropdownMenu.Label>
-                                                <DropdownMenu.Item onclick={() => router.visit(`/master/research-schema/${schema.id}`)}
-                                                    >Detail</DropdownMenu.Item
-                                                >
-                                                <DropdownMenu.Item onclick={() => openEdit(schema)}>Edit</DropdownMenu.Item>
-                                                <DropdownMenu.Separator />
-                                                <DropdownMenu.Item onclick={() => openDeleteDialog(schema)} class="text-destructive"
-                                                    >Hapus</DropdownMenu.Item
-                                                >
-                                            </DropdownMenu.Content>
-                                        </DropdownMenu.Root>
-                                    </Table.Cell>
-                                </Table.Row>
-                            {/each}
-                        {/if}
-                    </Table.Body>
-                </Table.Root>
-            </div>
+                                            <DropdownMenu.Item onclick={() => openEdit(schema)}>Edit</DropdownMenu.Item>
+                                            <DropdownMenu.Separator />
+                                            <DropdownMenu.Item onclick={() => openDeleteDialog(schema)} class="text-destructive"
+                                                >Hapus</DropdownMenu.Item
+                                            >
+                                        </DropdownMenu.Content>
+                                    </DropdownMenu.Root>
+                                </Table.Cell>
+                            </Table.Row>
+                        {/each}
+                    {/if}
+                </Table.Body>
+            </Table.Root>
+        </div>
 
-            <div class="mt-4">
-                <Pagination links={researchSchemas.links} meta={researchSchemas} />
-            </div>
+        <div class="mt-4">
+            <Pagination links={researchSchemas.links} meta={researchSchemas} />
+        </div>
 
-            <ResearchSchemaSheet bind:open={sheetOpen} {selectedResearchSchema} />
+        <ResearchSchemaSheet bind:open={sheetOpen} {selectedResearchSchema} />
 
-            <AlertDialog.Root bind:open={deleteDialogOpen}>
-                <AlertDialog.Content>
-                    <AlertDialog.Header>
-                        <AlertDialog.Title>Apakah anda yakin?</AlertDialog.Title>
-                        <AlertDialog.Description>
-                            Aksi ini tidak dapat dibatalkan. Ini akan menghapus skema riset <strong>{researchSchemaToDelete?.title}</strong> secara permanen.
-                        </AlertDialog.Description>
-                    </AlertDialog.Header>
-                    <AlertDialog.Footer>
-                        <AlertDialog.Cancel>Batal</AlertDialog.Cancel>
-                        <AlertDialog.Action class="bg-destructive text-destructive-foreground hover:bg-destructive/90" onclick={confirmDelete}
-                            >Hapus</AlertDialog.Action
-                        >
-                    </AlertDialog.Footer>
-                </AlertDialog.Content>
-            </AlertDialog.Root>
-        {/snippet}
+        <AlertDialog.Root bind:open={deleteDialogOpen}>
+            <AlertDialog.Content>
+                <AlertDialog.Header>
+                    <AlertDialog.Title>Apakah anda yakin?</AlertDialog.Title>
+                    <AlertDialog.Description>
+                        Aksi ini tidak dapat dibatalkan. Ini akan menghapus skema riset <strong>{researchSchemaToDelete?.title}</strong> secara permanen.
+                    </AlertDialog.Description>
+                </AlertDialog.Header>
+                <AlertDialog.Footer>
+                    <AlertDialog.Cancel>Batal</AlertDialog.Cancel>
+                    <AlertDialog.Action class="bg-destructive text-destructive-foreground hover:bg-destructive/90" onclick={confirmDelete}
+                        >Hapus</AlertDialog.Action
+                    >
+                </AlertDialog.Footer>
+            </AlertDialog.Content>
+        </AlertDialog.Root>
     </LayoutComposer>
 </AppLayout>

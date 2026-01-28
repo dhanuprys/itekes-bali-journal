@@ -61,59 +61,57 @@
             <Heading title="Dashboard Reviewer" description="Kelola tugas review pengabdian masyarakat Anda." />
         {/snippet}
 
-        {#snippet children()}
-            <Card.Root>
-                <Card.Header>
-                    <Card.Title>Daftar Tugas Review (Pengabdian)</Card.Title>
-                    <Card.Description>Review proposal dan laporan yang ditugaskan kepada Anda.</Card.Description>
-                </Card.Header>
-                <Card.Content>
-                    {#if submissions.data.length === 0}
-                        <div class="text-center py-10 text-muted-foreground">Tidak ada tugas review saat ini.</div>
-                    {:else}
-                        <Table.Root>
-                            <Table.Header>
+        <Card.Root>
+            <Card.Header>
+                <Card.Title>Daftar Tugas Review (Pengabdian)</Card.Title>
+                <Card.Description>Review proposal dan laporan yang ditugaskan kepada Anda.</Card.Description>
+            </Card.Header>
+            <Card.Content>
+                {#if submissions.data.length === 0}
+                    <div class="text-center py-10 text-muted-foreground">Tidak ada tugas review saat ini.</div>
+                {:else}
+                    <Table.Root>
+                        <Table.Header>
+                            <Table.Row>
+                                <Table.Head>Judul</Table.Head>
+                                <Table.Head>Pengusul</Table.Head>
+                                <Table.Head>Tahap</Table.Head>
+                                <Table.Head>Status</Table.Head>
+                                <Table.Head>Tanggal Masuk</Table.Head>
+                                <Table.Head class="text-right">Aksi</Table.Head>
+                            </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                            {#each submissions.data as submission (submission.id)}
                                 <Table.Row>
-                                    <Table.Head>Judul</Table.Head>
-                                    <Table.Head>Pengusul</Table.Head>
-                                    <Table.Head>Tahap</Table.Head>
-                                    <Table.Head>Status</Table.Head>
-                                    <Table.Head>Tanggal Masuk</Table.Head>
-                                    <Table.Head class="text-right">Aksi</Table.Head>
+                                    <Table.Cell class="font-medium max-w-xs truncate">
+                                        {submission.latest_detail?.title || submission.latest_detail?.final_title || 'Judul Tidak Tersedia'}
+                                    </Table.Cell>
+                                    <Table.Cell>{submission.user?.name}</Table.Cell>
+                                    <Table.Cell>
+                                        <Badge variant="outline">{getStageLabel(submission.stage)}</Badge>
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                        <Badge variant={getStatusVariant(submission.status)}>
+                                            {submission.status.replace('_', ' ').toUpperCase()}
+                                        </Badge>
+                                    </Table.Cell>
+                                    <Table.Cell>{new Date(submission.updated_at).toLocaleDateString('id-ID')}</Table.Cell>
+                                    <Table.Cell class="text-right">
+                                        <Button
+                                            size="sm"
+                                            variant={submission.status === 'need_review' ? 'default' : 'outline'}
+                                            href={getReviewRoute(submission)}
+                                        >
+                                            {submission.status === 'need_review' ? 'Review' : 'Detail'}
+                                        </Button>
+                                    </Table.Cell>
                                 </Table.Row>
-                            </Table.Header>
-                            <Table.Body>
-                                {#each submissions.data as submission}
-                                    <Table.Row>
-                                        <Table.Cell class="font-medium max-w-xs truncate">
-                                            {submission.latest_detail?.title || submission.latest_detail?.final_title || 'Judul Tidak Tersedia'}
-                                        </Table.Cell>
-                                        <Table.Cell>{submission.user?.name}</Table.Cell>
-                                        <Table.Cell>
-                                            <Badge variant="outline">{getStageLabel(submission.stage)}</Badge>
-                                        </Table.Cell>
-                                        <Table.Cell>
-                                            <Badge variant={getStatusVariant(submission.status)}>
-                                                {submission.status.replace('_', ' ').toUpperCase()}
-                                            </Badge>
-                                        </Table.Cell>
-                                        <Table.Cell>{new Date(submission.updated_at).toLocaleDateString('id-ID')}</Table.Cell>
-                                        <Table.Cell class="text-right">
-                                            <Button
-                                                size="sm"
-                                                variant={submission.status === 'need_review' ? 'default' : 'outline'}
-                                                href={getReviewRoute(submission)}
-                                            >
-                                                {submission.status === 'need_review' ? 'Review' : 'Detail'}
-                                            </Button>
-                                        </Table.Cell>
-                                    </Table.Row>
-                                {/each}
-                            </Table.Body>
-                        </Table.Root>
-                    {/if}
-                </Card.Content>
-            </Card.Root>
-        {/snippet}
+                            {/each}
+                        </Table.Body>
+                    </Table.Root>
+                {/if}
+            </Card.Content>
+        </Card.Root>
     </LayoutComposer>
 </AppLayout>

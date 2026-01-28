@@ -108,7 +108,7 @@
                             <Table.Cell colspan={4} class="text-center h-24 text-muted-foreground">Tidak ada data program studi.</Table.Cell>
                         </Table.Row>
                     {:else}
-                        {#each studyPrograms.data as studyProgram, i}
+                        {#each studyPrograms.data as studyProgram, i (studyProgram.id)}
                             <Table.Row>
                                 <Table.Cell>{(studyPrograms.current_page - 1) * studyPrograms.per_page + i + 1}</Table.Cell>
                                 <Table.Cell class="font-medium">{studyProgram.name}</Table.Cell>

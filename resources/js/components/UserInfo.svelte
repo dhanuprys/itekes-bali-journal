@@ -5,10 +5,9 @@
 
     interface Props {
         user: User;
-        showEmail?: boolean;
     }
 
-    let { user, showEmail = false }: Props = $props();
+    let { user }: Props = $props();
 
     const { getInitials } = useInitials();
 

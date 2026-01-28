@@ -52,54 +52,52 @@
             <Heading title="Changelog" description="Riwayat pembaruan aplikasi" />
         {/snippet}
 
-        {#snippet children()}
-            <div class="space-y-6 max-w-4xl">
-                {#if changelog.length === 0}
-                    <Empty.Root class="border border-dashed">
-                        <Empty.Header>
-                            <Empty.Media variant="icon">
-                                <FileMinus class="h-10 w-10 text-muted-foreground opacity-20" />
-                            </Empty.Media>
-                            <Empty.Title>Tidak ada data changelog</Empty.Title>
-                            <Empty.Description>Belum ada riwayat pembaruan yang tercatat.</Empty.Description>
-                        </Empty.Header>
-                    </Empty.Root>
-                {:else}
-                    {#each changelog as release}
-                        <Card>
-                            <CardHeader>
-                                <div class="flex items-center justify-between">
-                                    <div class="space-y-1">
-                                        <CardTitle class="text-xl">{release.version}</CardTitle>
-                                        <CardDescription>
-                                            {new Date(release.date).toLocaleDateString('id-ID', {
-                                                weekday: 'long',
-                                                day: 'numeric',
-                                                month: 'long',
-                                                year: 'numeric',
-                                            })}
-                                        </CardDescription>
-                                    </div>
+        <div class="space-y-6 max-w-4xl">
+            {#if changelog.length === 0}
+                <Empty.Root class="border border-dashed">
+                    <Empty.Header>
+                        <Empty.Media variant="icon">
+                            <FileMinus class="h-10 w-10 text-muted-foreground opacity-20" />
+                        </Empty.Media>
+                        <Empty.Title>Tidak ada data changelog</Empty.Title>
+                        <Empty.Description>Belum ada riwayat pembaruan yang tercatat.</Empty.Description>
+                    </Empty.Header>
+                </Empty.Root>
+            {:else}
+                {#each changelog as release (release.version)}
+                    <Card>
+                        <CardHeader>
+                            <div class="flex items-center justify-between">
+                                <div class="space-y-1">
+                                    <CardTitle class="text-xl">{release.version}</CardTitle>
+                                    <CardDescription>
+                                        {new Date(release.date).toLocaleDateString('id-ID', {
+                                            weekday: 'long',
+                                            day: 'numeric',
+                                            month: 'long',
+                                            year: 'numeric',
+                                        })}
+                                    </CardDescription>
                                 </div>
-                            </CardHeader>
-                            <CardContent>
-                                <ul class="space-y-3">
-                                    {#each release.changes as change}
-                                        {@const config = getChangeTypeConfig(change.type)}
-                                        <li class="flex items-start gap-3 text-sm">
-                                            <Badge variant="outline" class={cn('shrink-0 mt-0.5 font-medium border-0', config.color)}>
-                                                <config.icon class="mr-1 h-3 w-3" />
-                                                {config.label}
-                                            </Badge>
-                                            <span class="text-muted-foreground leading-relaxed pt-0.5">{change.message}</span>
-                                        </li>
-                                    {/each}
-                                </ul>
-                            </CardContent>
-                        </Card>
-                    {/each}
-                {/if}
-            </div>
-        {/snippet}
+                            </div>
+                        </CardHeader>
+                        <CardContent>
+                            <ul class="space-y-3">
+                                {#each release.changes as change, i (i)}
+                                    {@const config = getChangeTypeConfig(change.type)}
+                                    <li class="flex items-start gap-3 text-sm">
+                                        <Badge variant="outline" class={cn('shrink-0 mt-0.5 font-medium border-0', config.color)}>
+                                            <config.icon class="mr-1 h-3 w-3" />
+                                            {config.label}
+                                        </Badge>
+                                        <span class="text-muted-foreground leading-relaxed pt-0.5">{change.message}</span>
+                                    </li>
+                                {/each}
+                            </ul>
+                        </CardContent>
+                    </Card>
+                {/each}
+            {/if}
+        </div>
     </LayoutComposer>
 </AppLayout>

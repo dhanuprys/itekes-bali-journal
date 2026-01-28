@@ -10,7 +10,8 @@
         stage: 'proposal' | 'progress_report' | 'final_report';
     }
 
-    let { detail, type = 'research', stage = 'proposal' }: Props = $props();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    let { detail, type: _type, stage = 'proposal' }: Props = $props();
 </script>
 
 <div class="space-y-6">
@@ -38,7 +39,7 @@
                 <dd class="mt-1">
                     {#if detail?.members && detail.members.length > 0}
                         <ul class="list-disc list-inside text-sm">
-                            {#each detail.members as member}
+                            {#each detail.members as member, i (i)}
                                 <li>{member.name}</li>
                             {/each}
                         </ul>
@@ -68,7 +69,9 @@
                     <span class="text-sm font-semibold">File Proposal</span>
                 </div>
                 {#if detail?.proposal_path}
-                    <Button href={`/storage/${detail?.proposal_path}`} target="_blank" variant="outline" size="sm">Unduh File</Button>
+                    <Button href={`/storage/${detail?.proposal_path}`} target="_blank" rel="noopener noreferrer" variant="outline" size="sm"
+                        >Unduh File</Button
+                    >
                 {:else}
                     <span class="text-xs text-muted-foreground">Tidak ada file</span>
                 {/if}
@@ -125,7 +128,13 @@
                             <span class="text-sm font-semibold">Laporan Akhir</span>
                         </div>
                         {#if detail?.final_report_path}
-                            <Button href={`/storage/${detail?.final_report_path}`} target="_blank" variant="outline" size="sm">Unduh</Button>
+                            <Button
+                                href={`/storage/${detail?.final_report_path}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                variant="outline"
+                                size="sm">Unduh</Button
+                            >
                         {:else}
                             <span class="text-xs text-muted-foreground">Tidak ada file</span>
                         {/if}
@@ -135,7 +144,9 @@
                             <span class="text-sm font-semibold">Manuskrip</span>
                         </div>
                         {#if detail?.manuscript_path}
-                            <Button href={`/storage/${detail?.manuscript_path}`} target="_blank" variant="outline" size="sm">Unduh</Button>
+                            <Button href={`/storage/${detail?.manuscript_path}`} target="_blank" rel="noopener noreferrer" variant="outline" size="sm"
+                                >Unduh</Button
+                            >
                         {:else}
                             <span class="text-xs text-muted-foreground">Tidak ada file</span>
                         {/if}

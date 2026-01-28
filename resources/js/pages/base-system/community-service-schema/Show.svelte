@@ -38,30 +38,28 @@
             <Heading title={communityServiceSchema?.title || 'Detail Skema PKM'} description="Detail informasi skema pengabdian kepada masyarakat" />
         {/snippet}
 
-        {#snippet children()}
-            <div class="grid gap-6 md:grid-cols-2">
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Informasi Dasar</CardTitle>
-                    </CardHeader>
-                    <CardContent class="space-y-4">
-                        <div class="grid grid-cols-3 gap-4">
-                            <div class="text-sm font-medium text-muted-foreground">Judul</div>
-                            <div class="col-span-2 text-sm">{communityServiceSchema?.title || '-'}</div>
+        <div class="grid gap-6 md:grid-cols-2">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Informasi Dasar</CardTitle>
+                </CardHeader>
+                <CardContent class="space-y-4">
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="text-sm font-medium text-muted-foreground">Judul</div>
+                        <div class="col-span-2 text-sm">{communityServiceSchema?.title || '-'}</div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="text-sm font-medium text-muted-foreground">Deskripsi</div>
+                        <div class="col-span-2 text-sm">{communityServiceSchema?.description || '-'}</div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="text-sm font-medium text-muted-foreground">Dibuat</div>
+                        <div class="col-span-2 text-sm">
+                            {communityServiceSchema?.created_at ? new Date(communityServiceSchema.created_at).toLocaleDateString() : '-'}
                         </div>
-                        <div class="grid grid-cols-3 gap-4">
-                            <div class="text-sm font-medium text-muted-foreground">Deskripsi</div>
-                            <div class="col-span-2 text-sm">{communityServiceSchema?.description || '-'}</div>
-                        </div>
-                        <div class="grid grid-cols-3 gap-4">
-                            <div class="text-sm font-medium text-muted-foreground">Dibuat</div>
-                            <div class="col-span-2 text-sm">
-                                {communityServiceSchema?.created_at ? new Date(communityServiceSchema.created_at).toLocaleDateString() : '-'}
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-        {/snippet}
+                    </div>
+                </CardContent>
+            </Card>
+        </div>
     </LayoutComposer>
 </AppLayout>

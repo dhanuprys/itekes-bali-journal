@@ -50,47 +50,45 @@
             {/if}
         {/snippet}
 
-        {#snippet children()}
-            <div class="grid gap-6 md:grid-cols-2">
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Informasi Dasar</CardTitle>
-                    </CardHeader>
-                    <CardContent class="space-y-4">
-                        <div class="grid grid-cols-3 gap-4">
-                            <div class="text-sm font-medium text-muted-foreground">Nama Role</div>
-                            <div class="col-span-2 text-sm">{role?.name || '-'}</div>
-                        </div>
-                        <div class="grid grid-cols-3 gap-4">
-                            <div class="text-sm font-medium text-muted-foreground">Guard Name</div>
-                            <div class="col-span-2 text-sm font-mono bg-muted p-1 rounded inline-block">{role?.guard_name || '-'}</div>
-                        </div>
-                        <div class="grid grid-cols-3 gap-4">
-                            <div class="text-sm font-medium text-muted-foreground">Dibuat</div>
-                            <div class="col-span-2 text-sm">{role?.created_at ? new Date(role.created_at).toLocaleDateString() : '-'}</div>
-                        </div>
-                    </CardContent>
-                </Card>
+        <div class="grid gap-6 md:grid-cols-2">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Informasi Dasar</CardTitle>
+                </CardHeader>
+                <CardContent class="space-y-4">
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="text-sm font-medium text-muted-foreground">Nama Role</div>
+                        <div class="col-span-2 text-sm">{role?.name || '-'}</div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="text-sm font-medium text-muted-foreground">Guard Name</div>
+                        <div class="col-span-2 text-sm font-mono bg-muted p-1 rounded inline-block">{role?.guard_name || '-'}</div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="text-sm font-medium text-muted-foreground">Dibuat</div>
+                        <div class="col-span-2 text-sm">{role?.created_at ? new Date(role.created_at).toLocaleDateString() : '-'}</div>
+                    </div>
+                </CardContent>
+            </Card>
 
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Daftar Izin (Permissions)</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        {#if role?.permissions && role.permissions.length > 0}
-                            <div class="flex flex-wrap gap-2">
-                                {#each role.permissions as perm}
-                                    <Badge variant="secondary">{perm.name}</Badge>
-                                {/each}
-                            </div>
-                        {:else}
-                            <p class="text-sm text-muted-foreground">Tidak ada izin yang diberikan untuk role ini.</p>
-                        {/if}
-                    </CardContent>
-                </Card>
-            </div>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Daftar Izin (Permissions)</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    {#if role?.permissions && role.permissions.length > 0}
+                        <div class="flex flex-wrap gap-2">
+                            {#each role.permissions as perm (perm.id)}
+                                <Badge variant="secondary">{perm.name}</Badge>
+                            {/each}
+                        </div>
+                    {:else}
+                        <p class="text-sm text-muted-foreground">Tidak ada izin yang diberikan untuk role ini.</p>
+                    {/if}
+                </CardContent>
+            </Card>
+        </div>
 
-            <RoleSheet bind:open={sheetOpen} {role} {permissions} />
-        {/snippet}
+        <RoleSheet bind:open={sheetOpen} selectedRole={role} {permissions} />
     </LayoutComposer>
 </AppLayout>

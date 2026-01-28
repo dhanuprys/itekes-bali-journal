@@ -1,17 +1,16 @@
 <script lang="ts">
     import * as Pagination from '@/components/ui/pagination';
     import { ChevronLeft, ChevronRight } from 'lucide-svelte';
-    import { page, router } from '@inertiajs/svelte';
+    import { router } from '@inertiajs/svelte';
 
     // Flexible props to handle different Laravel Pagination responses (Cursor, LengthAware, API Resources)
-    let { links = [], meta = {}, data = {} } = $props();
+    let { meta = {}, data = {} } = $props();
 
     // Resolve valid meta and links from various possible structures
     let resolvedMeta = $derived(meta.total ? meta : data.meta || data);
-    let resolvedLinks = $derived(links.length ? links : data.links || resolvedMeta.links || []);
 
     let currentPageVal = $derived(resolvedMeta.current_page || 1);
-    let lastPage = $derived(resolvedMeta.last_page || 1);
+
     let perPage = $derived(resolvedMeta.per_page || 10);
     let total = $derived(resolvedMeta.total || 0);
 

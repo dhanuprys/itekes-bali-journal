@@ -53,26 +53,24 @@
             <Heading title="Buat Laporan Kemajuan" description="Isi formulir laporan kemajuan/akhir penelitian." />
         {/snippet}
 
-        {#snippet children()}
-            <form
-                onsubmit={(e) => {
-                    e.preventDefault();
-                    submit();
-                }}
-            >
-                <ProgressReportForm bind:form={$form} data={{ schemas }} type="research" mode="create" />
+        <form
+            onsubmit={(e) => {
+                e.preventDefault();
+                submit();
+            }}
+        >
+            <ProgressReportForm bind:form={$form} data={{ schemas }} type="research" mode="create" />
 
-                <div class="mt-6 flex justify-end gap-3">
-                    <Button variant="outline" href={route('apply.research.progress_report.index')}>Batal</Button>
-                    <Button type="submit" disabled={$form.processing || uploadState.isUploading}>
-                        {#if $form.processing}
-                            Menyimpan...
-                        {:else}
-                            Simpan Laporan
-                        {/if}
-                    </Button>
-                </div>
-            </form>
-        {/snippet}
+            <div class="mt-6 flex justify-end gap-3">
+                <Button variant="outline" href={route('apply.research.progress_report.index')}>Batal</Button>
+                <Button type="submit" disabled={$form.processing || uploadState.isUploading}>
+                    {#if $form.processing}
+                        Menyimpan...
+                    {:else}
+                        Simpan Laporan
+                    {/if}
+                </Button>
+            </div>
+        </form>
     </LayoutComposer>
 </AppLayout>
