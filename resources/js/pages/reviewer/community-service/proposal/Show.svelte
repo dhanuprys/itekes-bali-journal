@@ -10,8 +10,8 @@
     import { FileTextIcon, ClockIcon, CheckCircleIcon, AlertCircleIcon } from 'lucide-svelte';
 
     let { submission, comments } = $props();
-    let detail = $derived(submission.latest_detail);
-    let canReview = $derived(submission.status === 'need_review');
+    let detail = $derived(submission?.latest_detail);
+    let canReview = $derived(submission?.status === 'need_review');
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Reviewer Area', href: '#' },
@@ -63,7 +63,7 @@
         {#snippet children()}
             <ReviewerSplitLayout>
                 {#snippet details()}
-                    <SubmissionDetailCard {detail} type="community-service" />
+                    <SubmissionDetailCard {detail} type="community-service" stage="proposal" />
                 {/snippet}
 
                 {#snippet actions()}

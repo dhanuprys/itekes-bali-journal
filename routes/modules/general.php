@@ -14,6 +14,7 @@ Route::middleware(['auth'])
     ->group(function () {
         Route::get('dashboard', [General\DashboardController::class, 'index'])->name('dashboard');
         Route::get('notifications', [General\NotificationController::class, 'index'])->name('notifications');
+        Route::get('uploaded-files', [General\StorageUploadController::class, 'index'])->name('uploaded-files');
 
         Route::get('changelog', [General\DashboardController::class, 'changelog'])->name('changelog');
         Route::post('storage-upload', [General\StorageUploadController::class, 'upload'])->name('storage.upload');

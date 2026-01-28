@@ -8,6 +8,7 @@
     import { Button } from '@/components/ui/button';
     import { Separator } from '@/components/ui/separator';
     import { router } from '@inertiajs/svelte';
+    import SubmissionDetailCard from '@/components/reviewer/SubmissionDetailCard.svelte';
 
     let { submission, detail } = $props();
 
@@ -46,90 +47,10 @@
         {#snippet children()}
             <div class="space-y-6">
                 <Card.Root>
-                    <Card.Header>
-                        <div class="flex items-center justify-between">
-                            <div class="space-y-1">
-                                <Card.Title>{detail.final_title || detail.title}</Card.Title>
-                                <Card.Description>Dibuat pada {formatDate(detail.created_at)}</Card.Description>
-                            </div>
-                        </div>
-                    </Card.Header>
-                    <Card.Content class="space-y-4">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <h4 class="text-sm font-semibold text-muted-foreground">Ketua Peneliti</h4>
-                                <p>{detail.final_leader_name || detail.leader_name} ({detail.leader_nidn})</p>
-                            </div>
-                            <div>
-                                <h4 class="text-sm font-semibold text-muted-foreground">Program Studi</h4>
-                                <p>{detail.study_program?.name || '-'}</p>
-                            </div>
-                            <div>
-                                <h4 class="text-sm font-semibold text-muted-foreground">Skema</h4>
-                                <p>{detail.research_schema?.name || '-'}</p>
-                            </div>
-                            <div>
-                                <h4 class="text-sm font-semibold text-muted-foreground">Target Luaran</h4>
-                                <p>{detail.research_target?.name || '-'}</p>
-                            </div>
-                            <div>
-                                <h4 class="text-sm font-semibold text-muted-foreground">Usulan Biaya</h4>
-                                <p>Rp {new Intl.NumberFormat('id-ID').format(detail.budget)}</p>
-                            </div>
-                        </div>
-
-                        <Separator />
-
-                        <div>
-                            <h4 class="text-sm font-medium mb-2">Dokumen</h4>
-                            <div class="space-y-2">
-                                {#if detail.proposal_path}
-                                    <div class="flex items-center gap-4">
-                                        <div class="p-3 border rounded bg-muted/50 flex-1">
-                                            <span class="text-sm font-mono">Proposal</span>
-                                        </div>
-                                        <Button href={`/storage/${detail.proposal_path}`} target="_blank" variant="outline" size="sm">Unduh</Button>
-                                    </div>
-                                {/if}
-                                {#if detail.final_report_path}
-                                    <div class="flex items-center gap-4">
-                                        <div class="p-3 border rounded bg-muted/50 flex-1">
-                                            <span class="text-sm font-mono">Laporan Akhir</span>
-                                        </div>
-                                        <Button href={`/storage/${detail.final_report_path}`} target="_blank" variant="outline" size="sm">
-                                            Unduh
-                                        </Button>
-                                    </div>
-                                {/if}
-                                {#if detail.manuscript_path}
-                                    <div class="flex items-center gap-4">
-                                        <div class="p-3 border rounded bg-muted/50 flex-1">
-                                            <span class="text-sm font-mono">Naskah Publikasi</span>
-                                        </div>
-                                        <Button href={`/storage/${detail.manuscript_path}`} target="_blank" variant="outline" size="sm">Unduh</Button>
-                                    </div>
-                                {/if}
-                            </div>
-                        </div>
+                    <Card.Content class="pt-6">
+                        <SubmissionDetailCard {detail} type="research" stage="final_report" />
                     </Card.Content>
                 </Card.Root>
-
-                {#if detail.members && detail.members.length > 0}
-                    <Card.Root>
-                        <Card.Header>
-                            <Card.Title>Anggota Tim</Card.Title>
-                        </Card.Header>
-                        <Card.Content>
-                            <div class="space-y-2">
-                                {#each detail.members as member}
-                                    <div class="p-3 border rounded bg-muted/20">
-                                        <p class="font-medium">{member.name}</p>
-                                    </div>
-                                {/each}
-                            </div>
-                        </Card.Content>
-                    </Card.Root>
-                {/if}
 
                 {#if detail.reviewers && detail.reviewers.length > 0}
                     <Card.Root>

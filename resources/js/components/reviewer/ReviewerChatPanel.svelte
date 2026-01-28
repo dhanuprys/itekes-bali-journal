@@ -1,7 +1,7 @@
 <script lang="ts">
     import CommentSection from '@/components/reviewer/CommentSection.svelte';
     import CommentForm from '@/components/reviewer/CommentForm.svelte';
-    import ReviewActions from '@/components/reviewer/ReviewActions.svelte';
+    import ReviewActions from './ReviewActions.svelte';
     let { comments = [], commentSubmitRoute, actionSubmitRoute, canReview = false } = $props();
 </script>
 

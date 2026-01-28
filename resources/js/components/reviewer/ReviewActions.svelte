@@ -4,6 +4,8 @@
     import { CheckCircle2Icon, XCircleIcon, AlertTriangleIcon, ChevronDownIcon } from 'lucide-svelte';
     import * as AlertDialog from '@/components/ui/alert-dialog';
     import * as DropdownMenu from '@/components/ui/dropdown-menu';
+    import { Input } from '@/components/ui/input';
+    import { Label } from '@/components/ui/field';
     import { toast } from 'svelte-sonner';
 
     let { submitRoute, canReview = false } = $props();
@@ -15,9 +17,11 @@
     let dialogOpen = $state(false);
     let selectedStatus = $state('');
     let confirmMessage = $state('');
+    let lgtmInput = $state('');
 
     function openConfirm(status: string) {
         selectedStatus = status;
+        lgtmInput = ''; // Reset input
         if (status === 'approved') confirmMessage = 'Apakah Anda yakin ingin MENYETUJUI usulan ini?';
         if (status === 'revision_needed') confirmMessage = 'Apakah Anda yakin ingin meminta REVISI?';
         if (status === 'rejected') confirmMessage = 'Apakah Anda yakin ingin MENOLAK usulan ini?';
@@ -73,13 +77,21 @@
         <AlertDialog.Content>
             <AlertDialog.Header>
                 <AlertDialog.Title>Konfirmasi Keputusan</AlertDialog.Title>
-                <AlertDialog.Description>
-                    {confirmMessage}
+                <AlertDialog.Description class="space-y-4">
+                    <p>{confirmMessage}</p>
+                    <div class="space-y-2">
+                        <Label>Ketik "LGTM" untuk mengonfirmasi</Label>
+                        <Input type="text" placeholder="LGTM" bind:value={lgtmInput} />
+                    </div>
                 </AlertDialog.Description>
             </AlertDialog.Header>
             <AlertDialog.Footer>
                 <AlertDialog.Cancel>Batal</AlertDialog.Cancel>
-                <AlertDialog.Action onclick={confirmAction}>Ya, Lanjutkan</AlertDialog.Action>
+                <AlertDialog.Action
+                    onclick={confirmAction}
+                    disabled={lgtmInput !== 'LGTM'}
+                    class={lgtmInput !== 'LGTM' ? 'opacity-50 cursor-not-allowed' : ''}>Ya, Lanjutkan</AlertDialog.Action
+                >
             </AlertDialog.Footer>
         </AlertDialog.Content>
     </AlertDialog.Root>

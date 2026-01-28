@@ -4,9 +4,11 @@ namespace App\Http\Controllers\General;
 
 use App\Enums\StorageUploadAction;
 use App\Http\Controllers\Controller;
+use App\Models\StorageUpload;
 use Illuminate\Http\Request;
 
 use App\Services\StorageUploadService;
+use Inertia\Inertia;
 
 class StorageUploadController extends Controller
 {
@@ -15,6 +17,26 @@ class StorageUploadController extends Controller
     public function __construct(StorageUploadService $uploadService)
     {
         $this->uploadService = $uploadService;
+    }
+
+    public function index()
+    {
+        $userId = auth()->id();
+        $query = StorageUpload::where('user_id', $userId);
+
+        $stats = [
+            'count' => $query->clone()->count(),
+            'usage' => $query->clone()->sum('file_size'),
+            'used_count' => $query->clone()->where('is_used', true)->count(),
+        ];
+
+        $files = $query->latest()
+            ->paginate(15);
+
+        return Inertia::render('general/storage/Index', [
+            'files' => $files,
+            'stats' => $stats,
+        ]);
     }
 
     public function upload(Request $request)

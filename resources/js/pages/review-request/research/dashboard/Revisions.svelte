@@ -8,6 +8,8 @@
     import * as Card from '@/components/ui/card';
     import { Badge } from '@/components/ui/badge';
     import { router } from '@inertiajs/svelte';
+    import { ChevronRightIcon } from 'lucide-svelte';
+    import HeadingSmall from '@/components/HeadingSmall.svelte';
 
     let { submission } = $props();
 
@@ -78,106 +80,49 @@
                     </Card.Content>
                 </Card.Root>
 
-                <Card.Root>
-                    <Card.Header>
-                        <Card.Title>Detail Revisi</Card.Title>
-                        <Card.Description>Daftar semua versi submission.</Card.Description>
-                    </Card.Header>
-                    <Card.Content>
-                        {#if submission.details && submission.details.length > 0}
-                            <div class="space-y-4">
-                                {#each submission.details as detail, index}
-                                    <Card.Root class="border-2">
-                                        <Card.Header>
-                                            <div class="flex items-start justify-between">
-                                                <div class="space-y-1 flex-1">
-                                                    <div class="flex items-center gap-2">
-                                                        <Badge variant="outline" class="font-mono">
-                                                            v{submission.details.length - index}
-                                                        </Badge>
-                                                        <Card.Title class="text-base">
-                                                            {detail.final_title || detail.title || 'Judul Tidak Tersedia'}
-                                                        </Card.Title>
-                                                    </div>
-                                                    <Card.Description>
-                                                        Dibuat pada {formatDate(detail.created_at)}
-                                                    </Card.Description>
-                                                </div>
-                                                <Button
-                                                    variant="outline"
-                                                    size="sm"
-                                                    onclick={() =>
-                                                        router.visit(
-                                                            route('apply.research.revision', {
-                                                                id: submission.id,
-                                                                revision_id: detail.id,
-                                                            }),
-                                                        )}
-                                                >
-                                                    Lihat Detail
-                                                </Button>
-                                            </div>
-                                        </Card.Header>
-                                        <Card.Content>
-                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                                                <div>
-                                                    <p class="text-muted-foreground font-medium">Ketua Peneliti</p>
-                                                    <p class="mt-1">
-                                                        {detail.final_leader_name || detail.leader_name || '-'}
-                                                        {#if detail.leader_nidn}
-                                                            <span class="text-muted-foreground">({detail.leader_nidn})</span>
-                                                        {/if}
-                                                    </p>
-                                                </div>
-                                                <div>
-                                                    <p class="text-muted-foreground font-medium">Skema</p>
-                                                    <p class="mt-1">{detail.research_schema?.name || '-'}</p>
-                                                </div>
-                                                <div>
-                                                    <p class="text-muted-foreground font-medium">Usulan Biaya</p>
-                                                    <p class="mt-1">
-                                                        {#if detail.budget}
-                                                            Rp {new Intl.NumberFormat('id-ID').format(detail.budget)}
-                                                        {:else}
-                                                            -
-                                                        {/if}
-                                                    </p>
-                                                </div>
-                                                <div>
-                                                    <p class="text-muted-foreground font-medium">Program Studi</p>
-                                                    <p class="mt-1">{detail.study_program?.name || '-'}</p>
-                                                </div>
-                                                <div>
-                                                    <p class="text-muted-foreground font-medium">Target Luaran</p>
-                                                    <p class="mt-1">{detail.research_target?.name || '-'}</p>
-                                                </div>
-                                                <div>
-                                                    <p class="text-muted-foreground font-medium">Dokumen</p>
-                                                    <div class="mt-1 flex flex-wrap gap-1">
-                                                        {#if detail.proposal_path}
-                                                            <Badge variant="secondary" class="text-xs">Proposal</Badge>
-                                                        {/if}
-                                                        {#if detail.final_report_path}
-                                                            <Badge variant="secondary" class="text-xs">Laporan</Badge>
-                                                        {/if}
-                                                        {#if detail.manuscript_path}
-                                                            <Badge variant="secondary" class="text-xs">Naskah</Badge>
-                                                        {/if}
-                                                        {#if !detail.proposal_path && !detail.final_report_path && !detail.manuscript_path}
-                                                            <span class="text-muted-foreground">-</span>
-                                                        {/if}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </Card.Content>
-                                    </Card.Root>
-                                {/each}
-                            </div>
-                        {:else}
-                            <div class="text-center py-10 text-muted-foreground">Belum ada detail revisi.</div>
-                        {/if}
-                    </Card.Content>
-                </Card.Root>
+                <div class="space-y-4">
+                    <HeadingSmall title="Detail Revisi" description="Daftar semua versi submission." />
+                    {#if submission.details && submission.details.length > 0}
+                        <div class="space-y-3">
+                            {#each submission.details as detail, index}
+                                <div class="flex items-center justify-between p-4 border rounded-lg bg-card hover:bg-accent/5 transition-colors">
+                                    <div class="flex items-center gap-4">
+                                        <Badge
+                                            variant="outline"
+                                            class="h-8 w-8 flex items-center justify-center rounded-full font-mono bg-background"
+                                        >
+                                            {submission.details.length - index}
+                                        </Badge>
+                                        <div class="space-y-1">
+                                            <p class="font-medium leading-none">
+                                                {detail.final_title || detail.title || 'Judul Tidak Tersedia'}
+                                            </p>
+                                            <p class="text-sm text-muted-foreground">
+                                                Dibuat pada {formatDate(detail.created_at)}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        class="gap-2"
+                                        onclick={() =>
+                                            router.visit(
+                                                route('apply.research.revision', {
+                                                    id: submission.id,
+                                                    revision_id: detail.id,
+                                                }),
+                                            )}
+                                    >
+                                        Detail <ChevronRightIcon class="h-4 w-4" />
+                                    </Button>
+                                </div>
+                            {/each}
+                        </div>
+                    {:else}
+                        <div class="text-center py-10 text-muted-foreground">Belum ada detail revisi.</div>
+                    {/if}
+                </div>
             </div>
         {/snippet}
     </LayoutComposer>
