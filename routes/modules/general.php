@@ -19,3 +19,5 @@ Route::middleware(['auth'])
         Route::get('changelog', [General\DashboardController::class, 'changelog'])->name('changelog');
         Route::post('storage-upload', [General\StorageUploadController::class, 'upload'])->name('storage.upload');
     });
+
+// Route::get('u/{username}', [General\PublicProfileController::class, 'index'])->name('public-profile');
