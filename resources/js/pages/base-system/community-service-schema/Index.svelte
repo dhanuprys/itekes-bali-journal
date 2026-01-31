@@ -148,7 +148,7 @@
         </div>
 
         <div class="mt-4">
-            <Pagination links={communityServiceSchemas.links} meta={communityServiceSchemas} />
+            <Pagination meta={communityServiceSchemas} />
         </div>
 
         <CommunityServiceSchemaSheet bind:open={sheetOpen} selectedCommunityServiceSchema={selectedSchema} />

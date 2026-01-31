@@ -148,7 +148,7 @@
         </div>
 
         <div class="mt-4">
-            <Pagination links={researchSchemas.links} meta={researchSchemas} />
+            <Pagination meta={researchSchemas} />
         </div>
 
         <ResearchSchemaSheet bind:open={sheetOpen} {selectedResearchSchema} />

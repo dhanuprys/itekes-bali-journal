@@ -10,6 +10,7 @@
     import ReviewerAssignmentSheet from './ReviewerAssignmentSheet.svelte';
     import { router } from '@inertiajs/svelte';
     import { debounce } from 'lodash-es';
+    import Pagination from '@/components/Pagination.svelte';
 
     interface Props {
         submissions: any;
@@ -264,23 +265,9 @@
     </div>
 
     <!-- Pagination -->
-    {#if submissions.links && submissions.links.length > 3}
-        <div class="flex items-center justify-between">
-            <div class="text-sm text-muted-foreground">
-                Halaman {submissions.current_page} dari {submissions.last_page}
-            </div>
-            <div class="flex gap-2">
-                {#each submissions.links as link, i (i)}
-                    {#if link.url}
-                        <Button variant={link.active ? 'default' : 'outline'} size="sm" onclick={() => router.visit(link.url)} disabled={!link.url}>
-                            <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-                            {@html link.label}
-                        </Button>
-                    {/if}
-                {/each}
-            </div>
-        </div>
-    {/if}
+    <div class="mt-4">
+        <Pagination meta={submissions} />
+    </div>
 </div>
 
 {#if selectedSubmission}

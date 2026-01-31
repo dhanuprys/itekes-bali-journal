@@ -10,6 +10,7 @@
     import * as DropdownMenu from '@/components/ui/dropdown-menu';
     import { router } from '@inertiajs/svelte';
     import { MoreHorizontalIcon } from 'lucide-svelte';
+    import Pagination from '@/components/Pagination.svelte';
 
     let { submissions } = $props();
 
@@ -49,71 +50,78 @@
             <Button href={route('apply.community_service.proposal.create')}>Buat Proposal Baru</Button>
         {/snippet}
 
-        <Card.Root>
-            <Card.Header>
-                <Card.Title>Riwayat Proposal</Card.Title>
-                <Card.Description>Daftar semua proposal pengabdian yang telah Anda ajukan.</Card.Description>
-            </Card.Header>
-            <Card.Content>
-                {#if submissions.data.length === 0}
-                    <div class="text-center py-10 text-muted-foreground">Belum ada proposal. Silakan buat proposal baru.</div>
-                {:else}
-                    <Table.Root>
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.Head>Judul</Table.Head>
-                                <Table.Head>Status</Table.Head>
-                                <Table.Head>Tanggal</Table.Head>
-                                <Table.Head class="text-right">Aksi</Table.Head>
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                            {#each submissions.data as submission (submission.id)}
+        <div class="space-y-4">
+            <Card.Root>
+                <Card.Header>
+                    <Card.Title>Riwayat Proposal</Card.Title>
+                    <Card.Description>Daftar semua proposal pengabdian yang telah Anda ajukan.</Card.Description>
+                </Card.Header>
+                <Card.Content>
+                    {#if submissions.data.length === 0}
+                        <div class="text-center py-10 text-muted-foreground">Belum ada proposal. Silakan buat proposal baru.</div>
+                    {:else}
+                        <Table.Root>
+                            <Table.Header>
                                 <Table.Row>
-                                    <Table.Cell class="font-medium">
-                                        {submission.latest_detail?.title || 'Judul Tidak Tersedia'}
-                                    </Table.Cell>
-                                    <Table.Cell>
-                                        <Badge variant={getStatusVariant(submission.status)}>
-                                            {submission.status.replace('_', ' ').toUpperCase()}
-                                        </Badge>
-                                    </Table.Cell>
-                                    <Table.Cell>{new Date(submission.created_at).toLocaleDateString('id-ID')}</Table.Cell>
-                                    <Table.Cell class="text-right">
-                                        <DropdownMenu.Root>
-                                            <DropdownMenu.Trigger
-                                                class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-background text-sm font-medium hover:bg-accent hover:text-accent-foreground"
-                                            >
-                                                <span class="sr-only">Open menu</span>
-                                                <MoreHorizontalIcon class="h-4 w-4" />
-                                            </DropdownMenu.Trigger>
-                                            <DropdownMenu.Content align="end">
-                                                <DropdownMenu.Item
-                                                    onclick={() => router.visit(route('apply.community_service.revisions', submission.id))}
-                                                >
-                                                    Riwayat Revisi
-                                                </DropdownMenu.Item>
-                                                {#if submission.status === 'revision_needed'}
-                                                    <DropdownMenu.Item
-                                                        onclick={() => router.visit(route('apply.community_service.proposal.edit', submission.id))}
-                                                    >
-                                                        Edit
-                                                    </DropdownMenu.Item>
-                                                {/if}
-                                                <DropdownMenu.Item
-                                                    onclick={() => router.visit(route('apply.community_service.proposal.show', submission.id))}
-                                                >
-                                                    Detail
-                                                </DropdownMenu.Item>
-                                            </DropdownMenu.Content>
-                                        </DropdownMenu.Root>
-                                    </Table.Cell>
+                                    <Table.Head>Judul</Table.Head>
+                                    <Table.Head>Status</Table.Head>
+                                    <Table.Head>Tanggal</Table.Head>
+                                    <Table.Head class="text-right">Aksi</Table.Head>
                                 </Table.Row>
-                            {/each}
-                        </Table.Body>
-                    </Table.Root>
-                {/if}
-            </Card.Content>
-        </Card.Root>
+                            </Table.Header>
+                            <Table.Body>
+                                {#each submissions.data as submission (submission.id)}
+                                    <Table.Row>
+                                        <Table.Cell class="font-medium">
+                                            {submission.latest_detail?.title || 'Judul Tidak Tersedia'}
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            <Badge variant={getStatusVariant(submission.status)}>
+                                                {submission.status.replace('_', ' ').toUpperCase()}
+                                            </Badge>
+                                        </Table.Cell>
+                                        <Table.Cell>{new Date(submission.created_at).toLocaleDateString('id-ID')}</Table.Cell>
+                                        <Table.Cell class="text-right">
+                                            <DropdownMenu.Root>
+                                                <DropdownMenu.Trigger
+                                                    class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-background text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                                                >
+                                                    <span class="sr-only">Open menu</span>
+                                                    <MoreHorizontalIcon class="h-4 w-4" />
+                                                </DropdownMenu.Trigger>
+                                                <DropdownMenu.Content align="end">
+                                                    <DropdownMenu.Item
+                                                        onclick={() => router.visit(route('apply.community_service.revisions', submission.id))}
+                                                    >
+                                                        Riwayat Revisi
+                                                    </DropdownMenu.Item>
+                                                    {#if submission.status === 'revision_needed'}
+                                                        <DropdownMenu.Item
+                                                            onclick={() =>
+                                                                router.visit(route('apply.community_service.proposal.edit', submission.id))}
+                                                        >
+                                                            Edit
+                                                        </DropdownMenu.Item>
+                                                    {/if}
+                                                    <DropdownMenu.Item
+                                                        onclick={() => router.visit(route('apply.community_service.proposal.show', submission.id))}
+                                                    >
+                                                        Detail
+                                                    </DropdownMenu.Item>
+                                                </DropdownMenu.Content>
+                                            </DropdownMenu.Root>
+                                        </Table.Cell>
+                                    </Table.Row>
+                                {/each}
+                            </Table.Body>
+                        </Table.Root>
+                    {/if}
+                </Card.Content>
+            </Card.Root>
+
+            <div class="mt-4">
+                <Pagination meta={submissions} />
+            </div>
+        </div>
     </LayoutComposer>
 </AppLayout>

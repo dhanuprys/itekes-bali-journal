@@ -100,7 +100,7 @@
         </div>
 
         <div class="mt-4">
-            <Pagination links={permissions.links} meta={permissions} />
+            <Pagination meta={permissions} />
         </div>
     </LayoutComposer>
 </AppLayout>

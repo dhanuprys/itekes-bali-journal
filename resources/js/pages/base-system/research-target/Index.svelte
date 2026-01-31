@@ -148,7 +148,7 @@
         </div>
 
         <div class="mt-4">
-            <Pagination links={researchTargets.links} meta={researchTargets} />
+            <Pagination meta={researchTargets} />
         </div>
 
         <ResearchTargetSheet bind:open={sheetOpen} {selectedResearchTarget} />

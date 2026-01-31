@@ -142,7 +142,7 @@
         </div>
 
         <div class="mt-4">
-            <Pagination links={studyPrograms.links} meta={studyPrograms} />
+            <Pagination meta={studyPrograms} />
         </div>
 
         <StudyProgramSheet bind:open={sheetOpen} {selectedStudyProgram} />

@@ -69,10 +69,6 @@
                                 </tbody>
                             </table>
                         </div>
-
-                        <div class="mt-4">
-                            <Pagination links={loginLogs.links} meta={loginLogs} />
-                        </div>
                     {:else}
                         <Empty.Root class="border border-dashed">
                             <Empty.Header>
@@ -86,6 +82,10 @@
                     {/if}
                 </CardContent>
             </Card>
+
+            <div class="mt-4">
+                <Pagination meta={loginLogs} />
+            </div>
         </div>
     </SettingsLayout>
 </AppLayout>

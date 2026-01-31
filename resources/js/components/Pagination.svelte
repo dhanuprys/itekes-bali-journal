@@ -3,25 +3,46 @@
     import { ChevronLeft, ChevronRight } from 'lucide-svelte';
     import { router } from '@inertiajs/svelte';
 
-    // Flexible props to handle different Laravel Pagination responses (Cursor, LengthAware, API Resources)
+    // We accept `links` (from Laravel's paginator.links, though we might not use it directly if we use Shadcn's calculator)
+    // and `meta` (which is usually the paginator object itself or the meta key in API resources).
     let { meta = {}, data = {} } = $props();
 
-    // Resolve valid meta and links from various possible structures
-    let resolvedMeta = $derived(meta.total ? meta : data.meta || data);
+    // Helper to extract the core pagination fields safely
+    let resolvedMeta = $derived.by(() => {
+        // If 'meta' has 'total' (LengthAwarePaginator root), use it.
+        if (meta && typeof meta.total !== 'undefined') {
+            return meta;
+        }
+        // If 'data' is passed (sometimes API resources wrap it in data: { ... }, meta: { ... })
+        if (data && data.meta) {
+            return data.meta;
+        }
+        if (data && typeof data.total !== 'undefined') {
+            return data;
+        }
+        return {};
+    });
 
     let currentPageVal = $derived(resolvedMeta.current_page || 1);
-
-    let perPage = $derived(resolvedMeta.per_page || 10);
+    let perPage = $derived(resolvedMeta.per_page || 15);
     let total = $derived(resolvedMeta.total || 0);
 
+    // If total is 0 or less than perPage, usually we don't show pagination,
+    // but sometimes we might want to show if there's at least 1 page?
+    // Standard practice: hide if total <= perPage or empty.
+    let showPagination = $derived(total > perPage);
+
     function getPageUrl(pageNumber: number) {
-        if (typeof window === 'undefined') return '#';
+        if (typeof window === 'undefined') return '';
         const url = new URL(window.location.href);
         url.searchParams.set('page', pageNumber.toString());
         return url.toString();
     }
 
     function handlePageChange(newPage: number) {
+        // Prevent redundant requests
+        if (newPage === currentPageVal) return;
+
         router.get(
             getPageUrl(newPage),
             {},
@@ -33,7 +54,7 @@
     }
 </script>
 
-{#if total > perPage}
+{#if showPagination}
     <Pagination.Root count={total} {perPage} page={currentPageVal} onPageChange={handlePageChange}>
         {#snippet children({ pages, currentPage })}
             <Pagination.Content>

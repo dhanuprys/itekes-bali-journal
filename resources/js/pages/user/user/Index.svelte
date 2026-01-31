@@ -188,7 +188,7 @@
         </div>
 
         <div class="mt-4">
-            <Pagination links={users.links} meta={users} />
+            <Pagination meta={users} />
         </div>
 
         <UserSheet bind:open={sheetOpen} {selectedUser} {roles} />

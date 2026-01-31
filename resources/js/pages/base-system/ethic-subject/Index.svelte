@@ -148,7 +148,7 @@
         </div>
 
         <div class="mt-4">
-            <Pagination links={ethicalClearanceSubjects.links} meta={ethicalClearanceSubjects} />
+            <Pagination meta={ethicalClearanceSubjects} />
         </div>
 
         <EthicSubjectSheet bind:open={sheetOpen} selectedEthicalClearanceSubject={selectedSubject} />

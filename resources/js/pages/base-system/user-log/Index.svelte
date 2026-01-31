@@ -66,56 +66,61 @@
         {/snippet}
 
         <div class="space-y-4">
-            {#if logs.data.length === 0}
-                <Empty.Root class="border border-dashed">
-                    <Empty.Header>
-                        <Empty.Media variant="icon">
-                            <FileMinus class="h-10 w-10 text-muted-foreground opacity-20" />
-                        </Empty.Media>
-                        <Empty.Title>Tidak ada data log</Empty.Title>
-                        <Empty.Description>Belum ada riwayat aktivitas pengguna yang tercatat.</Empty.Description>
-                    </Empty.Header>
-                </Empty.Root>
-            {:else}
-                <div class="grid gap-4 md:grid-cols-1">
-                    {#each logs.data as log (log.id)}
-                        <Card class="transition-shadow hover:shadow-md">
-                            <CardHeader class="flex flex-row items-center gap-4 space-y-0 pb-2">
-                                <Avatar class="h-10 w-10">
-                                    <AvatarImage src={`https://ui-avatars.com/api/?name=${log.user?.name}&background=random`} alt={log.user?.name} />
-                                    <AvatarFallback>{getInitials(log.user?.name || 'Unknown')}</AvatarFallback>
-                                </Avatar>
-                                <div class="flex flex-1 flex-col">
-                                    <div class="flex items-center justify-between">
-                                        <CardTitle class="text-base font-medium">
-                                            {log.user?.name || 'Unknown User'}
-                                        </CardTitle>
-                                        <span class="text-xs text-muted-foreground">
-                                            {new Date(log.created_at).toLocaleString('id-ID', {
-                                                day: 'numeric',
-                                                month: 'long',
-                                                year: 'numeric',
-                                                hour: '2-digit',
-                                                minute: '2-digit',
-                                            })}
-                                        </span>
+            <div class="space-y-4">
+                {#if logs.data.length === 0}
+                    <Empty.Root class="border border-dashed">
+                        <Empty.Header>
+                            <Empty.Media variant="icon">
+                                <FileMinus class="h-10 w-10 text-muted-foreground opacity-20" />
+                            </Empty.Media>
+                            <Empty.Title>Tidak ada data log</Empty.Title>
+                            <Empty.Description>Belum ada riwayat aktivitas pengguna yang tercatat.</Empty.Description>
+                        </Empty.Header>
+                    </Empty.Root>
+                {:else}
+                    <div class="grid gap-4 md:grid-cols-1">
+                        {#each logs.data as log (log.id)}
+                            <Card class="transition-shadow hover:shadow-md">
+                                <CardHeader class="flex flex-row items-center gap-4 space-y-0 pb-2">
+                                    <Avatar class="h-10 w-10">
+                                        <AvatarImage
+                                            src={`https://ui-avatars.com/api/?name=${log.user?.name}&background=random`}
+                                            alt={log.user?.name}
+                                        />
+                                        <AvatarFallback>{getInitials(log.user?.name || 'Unknown')}</AvatarFallback>
+                                    </Avatar>
+                                    <div class="flex flex-1 flex-col">
+                                        <div class="flex items-center justify-between">
+                                            <CardTitle class="text-base font-medium">
+                                                {log.user?.name || 'Unknown User'}
+                                            </CardTitle>
+                                            <span class="text-xs text-muted-foreground">
+                                                {new Date(log.created_at).toLocaleString('id-ID', {
+                                                    day: 'numeric',
+                                                    month: 'long',
+                                                    year: 'numeric',
+                                                    hour: '2-digit',
+                                                    minute: '2-digit',
+                                                })}
+                                            </span>
+                                        </div>
+                                        <CardDescription class="text-xs">
+                                            {log.user?.email || '-'}
+                                        </CardDescription>
                                     </div>
-                                    <CardDescription class="text-xs">
-                                        {log.user?.email || '-'}
-                                    </CardDescription>
-                                </div>
-                            </CardHeader>
-                            <CardContent>
-                                <p class="text-sm text-foreground/90">{log.comment}</p>
-                            </CardContent>
-                        </Card>
-                    {/each}
-                </div>
-            {/if}
-        </div>
+                                </CardHeader>
+                                <CardContent>
+                                    <p class="text-sm text-foreground/90">{log.comment}</p>
+                                </CardContent>
+                            </Card>
+                        {/each}
+                    </div>
+                {/if}
+            </div>
 
-        <div class="mt-4">
-            <Pagination links={logs.links} meta={logs} />
+            <div class="mt-4">
+                <Pagination meta={logs} />
+            </div>
         </div>
     </LayoutComposer>
 </AppLayout>

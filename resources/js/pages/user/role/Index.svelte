@@ -148,7 +148,7 @@
         </div>
 
         <div class="mt-4">
-            <Pagination links={roles.links} meta={roles} />
+            <Pagination meta={roles} />
         </div>
 
         <RoleSheet bind:open={sheetOpen} {selectedRole} {permissions} />

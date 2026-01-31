@@ -19,4 +19,24 @@ export default defineConfig({
             '@': path.resolve(__dirname, './resources/js'),
         },
     },
+    build: {
+        chunkSizeWarningLimit: 1000,
+        rollupOptions: {
+            output: {
+                manualChunks: (id) => {
+                    if (id.includes('node_modules')) {
+                        if (id.includes('lodash')) {
+                            return 'vendor-lodash';
+                        }
+                        if (id.includes('lucide')) {
+                            return 'vendor-lucide';
+                        }
+                        if (id.includes('svelte')) {
+                            return 'vendor-svelte';
+                        }
+                    }
+                },
+            },
+        },
+    },
 });

@@ -148,7 +148,7 @@
         </div>
 
         <div class="mt-4">
-            <Pagination links={communityServiceTargets.links} meta={communityServiceTargets} />
+            <Pagination meta={communityServiceTargets} />
         </div>
 
         <CommunityServiceTargetSheet bind:open={sheetOpen} selectedCommunityServiceTarget={selectedTarget} />
