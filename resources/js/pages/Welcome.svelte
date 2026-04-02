@@ -86,7 +86,7 @@
 
     <!-- Hero -->
     <section class="relative overflow-hidden">
-        <div class="max-w-[1400px] mx-auto px-6 lg:px-12 py-24 lg:py-32">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12 py-24 lg:py-24">
             <div class="grid lg:grid-cols-12 gap-12 items-center">
                 <div class="lg:col-span-7">
                     <div
@@ -96,8 +96,8 @@
                     </div>
 
                     <h1 class="text-4xl lg:text-5xl xl:text-6xl font-light text-neutral-900 dark:text-neutral-100 mb-6 leading-[1.1]">
-                        Sistem Manajemen<br />
-                        <span class="font-semibold">Review Penelitian</span>
+                        SIPANDU<br />
+                        <span class="font-semibold">ITEKES BALI</span>
                     </h1>
 
                     <p class="text-lg text-neutral-600 dark:text-neutral-400 mb-8 max-w-xl leading-relaxed">
@@ -156,18 +156,18 @@
                         <div class="relative bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-8">
                             <img src="/assets/images/itekes-bali.webp" alt="ITEKES Bali" class="w-full h-auto opacity-90" />
 
-                            <div class="mt-6 space-y-2">
+                            <div class="mt-6 hidden md:flex gap-x-4 space-y-2">
                                 <div class="flex items-center gap-2 text-sm">
                                     <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                                    <span class="text-neutral-600 dark:text-neutral-400">Sistem Online 24/7</span>
+                                    <span class="text-neutral-600 dark:text-neutral-400 text-sm">Sistem Online 24/7</span>
                                 </div>
                                 <div class="flex items-center gap-2 text-sm">
                                     <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
-                                    <span class="text-neutral-600 dark:text-neutral-400">Tracking Real-time</span>
+                                    <span class="text-neutral-600 dark:text-neutral-400 text-sm">Tracking Real-time</span>
                                 </div>
                                 <div class="flex items-center gap-2 text-sm">
                                     <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
-                                    <span class="text-neutral-600 dark:text-neutral-400">Aman & Terenkripsi</span>
+                                    <span class="text-neutral-600 dark:text-neutral-400 text-sm">Aman & Terenkripsi</span>
                                 </div>
                             </div>
                         </div>

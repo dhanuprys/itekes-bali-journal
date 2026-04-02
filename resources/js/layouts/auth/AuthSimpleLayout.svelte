@@ -49,9 +49,9 @@
                 <div class="max-w-md">
                     <!-- Logo -->
                     <div class="mb-8">
-                        <img src="/assets/images/itekes-bali.webp" alt="ITEKES Bali" class="h-20 w-20 mb-6" />
+                        <img src="/assets/images/itekes-bali.webp" alt="SIPANDU ITEKES BALI" class="h-20 w-20 mb-6" />
                         <div class="border-l-2 border-white/30 pl-4">
-                            <h2 class="text-2xl font-semibold text-white mb-1">ITEKES Bali Journal</h2>
+                            <h2 class="text-2xl font-semibold text-white mb-1">SIPANDU ITEKES BALI</h2>
                             <p class="text-sm text-neutral-400">Sistem Manajemen Review</p>
                         </div>
                     </div>
