@@ -13,11 +13,21 @@ class EthicalClearanceSubmission extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['user_id', 'stage', 'status'];
+    protected $fillable = ['user_id', 'category', 'stage', 'status'];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function details(): HasMany
+    {
+        return $this->hasMany(EthicalClearanceDetail::class);
+    }
+
+    public function latestDetail()
+    {
+        return $this->hasOne(EthicalClearanceDetail::class)->latestOfMany();
     }
 
     public function detail(): HasOne
@@ -38,5 +48,10 @@ class EthicalClearanceSubmission extends Model
     public function outputs(): HasMany
     {
         return $this->hasMany(EthicalClearanceOutput::class);
+    }
+
+    public function latestOutput()
+    {
+        return $this->hasOne(EthicalClearanceOutput::class)->latestOfMany();
     }
 }

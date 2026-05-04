@@ -11,6 +11,7 @@ import {
     LogsIcon,
     MicroscopeIcon,
     ShieldIcon,
+    TimerIcon,
     UsersIcon,
     ZapIcon,
 } from 'lucide-svelte';
@@ -104,6 +105,11 @@ export function createMenu(user: User): Record<string, NavGroup> {
                             icon: CircleDashedIcon,
                         },
                         {
+                            title: 'Dokumen Diproses',
+                            href: '/apply/ethics/wait-for-output',
+                            icon: TimerIcon,
+                        },
+                        {
                             title: 'Output',
                             href: '/apply/ethics/output',
                             icon: CircleCheckBigIcon,
@@ -169,6 +175,11 @@ export function createMenu(user: User): Record<string, NavGroup> {
                             title: 'Usulan Awal',
                             href: '/review/ethics/proposal',
                             icon: CircleDashedIcon,
+                        },
+                        {
+                            title: 'Dokumen Diproses',
+                            href: '/review/ethics/wait-for-output',
+                            icon: CircleDotDashed,
                         },
                         {
                             title: 'Output',

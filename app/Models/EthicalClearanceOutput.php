@@ -10,7 +10,12 @@ class EthicalClearanceOutput extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'ethical_clearance_submission_id'];
+    protected $fillable = [
+        'ethical_clearance_submission_id',
+        'user_id',
+        'document_path',
+        'notes',
+    ];
 
     public function user(): BelongsTo
     {

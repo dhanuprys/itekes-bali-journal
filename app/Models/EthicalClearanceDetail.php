@@ -13,20 +13,6 @@ class EthicalClearanceDetail extends Model
 
     protected $fillable = [
         'ethical_clearance_submission_id',
-        'is_multicenter',
-        'research_title',
-        'leader_name',
-        'research_location',
-        'institution_details',
-        'ethical_clearance_subject_id',
-        'duration_per_participant',
-        'proposal_summary',
-        'ethical_issues',
-        'ethical_mitigation',
-        'experimental_procedure',
-        'potential_hazards',
-        'previous_experience',
-        'documentation_method'
     ];
 
     public function submission(): BelongsTo
@@ -34,9 +20,9 @@ class EthicalClearanceDetail extends Model
         return $this->belongsTo(EthicalClearanceSubmission::class, 'ethical_clearance_submission_id');
     }
 
-    public function subject(): BelongsTo
+    public function files(): HasMany
     {
-        return $this->belongsTo(EthicalClearanceSubject::class, 'ethical_clearance_subject_id');
+        return $this->hasMany(EthicalClearanceDetailFile::class, 'ethical_clearance_detail_id');
     }
 
     public function reviewers(): HasMany

@@ -1,0 +1,124 @@
+<script lang="ts">
+    import LayoutComposer from '@/layouts/LayoutComposer.svelte';
+    import AppLayout from '@/layouts/AppLayout.svelte';
+    import { type BreadcrumbItem } from '@/types';
+    import Heading from '@/components/Heading.svelte';
+    import { Badge } from '@/components/ui/badge';
+    import * as Card from '@/components/ui/card';
+    import ReviewerSplitLayout from '@/components/reviewer/ReviewerSplitLayout.svelte';
+    import ReviewerChatPanel from '@/components/reviewer/ReviewerChatPanel.svelte';
+    import { FileTextIcon, ClockIcon, CheckCircleIcon, AlertCircleIcon, DownloadIcon } from 'lucide-svelte';
+
+    let { submission, comments } = $props();
+    let detail = $derived(submission?.latest_detail);
+    let files = $derived(detail?.files ?? []);
+    let canReview = $derived(submission?.status === 'need_review');
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        { title: 'Reviewer Area', href: '#' },
+        { title: 'Etik', href: route('review.ethics.index') },
+        { title: 'Review Proposal', href: '#' },
+    ];
+
+    function getStatusConfig(status: string) {
+        switch (status) {
+            case 'approved':
+                return { color: 'bg-green-500/10 text-green-600 hover:bg-green-500/20 border-green-200', label: 'Disetujui', icon: CheckCircleIcon };
+            case 'rejected':
+                return { color: 'bg-red-500/10 text-red-600 hover:bg-red-500/20 border-red-200', label: 'Ditolak', icon: AlertCircleIcon };
+            case 'revision_needed':
+                return { color: 'bg-orange-500/10 text-orange-600 hover:bg-orange-500/20 border-orange-200', label: 'Perlu Revisi', icon: AlertCircleIcon };
+            case 'need_review':
+                return { color: 'bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 border-blue-200', label: 'Menunggu Review', icon: ClockIcon };
+            default:
+                return { color: 'bg-muted text-muted-foreground', label: status.replace('_', ' ').toUpperCase(), icon: FileTextIcon };
+        }
+    }
+
+    function getCategoryLabel(category: string) {
+        return category === 'clinical' ? 'Etik Klinik / Uji Coba Hewan' : 'Etik Non Klinis';
+    }
+
+    let statusConfig = $derived(getStatusConfig(submission.status));
+</script>
+
+<svelte:head>
+    <title>Review Pengajuan Etik</title>
+</svelte:head>
+
+<AppLayout {breadcrumbs}>
+    <LayoutComposer>
+        {#snippet header()}
+            <div class="flex items-center justify-between">
+                <Heading title="Review Pengajuan Etik" description="Tinjau dokumen pengajuan ethical clearance berikut." />
+            </div>
+        {/snippet}
+
+        {#snippet actions()}
+            <Badge variant="outline" class={'px-3 py-1 gap-2 flex items-center ' + statusConfig.color}>
+                <statusConfig.icon class="h-4 w-4" />
+                {statusConfig.label}
+            </Badge>
+        {/snippet}
+
+        <ReviewerSplitLayout>
+            {#snippet details()}
+                <!-- Submission Info -->
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-3">Informasi Pengajuan</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-sm text-muted-foreground">Pengaju</p>
+                                <p class="font-medium">{submission.user?.name ?? '-'}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-muted-foreground">Kategori</p>
+                                <p class="font-medium">{getCategoryLabel(submission.category)}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-muted-foreground">Tanggal Pengajuan</p>
+                                <p class="font-medium">{new Date(submission.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Uploaded Documents -->
+                    <div>
+                        <h3 class="text-lg font-semibold mb-3">Dokumen yang Diunggah</h3>
+                        <div class="space-y-2">
+                            {#each files as file (file.id)}
+                                <div class="flex items-center justify-between border rounded-lg p-3">
+                                    <div class="flex items-center gap-3 min-w-0">
+                                        <FileTextIcon class="h-5 w-5 text-muted-foreground shrink-0" />
+                                        <div class="min-w-0">
+                                            <p class="font-medium text-sm truncate">{file.original_name || file.template_key}</p>
+                                            <p class="text-xs text-muted-foreground capitalize">{file.template_key.replace(/_/g, ' ')}</p>
+                                        </div>
+                                    </div>
+                                    <a
+                                        href={'/storage/' + file.file_path}
+                                        target="_blank"
+                                        class="inline-flex items-center gap-1.5 rounded-md bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/20 transition-colors shrink-0"
+                                    >
+                                        <DownloadIcon class="h-3.5 w-3.5" />
+                                        Unduh
+                                    </a>
+                                </div>
+                            {/each}
+                        </div>
+                    </div>
+                </div>
+            {/snippet}
+
+            {#snippet actions()}
+                <ReviewerChatPanel
+                    {comments}
+                    {canReview}
+                    commentSubmitRoute={route('review.ethics.proposal.comment', submission.id)}
+                    actionSubmitRoute={route('review.ethics.proposal.change-state', submission.id)}
+                />
+            {/snippet}
+        </ReviewerSplitLayout>
+    </LayoutComposer>
+</AppLayout>

@@ -7,5 +7,7 @@ export const StorageUploadAction = {
     CS_PROGRESS_REPORT: '9f5de0e023b7060320ab',
     CS_FINAL_REPORT: 'a9b8cd4e294711823ab2',
     CS_MANUSCRIPT: '51a13ef99f17d459855c',
+    ETHICS_PROPOSAL: 'e7b3a91f45c820d69e14',
+    ETHICS_OUTPUT: 'f4d2c8e716a930b58c23',
     USER_PROFILE_PHOTO: 'fa125c14309328d8231c',
 } as const;

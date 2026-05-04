@@ -2,30 +2,74 @@
 
 namespace App\Http\Controllers\ReviewRequest\Ethics;
 
+use App\Enums\EthicsReviewStage;
+use App\Enums\EthicsStatus;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\EthicalClearanceSubmission;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class OutputController extends Controller
 {
-    public function index()
-    {
-        return Inertia::render('review-request/ethics/output/Index');
-    }
-
-    public function show()
-    {
-        return Inertia::render('review-request/ethics/output/Show');
-    }
-
     public function waitForOutput()
     {
-        return Inertia::render('review-request/ethics/output/WaitForOutput');
+        // Submissions approved at proposal stage, moved to output, but no EC document yet
+        $submissions = EthicalClearanceSubmission::with(['latestDetail.files'])
+            ->where('user_id', Auth::id())
+            ->where('stage', EthicsReviewStage::OUTPUT->value)
+            ->where('status', EthicsStatus::APPROVED->value)
+            ->whereDoesntHave('outputs', function ($q) {
+                $q->whereNotNull('document_path');
+            })
+            ->latest()
+            ->paginate(10);
+
+        return Inertia::render('review-request/ethics/output/WaitForOutput', [
+            'submissions' => $submissions,
+        ]);
     }
 
-    public function waitForOutputDetail()
+    public function waitForOutputDetail($id)
     {
-        return Inertia::render('review-request/ethics/output/WaitForOutputDetail');
+        $submission = EthicalClearanceSubmission::with(['latestDetail.files', 'latestDetail.comments.user'])
+            ->where('user_id', Auth::id())
+            ->where('stage', EthicsReviewStage::OUTPUT->value)
+            ->findOrFail($id);
 
+        return Inertia::render('review-request/ethics/output/WaitForOutputDetail', [
+            'submission' => $submission,
+        ]);
+    }
+
+    public function index()
+    {
+        // Submissions that have received their EC document
+        $submissions = EthicalClearanceSubmission::with(['latestDetail.files', 'latestOutput'])
+            ->where('user_id', Auth::id())
+            ->where('stage', EthicsReviewStage::OUTPUT->value)
+            ->whereHas('outputs', function ($q) {
+                $q->whereNotNull('document_path');
+            })
+            ->latest()
+            ->paginate(10);
+
+        return Inertia::render('review-request/ethics/output/Index', [
+            'submissions' => $submissions,
+        ]);
+    }
+
+    public function show($id)
+    {
+        $submission = EthicalClearanceSubmission::with([
+            'latestDetail.files',
+            'latestDetail.comments.user',
+            'latestOutput',
+        ])
+            ->where('user_id', Auth::id())
+            ->findOrFail($id);
+
+        return Inertia::render('review-request/ethics/output/Show', [
+            'submission' => $submission,
+        ]);
     }
 }

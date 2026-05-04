@@ -11,6 +11,7 @@
     interface Props {
         action: string;
         value?: string | null | undefined;
+        fileName?: string | null | undefined;
         error?: string;
         accept?: string;
         maxSize?: number; // in bytes
@@ -21,9 +22,10 @@
     let {
         action,
         value = $bindable(),
+        fileName = $bindable(null),
         error = undefined,
         accept = '.pdf,.doc,.docx',
-        maxSize = 10 * 1024 * 1024, // 10MB default
+        maxSize = 4 * 1024 * 1024, // 4MB
         label = 'Upload File',
         description,
     }: Props = $props();
@@ -32,7 +34,6 @@
     let isUploading = $state(false);
     let progress = $state(0);
     let localError = $state<string | null>(null);
-    let fileName = $state<string | null>(null);
 
     // If value already exists (e.g. edit mode), try to extract filename from path or just show "File Uploaded"
     $effect(() => {

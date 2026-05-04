@@ -112,8 +112,10 @@ Route::middleware(['auth', 'permission:' . PermissionRole::P_REQUEST_ETHICS_REVI
             Route::prefix('proposal')->as('proposal.')->group(
                 function () {
                     Route::get('', [ReviewRequest\Ethics\ProposalController::class, 'index'])->name('index');
-                    Route::post('', [ReviewRequest\Ethics\ProposalController::class, 'create'])->name('create');
+                    Route::get('create', [ReviewRequest\Ethics\ProposalController::class, 'create'])->name('create');
+                    Route::post('', [ReviewRequest\Ethics\ProposalController::class, 'store'])->name('store');
                     Route::get('{id}', [ReviewRequest\Ethics\ProposalController::class, 'show'])->name('show');
+                    Route::get('{id}/edit', [ReviewRequest\Ethics\ProposalController::class, 'edit'])->name('edit');
 
                     // update when rejected by reviewer
                     Route::post('{id}/revise', [ReviewRequest\Ethics\ProposalController::class, 'revise'])->name('revise');

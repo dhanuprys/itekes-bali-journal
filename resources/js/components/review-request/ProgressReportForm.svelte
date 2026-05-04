@@ -96,7 +96,7 @@
 
                     <Field.Field>
                         <FileUpload
-                            label="Naskah Publikasi / Manuskrip (PDF/DOC, Max 10MB)"
+                            label="Naskah Publikasi / Manuskrip (PDF/DOC, Max 4MB)"
                             action={isResearch ? StorageUploadAction.RESEARCH_MANUSCRIPT : StorageUploadAction.CS_MANUSCRIPT}
                             bind:value={form.manuscript_path}
                             error={form.errors?.manuscript_path}

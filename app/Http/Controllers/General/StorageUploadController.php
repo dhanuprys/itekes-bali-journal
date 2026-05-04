@@ -72,62 +72,77 @@ class StorageUploadController extends Controller
 
     private function getValidatorByAction(StorageUploadAction $action, Request $request)
     {
+        // default max file size is 4MB
         switch ($action) {
             case StorageUploadAction::RESEARCH_PROPOSAL:
                 return [
                     'rules' => [
-                        'file' => 'required|file|mimes:pdf,doc,docx|max:10240',
+                        'file' => 'required|file|mimes:pdf,doc,docx|max:4096',
                     ],
                     'path' => 'research/proposals',
                 ];
             case StorageUploadAction::RESEARCH_PROGRESS_REPORT:
                 return [
                     'rules' => [
-                        'file' => 'required|file|mimes:pdf,doc,docx|max:10240',
+                        'file' => 'required|file|mimes:pdf,doc,docx|max:4096',
                     ],
                     'path' => 'research/progress-reports',
                 ];
             case StorageUploadAction::RESEARCH_FINAL_REPORT:
                 return [
                     'rules' => [
-                        'file' => 'required|file|mimes:pdf,doc,docx|max:10240',
+                        'file' => 'required|file|mimes:pdf,doc,docx|max:4096',
                     ],
                     'path' => 'research/final-reports',
                 ];
             case StorageUploadAction::RESEARCH_MANUSCRIPT:
                 return [
                     'rules' => [
-                        'file' => 'required|file|mimes:pdf,doc,docx|max:10240',
+                        'file' => 'required|file|mimes:pdf,doc,docx|max:4096',
                     ],
                     'path' => 'research/manuscripts',
                 ];
             case StorageUploadAction::CS_PROPOSAL:
                 return [
                     'rules' => [
-                        'file' => 'required|file|mimes:pdf,doc,docx|max:10240',
+                        'file' => 'required|file|mimes:pdf,doc,docx|max:4096',
                     ],
                     'path' => 'community-service/proposals',
                 ];
             case StorageUploadAction::CS_PROGRESS_REPORT:
                 return [
                     'rules' => [
-                        'file' => 'required|file|mimes:pdf,doc,docx|max:10240',
+                        'file' => 'required|file|mimes:pdf,doc,docx|max:4096',
                     ],
                     'path' => 'community-service/progress-reports',
                 ];
             case StorageUploadAction::CS_FINAL_REPORT:
                 return [
                     'rules' => [
-                        'file' => 'required|file|mimes:pdf,doc,docx|max:10240',
+                        'file' => 'required|file|mimes:pdf,doc,docx|max:4096',
                     ],
                     'path' => 'community-service/final-reports',
                 ];
             case StorageUploadAction::CS_MANUSCRIPT:
                 return [
                     'rules' => [
-                        'file' => 'required|file|mimes:pdf,doc,docx|max:10240',
+                        'file' => 'required|file|mimes:pdf,doc,docx|max:4096',
                     ],
                     'path' => 'community-service/manuscripts',
+                ];
+            case StorageUploadAction::ETHICS_PROPOSAL:
+                return [
+                    'rules' => [
+                        'file' => 'required|file|mimes:pdf,doc,docx|max:4096',
+                    ],
+                    'path' => 'ethics/proposals',
+                ];
+            case StorageUploadAction::ETHICS_OUTPUT:
+                return [
+                    'rules' => [
+                        'file' => 'required|file|mimes:pdf,doc,docx|max:4096',
+                    ],
+                    'path' => 'ethics/outputs',
                 ];
             case StorageUploadAction::USER_PROFILE_PHOTO:
                 return [

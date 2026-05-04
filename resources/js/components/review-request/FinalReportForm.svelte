@@ -14,7 +14,7 @@
             action={type === 'research' ? StorageUploadAction.RESEARCH_FINAL_REPORT : StorageUploadAction.CS_FINAL_REPORT}
             bind:value={form.final_report_path}
             accept=".pdf,.doc,.docx"
-            description="Upload laporan akhir. Format: PDF, DOC, DOCX. Maksimal 10MB."
+            description="Upload laporan akhir. Format: PDF, DOC, DOCX. Maksimal 4MB."
         />
         {#if form.errors?.final_report_path}
             <p class="text-sm text-destructive mt-1">{form.errors.final_report_path}</p>

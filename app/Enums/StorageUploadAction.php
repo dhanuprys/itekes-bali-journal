@@ -12,5 +12,7 @@ enum StorageUploadAction: string
     case CS_PROGRESS_REPORT = '9f5de0e023b7060320ab';
     case CS_FINAL_REPORT = 'a9b8cd4e294711823ab2';
     case CS_MANUSCRIPT = '51a13ef99f17d459855c';
+    case ETHICS_PROPOSAL = 'e7b3a91f45c820d69e14';
+    case ETHICS_OUTPUT = 'f4d2c8e716a930b58c23';
     case USER_PROFILE_PHOTO = 'fa125c14309328d8231c';
 }
