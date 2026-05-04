@@ -9,10 +9,11 @@
     import { Badge } from '@/components/ui/badge';
     import * as DropdownMenu from '@/components/ui/dropdown-menu';
     import { router } from '@inertiajs/svelte';
-    import { MoreHorizontalIcon } from 'lucide-svelte';
+    import * as Alert from '@/components/ui/alert';
+    import { InfoIcon, MoreHorizontalIcon } from 'lucide-svelte';
     import Pagination from '@/components/Pagination.svelte';
 
-    let { submissions } = $props();
+    let { submissions, hasOngoing = false } = $props();
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Permintaan Review', href: '#' },
@@ -47,10 +48,22 @@
         {/snippet}
 
         {#snippet actions()}
-            <Button href={route('apply.research.proposal.create')}>Buat Proposal Baru</Button>
+            {#if !hasOngoing}
+                <Button href={route('apply.research.proposal.create')}>Buat Proposal Baru</Button>
+            {/if}
         {/snippet}
 
         <div class="space-y-4">
+            {#if hasOngoing}
+                <Alert.Root class="bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-950 dark:border-blue-900 dark:text-blue-200">
+                    <InfoIcon class="h-4 w-4 text-blue-800 dark:text-blue-200" />
+                    <Alert.Title>Perhatian</Alert.Title>
+                    <Alert.Description>
+                        Anda masih memiliki usulan penelitian yang sedang berjalan. Anda baru dapat mengajukan usulan baru setelah usulan saat ini selesai (Laporan Akhir disetujui) atau dibatalkan/ditolak.
+                    </Alert.Description>
+                </Alert.Root>
+            {/if}
+
             <Card.Root>
                 <Card.Header>
                     <Card.Title>Riwayat Proposal</Card.Title>

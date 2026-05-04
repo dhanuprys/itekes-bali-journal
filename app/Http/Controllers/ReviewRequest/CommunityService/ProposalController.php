@@ -31,6 +31,17 @@ class ProposalController extends Controller
         $this->notificationService = $notificationService;
     }
 
+    private function hasOngoingSubmission()
+    {
+        return CommunityServiceSubmission::where('user_id', Auth::id())
+            ->whereNotIn('status', [CommunityServiceStatus::REJECTED->value, CommunityServiceStatus::CANCELED->value])
+            ->where(function ($query) {
+                $query->where('stage', '!=', CommunityServiceReviewStage::FINAL_REPORT->value)
+                    ->orWhere('status', '!=', CommunityServiceStatus::APPROVED->value);
+            })
+            ->exists();
+    }
+
     public function index()
     {
         $submissions = CommunityServiceSubmission::with(['latestDetail'])
@@ -41,11 +52,16 @@ class ProposalController extends Controller
 
         return Inertia::render('review-request/community-service/proposal/Index', [
             'submissions' => $submissions,
+            'hasOngoing' => $this->hasOngoingSubmission(),
         ]);
     }
 
     public function create()
     {
+        if ($this->hasOngoingSubmission()) {
+            abort(403, 'Anda masih memiliki usulan pengabdian yang sedang berjalan.');
+        }
+
         return Inertia::render('review-request/community-service/proposal/Create', [
             'studyPrograms' => StudyProgram::all(),
             'communityServiceTargets' => CommunityServiceTarget::all(),
@@ -54,6 +70,10 @@ class ProposalController extends Controller
 
     public function store(Request $request)
     {
+        if ($this->hasOngoingSubmission()) {
+            abort(403, 'Anda masih memiliki usulan pengabdian yang sedang berjalan.');
+        }
+
         $validated = $request->validate([
             'leader_name' => 'required|string|max:255',
             'study_program_id' => 'required|exists:study_programs,id',

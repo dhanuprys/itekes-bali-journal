@@ -5,6 +5,7 @@
     import FileUpload from '@/components/FileUpload.svelte';
     import { StorageUploadAction } from '@/data/storage-upload';
     import * as Select from '@/components/ui/select';
+    import Label from '../ui/label/label.svelte';
 
     let { form = $bindable(), data, type = 'research' } = $props();
 
@@ -85,7 +86,7 @@
                                 action={type === 'research' ? StorageUploadAction.RESEARCH_PROGRESS_REPORT : StorageUploadAction.CS_PROGRESS_REPORT}
                                 bind:value={form.progress_report_path}
                                 accept=".pdf,.doc,.docx"
-                                description="Upload laporan kemajuan. Format: PDF, DOC, DOCX. Maksimal 10MB."
+                                description="Upload laporan kemajuan."
                             />
                             {#if form.errors?.progress_report_path}
                                 <p class="text-sm text-destructive mt-1">{form.errors.progress_report_path}</p>

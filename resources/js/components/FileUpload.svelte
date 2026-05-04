@@ -15,6 +15,7 @@
         accept?: string;
         maxSize?: number; // in bytes
         label?: string;
+        description?: string;
     }
 
     let {
@@ -24,6 +25,7 @@
         accept = '.pdf,.doc,.docx',
         maxSize = 10 * 1024 * 1024, // 10MB default
         label = 'Upload File',
+        description,
     }: Props = $props();
 
     let isLocalDragging = $state(false);
@@ -213,6 +215,12 @@
     {#if localError || error}
         <p class="text-sm font-medium text-destructive transition-all">
             {localError || error}
+        </p>
+    {/if}
+
+    {#if description}
+        <p class="text-xs text-muted-foreground">
+            {description}
         </p>
     {/if}
 </div>

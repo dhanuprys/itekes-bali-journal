@@ -29,6 +29,17 @@ class ProposalController extends Controller
         $this->notificationService = $notificationService;
     }
 
+    private function hasOngoingSubmission()
+    {
+        return ResearchSubmission::where('user_id', Auth::id())
+            ->whereNotIn('status', [ResearchStatus::REJECTED->value, ResearchStatus::CANCELED->value])
+            ->where(function ($query) {
+                $query->where('stage', '!=', ResearchReviewStage::FINAL_REPORT->value)
+                    ->orWhere('status', '!=', ResearchStatus::APPROVED->value);
+            })
+            ->exists();
+    }
+
     public function index()
     {
         $submissions = ResearchSubmission::with(['latestDetail'])
@@ -39,11 +50,16 @@ class ProposalController extends Controller
 
         return Inertia::render('review-request/research/proposal/Index', [
             'submissions' => $submissions,
+            'hasOngoing' => $this->hasOngoingSubmission(),
         ]);
     }
 
     public function create()
     {
+        if ($this->hasOngoingSubmission()) {
+            abort(403, 'Anda masih memiliki usulan penelitian yang sedang berjalan.');
+        }
+
         return Inertia::render('review-request/research/proposal/Create', [
             'studyPrograms' => StudyProgram::all(),
             'researchTargets' => ResearchTarget::all(),
@@ -52,6 +68,10 @@ class ProposalController extends Controller
 
     public function store(Request $request)
     {
+        if ($this->hasOngoingSubmission()) {
+            abort(403, 'Anda masih memiliki usulan penelitian yang sedang berjalan.');
+        }
+
         $validated = $request->validate([
             'leader_name' => 'required|string|max:255',
             'study_program_id' => 'required|exists:study_programs,id',
