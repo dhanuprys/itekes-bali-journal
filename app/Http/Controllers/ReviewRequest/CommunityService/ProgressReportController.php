@@ -57,7 +57,7 @@ class ProgressReportController extends Controller
             'final_leader_name' => 'required|string|max:255',
             'final_title' => 'required|string',
             'schema_id' => 'required|exists:community_service_schema,id', // Added schema validation
-            'final_report_path' => 'required|string',
+            'progress_report_path' => 'required|string',
             'manuscript_path' => 'required|string',
             // Members removed from validation as they are not updated
         ]);
@@ -70,7 +70,7 @@ class ProgressReportController extends Controller
             $latestDetail = $submission->latestDetail;
 
             // Mark files as used
-            $uploadService->markAsUsed($validated['final_report_path'], \App\Enums\StorageUploadAction::CS_FINAL_REPORT->name);
+            $uploadService->markAsUsed($validated['progress_report_path'], \App\Enums\StorageUploadAction::CS_PROGRESS_REPORT->name);
             $uploadService->markAsUsed($validated['manuscript_path'], \App\Enums\StorageUploadAction::CS_MANUSCRIPT->name);
 
             $detail = CommunityServiceSubmissionDetail::create([
@@ -89,7 +89,7 @@ class ProgressReportController extends Controller
                 'leader_nidn' => $validated['leader_nidn'],
                 'final_leader_name' => $validated['final_leader_name'],
                 'final_title' => $validated['final_title'],
-                'final_report_path' => $validated['final_report_path'],
+                'progress_report_path' => $validated['progress_report_path'],
                 'manuscript_path' => $validated['manuscript_path'],
             ]);
 
@@ -172,7 +172,7 @@ class ProgressReportController extends Controller
             'final_leader_name' => 'required|string|max:255',
             'final_title' => 'required|string',
             'schema_id' => 'required|exists:community_service_schema,id',
-            'final_report_path' => 'required|string',
+            'progress_report_path' => 'required|string',
             'manuscript_path' => 'required|string',
         ]);
         // NOTE: The user manually changed schemas to `research_schema` and `community_service_schema` validation rule in previous turn.
@@ -184,7 +184,7 @@ class ProgressReportController extends Controller
             $latestDetail = $submission->latestDetail;
 
             // Mark files as used
-            $uploadService->markAsUsed($validated['final_report_path'], \App\Enums\StorageUploadAction::CS_FINAL_REPORT->name);
+            $uploadService->markAsUsed($validated['progress_report_path'], \App\Enums\StorageUploadAction::CS_PROGRESS_REPORT->name);
             $uploadService->markAsUsed($validated['manuscript_path'], \App\Enums\StorageUploadAction::CS_MANUSCRIPT->name);
 
             $detail = CommunityServiceSubmissionDetail::create([
@@ -203,7 +203,7 @@ class ProgressReportController extends Controller
                 'leader_nidn' => $validated['leader_nidn'],
                 'final_leader_name' => $validated['final_leader_name'],
                 'final_title' => $validated['final_title'],
-                'final_report_path' => $validated['final_report_path'],
+                'progress_report_path' => $validated['progress_report_path'],
                 'manuscript_path' => $validated['manuscript_path'],
             ]);
 

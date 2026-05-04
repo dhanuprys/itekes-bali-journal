@@ -42,7 +42,11 @@ Route::middleware(['auth', 'permission:' . PermissionRole::P_REQUEST_RESEARCH_RE
             Route::prefix('final-report')->as('final_report.')->group(
                 function () {
                     Route::get('', [ReviewRequest\Research\FinalReportController::class, 'index'])->name('index');
+                    Route::get('create', [ReviewRequest\Research\FinalReportController::class, 'create'])->name('create');
+                    Route::post('', [ReviewRequest\Research\FinalReportController::class, 'store'])->name('store');
                     Route::get('{id}', [ReviewRequest\Research\FinalReportController::class, 'show'])->name('show');
+                    Route::get('{id}/edit', [ReviewRequest\Research\FinalReportController::class, 'edit'])->name('edit');
+                    Route::post('{id}/revise', [ReviewRequest\Research\FinalReportController::class, 'revise'])->name('revise');
                 }
             );
         }
@@ -86,7 +90,11 @@ Route::middleware(['auth', 'permission:' . PermissionRole::P_REQUEST_COMMUNITY_S
             Route::prefix('final-report')->as('final_report.')->group(
                 function () {
                     Route::get('', [ReviewRequest\CommunityService\FinalReportController::class, 'index'])->name('index');
+                    Route::get('create', [ReviewRequest\CommunityService\FinalReportController::class, 'create'])->name('create');
+                    Route::post('', [ReviewRequest\CommunityService\FinalReportController::class, 'store'])->name('store');
                     Route::get('{id}', [ReviewRequest\CommunityService\FinalReportController::class, 'show'])->name('show');
+                    Route::get('{id}/edit', [ReviewRequest\CommunityService\FinalReportController::class, 'edit'])->name('edit');
+                    Route::post('{id}/revise', [ReviewRequest\CommunityService\FinalReportController::class, 'revise'])->name('revise');
                 }
             );
         }

@@ -11,9 +11,16 @@ use App\Models\ResearchSubmissionComment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use App\Services\NotificationService;
 
 class FinalReportController extends Controller
 {
+    protected $notificationService;
+
+    public function __construct(NotificationService $notificationService)
+    {
+        $this->notificationService = $notificationService;
+    }
     public function index()
     {
         $submissions = ResearchSubmission::with(['latestDetail', 'user'])
@@ -112,6 +119,19 @@ class FinalReportController extends Controller
         $submission->update([
             'status' => $newStatus,
         ]);
+
+        // Notify User
+        $this->notificationService->send(
+            $submission->user,
+            "Reviewer memperbarui status Laporan Akhir penelitian Anda: " . $submission->latestDetail->title . " menjadi " . strtoupper(str_replace('_', ' ', $request->input('status'))) . ". Silakan cek detailnya.",
+            new \App\DTO\NotificationPayload(
+                title: "Status Laporan Akhir Diperbarui",
+                url: route('apply.research.final_report.show', $submission->id),
+                type: 'info',
+                metadata: ['submission_id' => $submission->id, 'status' => $request->input('status')]
+            ),
+            true
+        );
 
         return redirect()->route('review.research.index')->with('success', 'Status berhasil diperbarui.');
     }

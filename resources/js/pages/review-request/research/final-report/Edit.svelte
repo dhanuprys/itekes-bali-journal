@@ -3,37 +3,31 @@
     import AppLayout from '@/layouts/AppLayout.svelte';
     import { type BreadcrumbItem } from '@/types';
     import Heading from '@/components/Heading.svelte';
+    import FinalReportForm from '@/components/review-request/FinalReportForm.svelte';
+    import RevisionCommentSheet from '@/components/review-request/RevisionCommentSheet.svelte';
+    import * as Alert from '@/components/ui/alert';
     import { useForm } from '@inertiajs/svelte';
     import { Button } from '@/components/ui/button';
-    import * as Alert from '@/components/ui/alert';
-    import ProgressReportForm from '@/components/review-request/ProgressReportForm.svelte';
-    import RevisionCommentSheet from '@/components/review-request/RevisionCommentSheet.svelte';
-    import { uploadState } from '@/stores/upload-state.svelte';
     import { toast } from 'svelte-sonner';
+    import { uploadState } from '@/stores/upload-state.svelte';
 
-    let { submission, detail, schemas } = $props();
+    let { submission, detail } = $props();
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Permintaan Review', href: '#' },
-        { title: 'Pengabdian Masyarakat', href: '#' },
-        { title: 'Laporan Kemajuan', href: '/apply/community-service/progress-report' },
+        { title: 'Penelitian', href: '#' },
+        { title: 'Laporan Akhir', href: route('apply.research.final_report.index') },
         { title: 'Revisi', href: '#' },
     ];
 
     const form = useForm({
-        submission_id: submission.id, // Keep submission_id for reference
-        leader_nidn: detail.leader_nidn || '',
-        final_leader_name: detail.final_leader_name || '',
-        final_title: detail.final_title || '',
-        members: detail.members ? detail.members.map((m: any) => ({ name: m.name })) : [],
-        schema_id: detail.community_service_schema_id || '',
-        progress_report_path: detail.progress_report_path || '',
-        manuscript_path: detail.manuscript_path || '',
+        submission_id: submission.id,
+        final_report_path: detail.final_report_path || '',
     });
 
     function submit() {
         if (uploadState.isUploading) return;
-        $form.post(route('apply.community_service.progress_report.revise', submission.id), {
+        $form.post(route('apply.research.final_report.revise', submission.id), {
             onSuccess: () => {
                 toast.success('Revisi laporan berhasil dikirim.');
             },
@@ -45,15 +39,13 @@
 </script>
 
 <svelte:head>
-    <title>Revisi Laporan Kemajuan</title>
+    <title>Revisi Laporan Akhir - Penelitian</title>
 </svelte:head>
 
 <AppLayout {breadcrumbs}>
     <LayoutComposer>
         {#snippet header()}
-            <div class="flex items-center justify-between">
-                <Heading title="Revisi Laporan Kemajuan" description="Perbarui laporan Anda berdasarkan masukan reviewer." />
-            </div>
+            <Heading title="Revisi Laporan Akhir" description="Perbarui laporan akhir Anda berdasarkan masukan reviewer." />
         {/snippet}
 
         {#snippet actions()}
@@ -77,10 +69,10 @@
                 submit();
             }}
         >
-            <ProgressReportForm bind:form={$form} data={{ schemas }} type="community-service" mode="revise" />
+            <FinalReportForm bind:form={$form} type="research" mode="revise" />
 
             <div class="mt-6 flex justify-end gap-3">
-                <Button variant="outline" href={route('apply.community_service.progress_report.index')}>Batal</Button>
+                <Button variant="outline" href={route('apply.research.final_report.index')}>Batal</Button>
                 <Button type="submit" disabled={$form.processing || uploadState.isUploading}>
                     {#if $form.processing}
                         Menyimpan...

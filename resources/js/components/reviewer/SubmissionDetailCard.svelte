@@ -123,30 +123,30 @@
             <div>
                 <h4 class="text-sm font-medium mb-2">Dokumen Laporan</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="flex items-center gap-4">
-                        <div>
-                            <span class="text-sm font-semibold">Laporan Akhir</span>
+                    {#if detail?.progress_report_path}
+                        <div class="flex items-center gap-4">
+                            <div>
+                                <span class="text-sm font-semibold">Laporan Kemajuan</span>
+                            </div>
+                            <Button href={`/storage/${detail?.progress_report_path}`} target="_blank" rel="noopener noreferrer" variant="outline" size="sm">Unduh</Button>
                         </div>
-                        {#if detail?.final_report_path}
-                            <Button
-                                href={`/storage/${detail?.final_report_path}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                variant="outline"
-                                size="sm">Unduh</Button
-                            >
-                        {:else}
-                            <span class="text-xs text-muted-foreground">Tidak ada file</span>
-                        {/if}
-                    </div>
+                    {/if}
+
+                    {#if detail?.final_report_path}
+                        <div class="flex items-center gap-4">
+                            <div>
+                                <span class="text-sm font-semibold">Laporan Akhir</span>
+                            </div>
+                            <Button href={`/storage/${detail?.final_report_path}`} target="_blank" rel="noopener noreferrer" variant="outline" size="sm">Unduh</Button>
+                        </div>
+                    {/if}
+
                     <div class="flex items-center gap-4">
                         <div>
                             <span class="text-sm font-semibold">Manuskrip</span>
                         </div>
                         {#if detail?.manuscript_path}
-                            <Button href={`/storage/${detail?.manuscript_path}`} target="_blank" rel="noopener noreferrer" variant="outline" size="sm"
-                                >Unduh</Button
-                            >
+                            <Button href={`/storage/${detail?.manuscript_path}`} target="_blank" rel="noopener noreferrer" variant="outline" size="sm">Unduh</Button>
                         {:else}
                             <span class="text-xs text-muted-foreground">Tidak ada file</span>
                         {/if}

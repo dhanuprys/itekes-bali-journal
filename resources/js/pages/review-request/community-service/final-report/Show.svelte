@@ -110,6 +110,21 @@
                         <Card.Title>Laporan Akhir</Card.Title>
                     </Card.Header>
                     <Card.Content>
+                        {#if detail?.progress_report_path}
+                            <div class="flex items-center gap-3 p-3 border rounded-md mb-4">
+                                <FileTextIcon class="h-8 w-8 text-primary" />
+                                <div class="flex-1 overflow-hidden">
+                                    <p class="text-sm font-medium truncate">File Laporan Kemajuan</p>
+                                </div>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    href={`/storage/${detail.progress_report_path}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer">Unduh</Button
+                                >
+                            </div>
+                        {/if}
                         {#if detail?.final_report_path}
                             <div class="flex items-center gap-3 p-3 border rounded-md">
                                 <FileTextIcon class="h-8 w-8 text-primary" />

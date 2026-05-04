@@ -27,7 +27,7 @@
         final_title: detail.final_title || '',
         members: detail.members ? detail.members.map((m: any) => ({ name: m.name })) : [],
         schema_id: detail.research_schema_id || '',
-        final_report_path: detail.final_report_path || '',
+        progress_report_path: detail.progress_report_path || '',
         manuscript_path: detail.manuscript_path || '',
     });
 

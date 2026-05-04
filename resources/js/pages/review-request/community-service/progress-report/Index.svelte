@@ -35,7 +35,7 @@
     }
 
     function hasSubmittedReport(submission: any) {
-        return !!submission.latest_detail?.final_report_path;
+        return !!submission.latest_detail?.progress_report_path;
     }
 </script>
 

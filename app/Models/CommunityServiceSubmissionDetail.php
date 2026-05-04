@@ -27,6 +27,7 @@ class CommunityServiceSubmissionDetail extends Model
         'final_leader_name',
         'leader_nidn',
         'final_title',
+        'progress_report_path',
         'final_report_path',
         'manuscript_path'
     ];

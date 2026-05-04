@@ -35,6 +35,9 @@ Route::middleware(['auth', 'permission:' . PermissionRole::P_REVIEW_RESEARCH->va
                 function () {
                     Route::get('', [Reviewer\Research\FinalReportController::class, 'index'])->name('index');
                     Route::get('{id}', [Reviewer\Research\FinalReportController::class, 'show'])->name('show');
+
+                    Route::post('{id}/comment', [Reviewer\Research\FinalReportController::class, 'comment'])->name('comment');
+                    Route::post('{id}/change-state', [Reviewer\Research\FinalReportController::class, 'changeState'])->name('change-state');
                 }
             );
         }
@@ -71,6 +74,9 @@ Route::middleware(['auth', 'permission:' . PermissionRole::P_REVIEW_COMMUNITY_SE
                 function () {
                     Route::get('', [Reviewer\CommunityService\FinalReportController::class, 'index'])->name('index');
                     Route::get('{id}', [Reviewer\CommunityService\FinalReportController::class, 'show'])->name('show');
+
+                    Route::post('{id}/comment', [Reviewer\CommunityService\FinalReportController::class, 'comment'])->name('comment');
+                    Route::post('{id}/change-state', [Reviewer\CommunityService\FinalReportController::class, 'changeState'])->name('change-state');
                 }
             );
         }

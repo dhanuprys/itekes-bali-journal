@@ -75,16 +75,22 @@
 
             <Field.Set>
                 <Field.Legend>Dokumen Laporan</Field.Legend>
-                <Field.Description>Unggah laporan akhir dan naskah publikasi.</Field.Description>
+                <Field.Description>Unggah laporan kemajuan dan naskah publikasi.</Field.Description>
 
                 <Field.Group>
                     <Field.Field>
-                        <FileUpload
-                            label="Laporan Akhir (PDF/DOC, Max 10MB)"
-                            action={isResearch ? StorageUploadAction.RESEARCH_FINAL_REPORT : StorageUploadAction.CS_FINAL_REPORT}
-                            bind:value={form.final_report_path}
-                            error={form.errors?.final_report_path}
-                        />
+                        <div class="col-span-1 md:col-span-2">
+                            <Label for="progress_report_path">File Laporan Kemajuan *</Label>
+                            <FileUpload
+                                action={type === 'research' ? StorageUploadAction.RESEARCH_PROGRESS_REPORT : StorageUploadAction.CS_PROGRESS_REPORT}
+                                bind:value={form.progress_report_path}
+                                accept=".pdf,.doc,.docx"
+                                description="Upload laporan kemajuan. Format: PDF, DOC, DOCX. Maksimal 10MB."
+                            />
+                            {#if form.errors?.progress_report_path}
+                                <p class="text-sm text-destructive mt-1">{form.errors.progress_report_path}</p>
+                            {/if}
+                        </div>
                     </Field.Field>
 
                     <Field.Field>

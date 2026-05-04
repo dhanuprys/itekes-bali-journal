@@ -26,7 +26,8 @@
         leader_nidn: detail.leader_nidn,
         members: detail.members ? detail.members.map((m: any) => ({ name: m.name })) : [],
         schema_id: detail.community_service_schema_id || '',
-        final_report_path: '',
+        schema_id: detail.community_service_schema_id || '',
+        progress_report_path: '',
         manuscript_path: '',
     });
 

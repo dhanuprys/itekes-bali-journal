@@ -57,7 +57,7 @@ class ProgressReportController extends Controller
             'final_leader_name' => 'required|string|max:255',
             'final_title' => 'required|string',
             'schema_id' => 'required|exists:research_schema,id', // Added schema validation
-            'final_report_path' => 'required|string',
+            'progress_report_path' => 'required|string',
             'manuscript_path' => 'required|string',
             // Members removed from validation as they are not updated
         ]);
@@ -70,7 +70,7 @@ class ProgressReportController extends Controller
             $latestDetail = $submission->latestDetail;
 
             // Mark files as used
-            $uploadService->markAsUsed($validated['final_report_path'], \App\Enums\StorageUploadAction::RESEARCH_FINAL_REPORT->name);
+            $uploadService->markAsUsed($validated['progress_report_path'], \App\Enums\StorageUploadAction::RESEARCH_PROGRESS_REPORT->name);
             $uploadService->markAsUsed($validated['manuscript_path'], \App\Enums\StorageUploadAction::RESEARCH_MANUSCRIPT->name);
 
             $detail = ResearchSubmissionDetail::create([
@@ -89,7 +89,7 @@ class ProgressReportController extends Controller
                 'leader_nidn' => $validated['leader_nidn'],
                 'final_leader_name' => $validated['final_leader_name'],
                 'final_title' => $validated['final_title'],
-                'final_report_path' => $validated['final_report_path'],
+                'progress_report_path' => $validated['progress_report_path'],
                 'manuscript_path' => $validated['manuscript_path'],
             ]);
 
@@ -172,7 +172,7 @@ class ProgressReportController extends Controller
             'final_leader_name' => 'required|string|max:255',
             'final_title' => 'required|string',
             'schema_id' => 'required|exists:research_schema,id',
-            'final_report_path' => 'required|string',
+            'progress_report_path' => 'required|string',
             'manuscript_path' => 'required|string',
         ]);
 
@@ -180,7 +180,7 @@ class ProgressReportController extends Controller
             $latestDetail = $submission->latestDetail;
 
             // Mark files as used
-            $uploadService->markAsUsed($validated['final_report_path'], \App\Enums\StorageUploadAction::RESEARCH_FINAL_REPORT->name);
+            $uploadService->markAsUsed($validated['progress_report_path'], \App\Enums\StorageUploadAction::RESEARCH_PROGRESS_REPORT->name);
             $uploadService->markAsUsed($validated['manuscript_path'], \App\Enums\StorageUploadAction::RESEARCH_MANUSCRIPT->name);
 
             $detail = ResearchSubmissionDetail::create([
@@ -199,7 +199,7 @@ class ProgressReportController extends Controller
                 'leader_nidn' => $validated['leader_nidn'],
                 'final_leader_name' => $validated['final_leader_name'],
                 'final_title' => $validated['final_title'],
-                'final_report_path' => $validated['final_report_path'],
+                'progress_report_path' => $validated['progress_report_path'],
                 'manuscript_path' => $validated['manuscript_path'],
             ]);
 
