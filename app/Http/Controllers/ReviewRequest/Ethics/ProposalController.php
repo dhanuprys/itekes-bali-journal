@@ -75,6 +75,10 @@ class ProposalController extends Controller
             'files.*.template_key' => 'required|string|max:100',
             'files.*.file_path' => 'required|string|max:2048',
             'files.*.original_name' => 'required|string|max:255',
+            'is_student' => 'required|boolean',
+            'student_nim' => 'required_if:is_student,true|nullable|string|max:255',
+            'wali_name' => 'required_if:is_student,true|nullable|string|max:255',
+            'payment_proof_path' => 'required|string|max:2048',
         ]);
 
         DB::transaction(function () use ($validated) {
@@ -83,6 +87,10 @@ class ProposalController extends Controller
                 'category' => $validated['category'],
                 'status' => EthicsStatus::NEED_REVIEW->value,
                 'stage' => EthicsReviewStage::PROPOSAL->value,
+                'is_student' => $validated['is_student'],
+                'student_nim' => $validated['is_student'] ? $validated['student_nim'] : null,
+                'wali_name' => $validated['is_student'] ? $validated['wali_name'] : null,
+                'payment_proof_path' => $validated['payment_proof_path'],
             ]);
 
             $detail = EthicalClearanceDetail::create([
@@ -100,6 +108,9 @@ class ProposalController extends Controller
                 ]);
             }
 
+            // Mark payment proof as used
+            $this->uploadService->markAsUsed($validated['payment_proof_path'], \App\Enums\StorageUploadAction::ETHICS_PAYMENT_PROOF->name);
+
             // Notify reviewers with ethics permission
             $this->notificationService->sendToPermission(
                 \App\Enums\PermissionRole::P_REVIEW_ETHICS,
@@ -112,6 +123,11 @@ class ProposalController extends Controller
                 )
             );
         });
+
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Mengajukan proposal etik baru kategori: {$validated['category']}"
+        ]);
 
         return redirect()->route('apply.ethics.proposal.index')->with('success', 'Pengajuan etik berhasil dikirim.');
     }
@@ -183,6 +199,11 @@ class ProposalController extends Controller
             ]);
         });
 
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Mengajukan revisi proposal etik"
+        ]);
+
         return redirect()->route('apply.ethics.proposal.show', $id)->with('success', 'Revisi berhasil dikirim.');
     }
 
@@ -200,6 +221,11 @@ class ProposalController extends Controller
             'ethical_clearance_subdetail_id' => $detail->id,
             'user_id' => Auth::id(),
             'content' => $request->input('content'),
+        ]);
+
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Menambahkan komentar pada pengajuan etik"
         ]);
 
         return back()->with('success', 'Komentar terkirim.');

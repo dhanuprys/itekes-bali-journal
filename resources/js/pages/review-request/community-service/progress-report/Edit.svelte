@@ -4,6 +4,7 @@
     import { type BreadcrumbItem } from '@/types';
     import Heading from '@/components/Heading.svelte';
     import { useForm } from '@inertiajs/svelte';
+    import { untrack } from 'svelte';
     import { Button } from '@/components/ui/button';
     import * as Alert from '@/components/ui/alert';
     import ProgressReportForm from '@/components/review-request/ProgressReportForm.svelte';
@@ -11,7 +12,7 @@
     import { uploadState } from '@/stores/upload-state.svelte';
     import { toast } from 'svelte-sonner';
 
-    let { submission, detail, schemas } = $props();
+    let { submission, detail } = $props();
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Permintaan Review', href: '#' },
@@ -20,16 +21,14 @@
         { title: 'Revisi', href: '#' },
     ];
 
-    const form = useForm({
+    const form = useForm(untrack(() => ({
         submission_id: submission.id, // Keep submission_id for reference
-        leader_nidn: detail.leader_nidn || '',
         final_leader_name: detail.final_leader_name || '',
         final_title: detail.final_title || '',
         members: detail.members ? detail.members.map((m: any) => ({ name: m.name })) : [],
-        schema_id: detail.community_service_schema_id || '',
         progress_report_path: detail.progress_report_path || '',
         manuscript_path: detail.manuscript_path || '',
-    });
+    })));
 
     function submit() {
         if (uploadState.isUploading) return;
@@ -77,7 +76,7 @@
                 submit();
             }}
         >
-            <ProgressReportForm bind:form={$form} data={{ schemas }} type="community-service" mode="revise" />
+            <ProgressReportForm bind:form={$form} data={{}} type="community-service" mode="revise" />
 
             <div class="mt-6 flex justify-end gap-3">
                 <Button variant="outline" href={route('apply.community_service.progress_report.index')}>Batal</Button>

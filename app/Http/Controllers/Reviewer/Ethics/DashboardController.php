@@ -12,11 +12,20 @@ class DashboardController extends Controller
     public function index()
     {
         $proposalCount = EthicalClearanceSubmission::where('stage', EthicsReviewStage::PROPOSAL->value)->count();
-        $outputCount = EthicalClearanceSubmission::where('stage', EthicsReviewStage::OUTPUT->value)->count();
+        $waitForOutputCount = EthicalClearanceSubmission::where('stage', EthicsReviewStage::OUTPUT->value)
+            ->whereDoesntHave('outputs', function ($q) {
+                $q->whereNotNull('document_path');
+            })->count();
+            
+        $outputCompletedCount = EthicalClearanceSubmission::where('stage', EthicsReviewStage::OUTPUT->value)
+            ->whereHas('outputs', function ($q) {
+                $q->whereNotNull('document_path');
+            })->count();
 
         return Inertia::render('reviewer/ethics/dashboard/Index', [
             'proposalCount' => $proposalCount,
-            'outputCount' => $outputCount,
+            'waitForOutputCount' => $waitForOutputCount,
+            'outputCompletedCount' => $outputCompletedCount,
         ]);
     }
 }

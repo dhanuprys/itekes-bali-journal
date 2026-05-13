@@ -87,6 +87,12 @@ class ProgressReportController extends Controller
             'content' => $request->input('content'),
         ]);
 
+        $title = $detail->title ?? 'Laporan Kemajuan Pengabdian';
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Memberikan komentar pada laporan kemajuan pengabdian: {$title}"
+        ]);
+
         return back()->with('success', 'Komentar terkirim.');
     }
 
@@ -136,6 +142,12 @@ class ProgressReportController extends Controller
             ),
             true
         );
+
+        $title = $submission->latestDetail->title ?? 'Laporan Kemajuan Pengabdian';
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Mengubah status laporan kemajuan pengabdian '{$title}' menjadi '{$request->input('status')}'"
+        ]);
 
         return redirect()->route('review.community_service.index')->with('success', 'Status berhasil diperbarui.');
     }

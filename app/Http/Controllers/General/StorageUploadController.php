@@ -102,6 +102,13 @@ class StorageUploadController extends Controller
                     ],
                     'path' => 'research/manuscripts',
                 ];
+            case StorageUploadAction::RESEARCH_SUPPLEMENTARY:
+                return [
+                    'rules' => [
+                        'file' => 'required|file|mimes:pdf,doc,docx|max:4096',
+                    ],
+                    'path' => 'research/supplementary',
+                ];
             case StorageUploadAction::CS_PROPOSAL:
                 return [
                     'rules' => [
@@ -130,6 +137,13 @@ class StorageUploadController extends Controller
                     ],
                     'path' => 'community-service/manuscripts',
                 ];
+            case StorageUploadAction::CS_SUPPLEMENTARY:
+                return [
+                    'rules' => [
+                        'file' => 'required|file|mimes:pdf,doc,docx|max:4096',
+                    ],
+                    'path' => 'community-service/supplementary',
+                ];
             case StorageUploadAction::ETHICS_PROPOSAL:
                 return [
                     'rules' => [
@@ -143,6 +157,13 @@ class StorageUploadController extends Controller
                         'file' => 'required|file|mimes:pdf,doc,docx|max:4096',
                     ],
                     'path' => 'ethics/outputs',
+                ];
+            case StorageUploadAction::ETHICS_PAYMENT_PROOF:
+                return [
+                    'rules' => [
+                        'file' => 'required|file|image|mimes:jpg,jpeg,png,webp|max:4096',
+                    ],
+                    'path' => 'ethics/payment-proofs',
                 ];
             case StorageUploadAction::USER_PROFILE_PHOTO:
                 return [

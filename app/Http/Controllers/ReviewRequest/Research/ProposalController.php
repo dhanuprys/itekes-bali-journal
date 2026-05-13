@@ -63,6 +63,7 @@ class ProposalController extends Controller
         return Inertia::render('review-request/research/proposal/Create', [
             'studyPrograms' => StudyProgram::all(),
             'researchTargets' => ResearchTarget::all(),
+            'schemas' => ResearchSchema::all(),
         ]);
     }
 
@@ -81,6 +82,9 @@ class ProposalController extends Controller
             'proposal_path' => 'required|string|max:2048', // Changed from proposal_file
             'members' => 'nullable|array',
             'members.*.name' => 'required|string|max:255',
+            'research_schema_id' => 'required|exists:research_schema,id',
+            'leader_nidn' => 'nullable|string',
+            'leader_nuptk' => 'required|string|max:50',
         ]);
 
         DB::transaction(function () use ($validated, $request) {
@@ -102,6 +106,9 @@ class ProposalController extends Controller
                 'budget' => $validated['budget'] ?? 0,
                 'research_target_id' => $validated['research_target_id'],
                 'proposal_path' => $path,
+                'research_schema_id' => $validated['research_schema_id'],
+                'leader_nidn' => $validated['leader_nidn'] ?? null,
+                'leader_nuptk' => $validated['leader_nuptk'],
             ]);
 
             if (!empty($validated['members'])) {
@@ -124,6 +131,11 @@ class ProposalController extends Controller
                 )
             );
         });
+
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Mengajukan proposal penelitian baru: {$validated['title']}"
+        ]);
 
         return redirect()->route('apply.research.index')->with('success', 'Proposal submitted successfully.');
     }
@@ -161,6 +173,7 @@ class ProposalController extends Controller
             'detail' => $submission->latestDetail,
             'studyPrograms' => StudyProgram::all(),
             'researchTargets' => ResearchTarget::all(),
+            'schemas' => ResearchSchema::all(),
         ]);
     }
 
@@ -177,6 +190,9 @@ class ProposalController extends Controller
             'proposal_path' => 'required|string|max:2048',
             'members' => 'nullable|array',
             'members.*.name' => 'required|string|max:255',
+            'research_schema_id' => 'required|exists:research_schema,id',
+            'leader_nidn' => 'nullable|string',
+            'leader_nuptk' => 'required|string|max:50',
         ]);
 
         DB::transaction(function () use ($validated, $request, $submission) {
@@ -196,6 +212,9 @@ class ProposalController extends Controller
                 'budget' => $validated['budget'] ?? 0,
                 'research_target_id' => $validated['research_target_id'],
                 'proposal_path' => $path,
+                'research_schema_id' => $validated['research_schema_id'],
+                'leader_nidn' => $validated['leader_nidn'] ?? null,
+                'leader_nuptk' => $validated['leader_nuptk'],
             ]);
 
             if (!empty($validated['members'])) {
@@ -226,6 +245,11 @@ class ProposalController extends Controller
                 );
             }
         });
+
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Mengajukan revisi proposal penelitian: {$validated['title']}"
+        ]);
 
         return redirect()->route('apply.research.index')->with('success', 'Proposal revision submitted.');
     }

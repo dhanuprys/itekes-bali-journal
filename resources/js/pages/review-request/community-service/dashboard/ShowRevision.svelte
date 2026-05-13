@@ -10,12 +10,12 @@
 
     let { submission, detail } = $props();
 
-    const breadcrumbs: BreadcrumbItem[] = [
+    let breadcrumbs: BreadcrumbItem[] = $derived([
         { title: 'Permintaan Review', href: '#' },
         { title: 'Pengabdian Masyarakat', href: '#' },
         { title: 'Riwayat Revisi', href: route('apply.community_service.revisions', submission.id) },
         { title: 'Detail Revisi', href: '#' },
-    ];
+    ]);
 
     function formatDate(dateString: string) {
         return new Date(dateString).toLocaleDateString('id-ID', {

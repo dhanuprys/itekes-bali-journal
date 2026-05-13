@@ -83,6 +83,42 @@
                         </div>
                     </div>
 
+                    <!-- Payment Info -->
+                    <div>
+                        <h3 class="text-lg font-semibold mb-3">Informasi Pemohon & Pembayaran</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-sm text-muted-foreground">Status Pemohon</p>
+                                <p class="font-medium">{submission.is_student ? 'Mahasiswa ITEKES Bali' : 'Publik / Umum'}</p>
+                            </div>
+                            {#if submission.is_student}
+                                <div>
+                                    <p class="text-sm text-muted-foreground">NIM</p>
+                                    <p class="font-medium">{submission.student_nim ?? '-'}</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-muted-foreground">Nama Wali</p>
+                                    <p class="font-medium">{submission.wali_name ?? '-'}</p>
+                                </div>
+                            {/if}
+                            <div class="md:col-span-2 mt-2">
+                                <p class="text-sm text-muted-foreground mb-1">Bukti Transfer</p>
+                                {#if submission.payment_proof_path}
+                                    <a
+                                        href={'/storage/' + submission.payment_proof_path}
+                                        target="_blank"
+                                        class="inline-flex items-center gap-1.5 rounded-md border border-input bg-background px-3 py-1.5 text-xs font-medium hover:bg-accent hover:text-accent-foreground transition-colors shrink-0"
+                                    >
+                                        <FileTextIcon class="h-3.5 w-3.5" />
+                                        Lihat Bukti Transfer
+                                    </a>
+                                {:else}
+                                    <p class="text-sm italic text-muted-foreground">Tidak ada bukti transfer.</p>
+                                {/if}
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Uploaded Documents -->
                     <div>
                         <h3 class="text-lg font-semibold mb-3">Dokumen yang Diunggah</h3>

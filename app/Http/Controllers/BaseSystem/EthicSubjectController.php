@@ -42,6 +42,11 @@ class EthicSubjectController extends Controller
 
         \App\Models\EthicalClearanceSubject::create($validated);
 
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Membuat Subjek Etik baru: {$validated['title']}"
+        ]);
+
         return redirect()->back()->with('success', 'Ethic Subject created successfully.');
     }
 
@@ -54,12 +59,23 @@ class EthicSubjectController extends Controller
 
         $ethicalClearanceSubject->update($validated);
 
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Memperbarui Subjek Etik menjadi: {$validated['title']}"
+        ]);
+
         return redirect()->back()->with('success', 'Ethic Subject updated successfully.');
     }
 
     public function destroy(\App\Models\EthicalClearanceSubject $ethicalClearanceSubject)
     {
+        $title = $ethicalClearanceSubject->title;
         $ethicalClearanceSubject->delete();
+
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Menghapus Subjek Etik: {$title}"
+        ]);
 
         return redirect()->back()->with('success', 'Ethic Subject deleted successfully.');
     }

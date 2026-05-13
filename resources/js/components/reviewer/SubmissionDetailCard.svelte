@@ -30,8 +30,23 @@
             </div>
 
             <div>
+                <dt class="text-sm font-medium text-muted-foreground">NIDN Ketua</dt>
+                <dd class="text-base font-semibold">{detail?.leader_nidn || '-'}</dd>
+            </div>
+
+            <div>
+                <dt class="text-sm font-medium text-muted-foreground">NUPTK Ketua</dt>
+                <dd class="text-base font-semibold">{detail?.leader_nuptk || '-'}</dd>
+            </div>
+
+            <div>
                 <dt class="text-sm font-medium text-muted-foreground">Program Studi</dt>
                 <dd class="text-base font-semibold">{detail?.study_program?.name || '-'}</dd>
+            </div>
+
+            <div>
+                <dt class="text-sm font-medium text-muted-foreground">Skema</dt>
+                <dd class="text-base font-semibold">{detail?.schema?.title || detail?.schema?.name || '-'}</dd>
             </div>
 
             <div>
@@ -109,18 +124,6 @@
             </div>
 
             <div>
-                <dt class="text-sm font-medium text-muted-foreground">NIDN/NIP</dt>
-                <dd class="text-base font-semibold">{detail?.leader_nidn}</dd>
-            </div>
-
-            <div>
-                <dt class="text-sm font-medium text-muted-foreground">Skema</dt>
-                <dd class="text-base font-semibold">
-                    {detail?.schema?.title || '-'}
-                </dd>
-            </div>
-
-            <div>
                 <h4 class="text-sm font-medium mb-2">Dokumen Laporan</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {#if detail?.progress_report_path}
@@ -141,18 +144,38 @@
                         </div>
                     {/if}
 
-                    <div class="flex items-center gap-4">
-                        <div>
-                            <span class="text-sm font-semibold">Manuskrip</span>
+                    {#if stage === 'final_report'}
+                        <div class="flex items-center gap-4">
+                            <div>
+                                <span class="text-sm font-semibold">Manuskrip</span>
+                            </div>
+                            {#if detail?.manuscript_path}
+                                <Button href={`/storage/${detail?.manuscript_path}`} target="_blank" rel="noopener noreferrer" variant="outline" size="sm">Unduh</Button>
+                            {:else}
+                                <span class="text-xs text-muted-foreground">Tidak ada file</span>
+                            {/if}
                         </div>
-                        {#if detail?.manuscript_path}
-                            <Button href={`/storage/${detail?.manuscript_path}`} target="_blank" rel="noopener noreferrer" variant="outline" size="sm">Unduh</Button>
-                        {:else}
-                            <span class="text-xs text-muted-foreground">Tidak ada file</span>
-                        {/if}
-                    </div>
+
+                        <div class="flex items-center gap-4">
+                            <div>
+                                <span class="text-sm font-semibold">Pelengkap (LOA/HKI/Jurnal)</span>
+                            </div>
+                            {#if detail?.supplementary_path}
+                                <Button href={`/storage/${detail?.supplementary_path}`} target="_blank" rel="noopener noreferrer" variant="outline" size="sm">Unduh</Button>
+                            {:else}
+                                <span class="text-xs text-muted-foreground">Tidak ada file</span>
+                            {/if}
+                        </div>
+                    {/if}
                 </div>
             </div>
+
+            {#if stage === 'final_report' && detail?.notes}
+                <div>
+                    <h4 class="text-sm font-medium mb-2">Keterangan</h4>
+                    <p class="text-sm bg-muted/50 p-4 rounded-md whitespace-pre-wrap">{detail.notes}</p>
+                </div>
+            {/if}
         </div>
     {/if}
 </div>

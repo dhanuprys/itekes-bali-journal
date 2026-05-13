@@ -17,8 +17,9 @@
     let titleLabel = $derived(isResearch ? 'Judul Penelitian' : 'Judul Pengabdian');
     let leaderLabel = $derived(isResearch ? 'Nama Ketua Peneliti' : 'Nama Ketua Pengabdi');
 
-    // Resolve targets based on type
+    // Resolve targets and schemas based on type
     let targets = $derived(data.targets || []);
+    let schemas = $derived(data.schemas || []);
 
     function addMember(e: Event) {
         e.preventDefault();
@@ -75,6 +76,38 @@
                                 <Field.Error>{form.errors?.study_program_id}</Field.Error>
                             {/if}
                         </Field.Field>
+                        <Field.Field>
+                            <Field.Label for="schema">Skema</Field.Label>
+                            {#if isResearch}
+                                <Select.Root type="single" bind:value={form.research_schema_id} name="research_schema_id">
+                                    <Select.Trigger class="w-full">
+                                        {schemas.find((s: any) => s.id === form.research_schema_id)?.title ?? 'Pilih Skema'}
+                                    </Select.Trigger>
+                                    <Select.Content>
+                                        {#each schemas as schema (schema.id)}
+                                            <Select.Item value={schema.id} label={schema.title}>{schema.title}</Select.Item>
+                                        {/each}
+                                    </Select.Content>
+                                </Select.Root>
+                                {#if form.errors?.research_schema_id}
+                                    <Field.Error>{form.errors?.research_schema_id}</Field.Error>
+                                {/if}
+                            {:else}
+                                <Select.Root type="single" bind:value={form.community_service_schema_id} name="community_service_schema_id">
+                                    <Select.Trigger class="w-full">
+                                        {schemas.find((s: any) => s.id === form.community_service_schema_id)?.title ?? 'Pilih Skema'}
+                                    </Select.Trigger>
+                                    <Select.Content>
+                                        {#each schemas as schema (schema.id)}
+                                            <Select.Item value={schema.id} label={schema.title}>{schema.title}</Select.Item>
+                                        {/each}
+                                    </Select.Content>
+                                </Select.Root>
+                                {#if form.errors?.community_service_schema_id}
+                                    <Field.Error>{form.errors?.community_service_schema_id}</Field.Error>
+                                {/if}
+                            {/if}
+                        </Field.Field>
                     </div>
                 </Field.Group>
             </Field.Set>
@@ -91,6 +124,22 @@
                             <Input id="leader_name" bind:value={form.leader_name} placeholder="Nama Lengkap dengan Gelar" />
                             {#if form.errors?.leader_name}
                                 <Field.Error>{form.errors?.leader_name}</Field.Error>
+                            {/if}
+                        </Field.Field>
+
+                        <Field.Field>
+                            <Field.Label for="leader_nidn">NIDN Ketua (Opsional)</Field.Label>
+                            <Input id="leader_nidn" bind:value={form.leader_nidn} placeholder="NIDN Ketua" />
+                            {#if form.errors?.leader_nidn}
+                                <Field.Error>{form.errors?.leader_nidn}</Field.Error>
+                            {/if}
+                        </Field.Field>
+
+                        <Field.Field>
+                            <Field.Label for="leader_nuptk">NUPTK Ketua</Field.Label>
+                            <Input id="leader_nuptk" bind:value={form.leader_nuptk} placeholder="NUPTK Ketua" />
+                            {#if form.errors?.leader_nuptk}
+                                <Field.Error>{form.errors?.leader_nuptk}</Field.Error>
                             {/if}
                         </Field.Field>
                     </div>

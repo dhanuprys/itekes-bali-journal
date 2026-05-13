@@ -4,6 +4,7 @@
     import { type BreadcrumbItem } from '@/types';
     import Heading from '@/components/Heading.svelte';
     import { useForm } from '@inertiajs/svelte';
+    import { untrack } from 'svelte';
     import { Button } from '@/components/ui/button';
     import * as Alert from '@/components/ui/alert';
     import ProposalForm from '@/components/review-request/ProposalForm.svelte';
@@ -11,7 +12,7 @@
     import { uploadState } from '@/stores/upload-state.svelte';
     import { toast } from 'svelte-sonner';
 
-    let { submission, detail, studyPrograms = [], researchTargets = [] } = $props();
+    let { submission, detail, studyPrograms = [], researchTargets = [], schemas = [] } = $props();
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Permintaan Review', href: '#' },
@@ -20,17 +21,19 @@
         { title: 'Revisi', href: '#' },
     ];
 
-    const form = useForm({
+    const form = useForm(untrack(() => ({
         leader_name: detail.leader_name || '',
         leader_nidn: detail.leader_nidn || '',
+        leader_nuptk: detail.leader_nuptk || '',
         study_program_id: detail.study_program_id || '',
+        research_schema_id: detail.research_schema_id || '',
         title: detail.title || '',
         budget: detail.budget || null,
 
         research_target_id: detail.research_target_id || '',
         proposal_path: detail.proposal_path || '',
         members: detail.members ? detail.members.map((m: any) => ({ name: m.name })) : [],
-    });
+    })));
 
     function submit() {
         if (uploadState.isUploading) return;
@@ -87,6 +90,7 @@
                 data={{
                     studyPrograms,
                     targets: researchTargets,
+                    schemas,
                 }}
             />
 

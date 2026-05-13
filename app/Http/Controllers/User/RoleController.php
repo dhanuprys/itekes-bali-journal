@@ -66,6 +66,11 @@ class RoleController extends Controller
             $role->syncPermissions($validated['permissions']);
         }
 
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Membuat peran (role) baru: {$validated['name']}"
+        ]);
+
         return redirect()->back()->with('success', 'Role created successfully.');
     }
 
@@ -96,6 +101,11 @@ class RoleController extends Controller
             $role->syncPermissions($validated['permissions']);
         }
 
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Memperbarui peran (role): {$validated['name']}"
+        ]);
+
         return redirect()->back()->with('success', 'Role updated successfully.');
     }
 
@@ -105,7 +115,13 @@ class RoleController extends Controller
             return redirect()->back()->with('error', 'Cannot delete a preserved role.');
         }
 
+        $name = $role->name;
         $role->delete();
+
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Menghapus peran (role): {$name}"
+        ]);
 
         return redirect()->back()->with('success', 'Role deleted successfully.');
     }

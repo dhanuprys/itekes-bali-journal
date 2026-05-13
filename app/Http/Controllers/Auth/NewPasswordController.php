@@ -52,6 +52,11 @@ class NewPasswordController extends Controller
                 ])->save();
 
                 event(new PasswordReset($user));
+
+                \App\Models\UserLog::create([
+                    'user_id' => $user->id,
+                    'comment' => "Mengatur ulang kata sandi melalui tautan email"
+                ]);
             }
         );
 

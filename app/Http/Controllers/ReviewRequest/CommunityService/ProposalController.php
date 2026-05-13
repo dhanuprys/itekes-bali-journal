@@ -65,6 +65,7 @@ class ProposalController extends Controller
         return Inertia::render('review-request/community-service/proposal/Create', [
             'studyPrograms' => StudyProgram::all(),
             'communityServiceTargets' => CommunityServiceTarget::all(),
+            'schemas' => CommunityServiceSchema::all(),
         ]);
     }
 
@@ -83,6 +84,9 @@ class ProposalController extends Controller
             'proposal_path' => 'required|string|max:2048',
             'members' => 'nullable|array',
             'members.*.name' => 'required|string|max:255',
+            'community_service_schema_id' => 'required|exists:community_service_schema,id',
+            'leader_nidn' => 'nullable|string',
+            'leader_nuptk' => 'required|string|max:50',
         ]);
 
         DB::transaction(function () use ($validated, $request) {
@@ -104,6 +108,9 @@ class ProposalController extends Controller
                 'budget' => $validated['budget'] ?? 0,
                 'community_service_target_id' => $validated['community_service_target_id'],
                 'proposal_path' => $path,
+                'community_service_schema_id' => $validated['community_service_schema_id'],
+                'leader_nidn' => $validated['leader_nidn'] ?? null,
+                'leader_nuptk' => $validated['leader_nuptk'],
             ]);
 
             if (!empty($validated['members'])) {
@@ -126,6 +133,11 @@ class ProposalController extends Controller
                 )
             );
         });
+
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Mengajukan proposal pengabdian baru: {$validated['title']}"
+        ]);
 
         return redirect()->route('apply.community_service.index')->with('success', 'Proposal submitted successfully.');
     }
@@ -163,7 +175,7 @@ class ProposalController extends Controller
             'detail' => $submission->latestDetail,
             'studyPrograms' => StudyProgram::all(),
             'communityServiceTargets' => CommunityServiceTarget::all(),
-            'communityServiceSchemas' => CommunityServiceSchema::all(), // Pass schemes
+            'schemas' => CommunityServiceSchema::all(),
         ]);
     }
 
@@ -180,6 +192,9 @@ class ProposalController extends Controller
             'proposal_path' => 'required|string|max:2048',
             'members' => 'nullable|array',
             'members.*.name' => 'required|string|max:255',
+            'community_service_schema_id' => 'required|exists:community_service_schema,id',
+            'leader_nidn' => 'nullable|string',
+            'leader_nuptk' => 'required|string|max:50',
         ]);
 
         DB::transaction(function () use ($validated, $request, $submission) {
@@ -196,6 +211,9 @@ class ProposalController extends Controller
                 'budget' => $validated['budget'] ?? 0,
                 'community_service_target_id' => $validated['community_service_target_id'],
                 'proposal_path' => $path,
+                'community_service_schema_id' => $validated['community_service_schema_id'],
+                'leader_nidn' => $validated['leader_nidn'] ?? null,
+                'leader_nuptk' => $validated['leader_nuptk'],
             ]);
 
             if (!empty($validated['members'])) {
@@ -226,6 +244,11 @@ class ProposalController extends Controller
                 );
             }
         });
+
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Mengajukan revisi proposal pengabdian: {$validated['title']}"
+        ]);
 
         return redirect()->route('apply.community_service.index')->with('success', 'Proposal revision submitted.');
     }

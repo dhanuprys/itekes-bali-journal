@@ -95,6 +95,12 @@ class ResearchController extends Controller
             }
         });
 
+        $title = $submission->latestDetail->title ?? 'Judul Tidak Tersedia';
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Menugaskan reviewer untuk proposal penelitian: {$title}"
+        ]);
+
         return back()->with('success', 'Reviewers assigned successfully.');
     }
 }

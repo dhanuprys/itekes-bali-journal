@@ -7,6 +7,7 @@
     import RevisionCommentSheet from '@/components/review-request/RevisionCommentSheet.svelte';
     import * as Alert from '@/components/ui/alert';
     import { useForm } from '@inertiajs/svelte';
+    import { untrack } from 'svelte';
     import { Button } from '@/components/ui/button';
     import { toast } from 'svelte-sonner';
     import { uploadState } from '@/stores/upload-state.svelte';
@@ -20,10 +21,10 @@
         { title: 'Revisi', href: '#' },
     ];
 
-    const form = useForm({
+    const form = useForm(untrack(() => ({
         submission_id: submission.id,
         final_report_path: detail.final_report_path || '',
-    });
+    })));
 
     function submit() {
         if (uploadState.isUploading) return;

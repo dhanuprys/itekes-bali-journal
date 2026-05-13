@@ -26,10 +26,13 @@ class ResearchSubmissionDetail extends Model
         'research_schema_id',
         'final_leader_name',
         'leader_nidn',
+        'leader_nuptk',
         'final_title',
         'progress_report_path',
         'final_report_path',
-        'manuscript_path'
+        'manuscript_path',
+        'supplementary_path',
+        'notes'
     ];
 
     public function submission(): BelongsTo

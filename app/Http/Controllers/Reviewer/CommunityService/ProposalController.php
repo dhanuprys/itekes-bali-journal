@@ -89,6 +89,12 @@ class ProposalController extends Controller
             'content' => $request->input('content'),
         ]);
 
+        $title = $detail->title ?? 'Proposal Pengabdian';
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Memberikan komentar pada proposal pengabdian: {$title}"
+        ]);
+
         return back()->with('success', 'Komentar terkirim.');
     }
 
@@ -139,6 +145,12 @@ class ProposalController extends Controller
             ),
             true
         );
+
+        $title = $submission->latestDetail->title ?? 'Proposal Pengabdian';
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Mengubah status proposal pengabdian '{$title}' menjadi '{$request->input('status')}'"
+        ]);
 
         return redirect()->route('review.community_service.index')->with('success', 'Status berhasil diperbarui.');
     }

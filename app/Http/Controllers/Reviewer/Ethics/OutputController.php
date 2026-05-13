@@ -26,10 +26,28 @@ class OutputController extends Controller
         $this->uploadService = $uploadService;
     }
 
+    public function waitForOutput()
+    {
+        $submissions = EthicalClearanceSubmission::with(['latestDetail.files', 'latestOutput', 'user'])
+            ->where('stage', EthicsReviewStage::OUTPUT->value)
+            ->whereDoesntHave('outputs', function ($q) {
+                $q->whereNotNull('document_path');
+            })
+            ->latest()
+            ->paginate(10);
+
+        return Inertia::render('reviewer/ethics/output/WaitForOutput', [
+            'submissions' => $submissions,
+        ]);
+    }
+
     public function index()
     {
         $submissions = EthicalClearanceSubmission::with(['latestDetail.files', 'latestOutput', 'user'])
             ->where('stage', EthicsReviewStage::OUTPUT->value)
+            ->whereHas('outputs', function ($q) {
+                $q->whereNotNull('document_path');
+            })
             ->latest()
             ->paginate(10);
 
@@ -77,6 +95,11 @@ class OutputController extends Controller
             'content' => $request->input('content'),
         ]);
 
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Memberikan komentar pada penerbitan output etik kategori {$submission->category}"
+        ]);
+
         return back()->with('success', 'Komentar terkirim.');
     }
 
@@ -111,6 +134,11 @@ class OutputController extends Controller
             ),
             true
         );
+
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Menerbitkan dokumen Ethical Clearance kategori {$submission->category}"
+        ]);
 
         return redirect()->route('review.ethics.wait_for_output.index')->with('success', 'Dokumen Ethical Clearance berhasil diunggah.');
     }

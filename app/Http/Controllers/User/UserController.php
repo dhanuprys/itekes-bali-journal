@@ -74,6 +74,11 @@ class UserController extends Controller
             $user->syncRoles($validated['roles']);
         }
 
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Membuat pengguna baru: {$validated['name']} ({$validated['email']})"
+        ]);
+
         return redirect()->back()->with('success', 'User created successfully.');
     }
 
@@ -124,6 +129,11 @@ class UserController extends Controller
             $user->syncRoles($validated['roles']);
         }
 
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Memperbarui pengguna: {$validated['name']} ({$validated['email']})"
+        ]);
+
         return redirect()->back()->with('success', 'User updated successfully.');
     }
 
@@ -133,7 +143,13 @@ class UserController extends Controller
             return redirect()->back()->with('error', 'You cannot delete yourself.');
         }
 
+        $name = $user->name;
         $user->delete();
+
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Menghapus pengguna: {$name}"
+        ]);
 
         return redirect()->back()->with('success', 'User deleted successfully.');
     }

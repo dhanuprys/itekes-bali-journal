@@ -88,6 +88,12 @@ class FinalReportController extends Controller
             'content' => $request->input('content'),
         ]);
 
+        $title = $detail->title ?? 'Laporan Akhir Pengabdian';
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Memberikan komentar pada laporan akhir pengabdian: {$title}"
+        ]);
+
         return back()->with('success', 'Komentar terkirim.');
     }
 
@@ -132,6 +138,12 @@ class FinalReportController extends Controller
             ),
             true
         );
+
+        $title = $submission->latestDetail->title ?? 'Laporan Akhir Pengabdian';
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Mengubah status laporan akhir pengabdian '{$title}' menjadi '{$request->input('status')}'"
+        ]);
 
         return redirect()->route('review.community_service.index')->with('success', 'Status berhasil diperbarui.');
     }

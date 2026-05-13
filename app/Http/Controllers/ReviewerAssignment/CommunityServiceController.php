@@ -95,6 +95,12 @@ class CommunityServiceController extends Controller
             }
         });
 
+        $title = $submission->latestDetail->title ?? 'Judul Tidak Tersedia';
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Menugaskan reviewer untuk proposal pengabdian: {$title}"
+        ]);
+
         return back()->with('success', 'Reviewers assigned successfully.');
     }
 }

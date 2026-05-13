@@ -10,7 +10,7 @@
     import { uploadState } from '@/stores/upload-state.svelte';
     import { toast } from 'svelte-sonner';
 
-    let { studyPrograms = [], communityServiceTargets = [] } = $props();
+    let { studyPrograms = [], communityServiceTargets = [], schemas = [] } = $props();
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Permintaan Review', href: '#' },
@@ -22,7 +22,9 @@
     const form = useForm({
         leader_name: '',
         leader_nidn: '',
+        leader_nuptk: '',
         study_program_id: '',
+        community_service_schema_id: '',
         title: '',
         budget: null,
 
@@ -69,6 +71,7 @@
                 data={{
                     studyPrograms,
                     targets: communityServiceTargets,
+                    schemas,
                 }}
             />
 

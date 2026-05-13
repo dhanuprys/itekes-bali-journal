@@ -42,6 +42,11 @@ class ResearchTargetController extends Controller
 
         \App\Models\ResearchTarget::create($validated);
 
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Membuat Target Penelitian baru: {$validated['title']}"
+        ]);
+
         return redirect()->back()->with('success', 'Research Target created successfully.');
     }
 
@@ -54,12 +59,23 @@ class ResearchTargetController extends Controller
 
         $researchTarget->update($validated);
 
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Memperbarui Target Penelitian menjadi: {$validated['title']}"
+        ]);
+
         return redirect()->back()->with('success', 'Research Target updated successfully.');
     }
 
     public function destroy(\App\Models\ResearchTarget $researchTarget)
     {
+        $title = $researchTarget->title;
         $researchTarget->delete();
+
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Menghapus Target Penelitian: {$title}"
+        ]);
 
         return redirect()->back()->with('success', 'Research Target deleted successfully.');
     }

@@ -35,6 +35,11 @@ class PasswordController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Memperbarui kata sandi pengguna"
+        ]);
+
         return back();
     }
 }

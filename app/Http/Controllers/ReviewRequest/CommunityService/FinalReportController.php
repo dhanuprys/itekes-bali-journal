@@ -54,6 +54,9 @@ class FinalReportController extends Controller
         $validated = $request->validate([
             'submission_id' => 'required|exists:community_service_submissions,id',
             'final_report_path' => 'required|string',
+            'manuscript_path' => 'required|string',
+            'supplementary_path' => 'required|string',
+            'notes' => 'required|string',
         ]);
 
         $submission = CommunityServiceSubmission::where('user_id', Auth::id())
@@ -65,6 +68,8 @@ class FinalReportController extends Controller
 
             // Mark files as used
             $uploadService->markAsUsed($validated['final_report_path'], \App\Enums\StorageUploadAction::CS_FINAL_REPORT->name);
+            $uploadService->markAsUsed($validated['manuscript_path'], \App\Enums\StorageUploadAction::CS_MANUSCRIPT->name);
+            $uploadService->markAsUsed($validated['supplementary_path'], \App\Enums\StorageUploadAction::CS_SUPPLEMENTARY->name);
 
             $detail = CommunityServiceSubmissionDetail::create([
                 'community_service_submission_id' => $submission->id,
@@ -79,13 +84,16 @@ class FinalReportController extends Controller
                 
                 'community_service_schema_id' => $latestDetail->community_service_schema_id,
                 'leader_nidn' => $latestDetail->leader_nidn,
+                'leader_nuptk' => $latestDetail->leader_nuptk,
                 'final_leader_name' => $latestDetail->final_leader_name,
                 'final_title' => $latestDetail->final_title,
                 'progress_report_path' => $latestDetail->progress_report_path,
-                'manuscript_path' => $latestDetail->manuscript_path,
 
                 // Updated fields
                 'final_report_path' => $validated['final_report_path'],
+                'manuscript_path' => $validated['manuscript_path'],
+                'supplementary_path' => $validated['supplementary_path'],
+                'notes' => $validated['notes'],
             ]);
 
             // Replicate members
@@ -117,6 +125,11 @@ class FinalReportController extends Controller
                 );
             }
         });
+
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Mengunggah laporan akhir pengabdian: {$latestDetail->final_title}"
+        ]);
 
         return redirect()->route('apply.community_service.final_report.index')
             ->with('success', 'Laporan akhir berhasil dikirim.');
@@ -165,6 +178,9 @@ class FinalReportController extends Controller
         $validated = $request->validate([
             'submission_id' => 'required|exists:community_service_submissions,id',
             'final_report_path' => 'required|string',
+            'manuscript_path' => 'required|string',
+            'supplementary_path' => 'required|string',
+            'notes' => 'required|string',
         ]);
 
         DB::transaction(function () use ($validated, $request, $submission, $uploadService) {
@@ -172,6 +188,8 @@ class FinalReportController extends Controller
 
             // Mark files as used
             $uploadService->markAsUsed($validated['final_report_path'], \App\Enums\StorageUploadAction::CS_FINAL_REPORT->name);
+            $uploadService->markAsUsed($validated['manuscript_path'], \App\Enums\StorageUploadAction::CS_MANUSCRIPT->name);
+            $uploadService->markAsUsed($validated['supplementary_path'], \App\Enums\StorageUploadAction::CS_SUPPLEMENTARY->name);
 
             $detail = CommunityServiceSubmissionDetail::create([
                 'community_service_submission_id' => $submission->id,
@@ -186,13 +204,16 @@ class FinalReportController extends Controller
                 
                 'community_service_schema_id' => $latestDetail->community_service_schema_id,
                 'leader_nidn' => $latestDetail->leader_nidn,
+                'leader_nuptk' => $latestDetail->leader_nuptk,
                 'final_leader_name' => $latestDetail->final_leader_name,
                 'final_title' => $latestDetail->final_title,
                 'progress_report_path' => $latestDetail->progress_report_path,
-                'manuscript_path' => $latestDetail->manuscript_path,
 
                 // Updated fields
                 'final_report_path' => $validated['final_report_path'],
+                'manuscript_path' => $validated['manuscript_path'],
+                'supplementary_path' => $validated['supplementary_path'],
+                'notes' => $validated['notes'],
             ]);
 
             // Replicate members
@@ -224,6 +245,11 @@ class FinalReportController extends Controller
                 );
             }
         });
+
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Mengajukan revisi laporan akhir pengabdian: {$latestDetail->final_title}"
+        ]);
 
         return redirect()->route('apply.community_service.final_report.index')
             ->with('success', 'Revisi laporan akhir berhasil dikirim.');

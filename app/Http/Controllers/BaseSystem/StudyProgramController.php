@@ -41,6 +41,11 @@ class StudyProgramController extends Controller
 
         \App\Models\StudyProgram::create($validated);
 
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Membuat Program Studi baru: {$validated['name']}"
+        ]);
+
         return redirect()->back()->with('success', 'Study Program created successfully.');
     }
 
@@ -52,12 +57,23 @@ class StudyProgramController extends Controller
 
         $studyProgram->update($validated);
 
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Memperbarui Program Studi menjadi: {$validated['name']}"
+        ]);
+
         return redirect()->back()->with('success', 'Study Program updated successfully.');
     }
 
     public function destroy(\App\Models\StudyProgram $studyProgram)
     {
+        $name = $studyProgram->name;
         $studyProgram->delete();
+
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Menghapus Program Studi: {$name}"
+        ]);
 
         return redirect()->back()->with('success', 'Study Program deleted successfully.');
     }

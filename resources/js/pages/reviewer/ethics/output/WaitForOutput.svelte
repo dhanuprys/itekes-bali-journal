@@ -15,7 +15,7 @@
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Reviewer Area', href: '#' },
         { title: 'Etik', href: route('review.ethics.index') },
-        { title: 'Output', href: '#' },
+        { title: 'Dokumen Diproses', href: '#' },
     ];
 
     function getCategoryLabel(category: string) {
@@ -24,20 +24,20 @@
 </script>
 
 <svelte:head>
-    <title>Riwayat Output Etik - Reviewer</title>
+    <title>Dokumen Diproses Etik - Reviewer</title>
 </svelte:head>
 
 <AppLayout {breadcrumbs}>
     <LayoutComposer>
         {#snippet header()}
-            <Heading title="Riwayat Penerbitan EC" description="Daftar pengajuan etik yang telah diterbitkan dokumen Ethical Clearance-nya." />
+            <Heading title="Dokumen Diproses" description="Pengajuan etik yang menunggu penerbitan dokumen Ethical Clearance." />
         {/snippet}
 
         <div class="space-y-4">
             <Card.Root>
                 <Card.Content class="pt-6">
                     {#if submissions.data.length === 0}
-                        <div class="text-center py-10 text-muted-foreground">Belum ada dokumen EC yang diterbitkan.</div>
+                        <div class="text-center py-10 text-muted-foreground">Tidak ada pengajuan yang menunggu penerbitan EC.</div>
                     {:else}
                         <Table.Root>
                             <Table.Header>
@@ -65,8 +65,8 @@
                                         </Table.Cell>
                                         <Table.Cell>{new Date(submission.created_at).toLocaleDateString('id-ID')}</Table.Cell>
                                         <Table.Cell class="text-right">
-                                            <Button variant="outline" size="sm" onclick={() => router.visit(route('review.ethics.output.show', submission.id))}>
-                                                Lihat Dokumen
+                                            <Button variant="outline" size="sm" onclick={() => router.visit(route('review.ethics.wait_for_output.show', submission.id))}>
+                                                Upload EC
                                             </Button>
                                         </Table.Cell>
                                     </Table.Row>

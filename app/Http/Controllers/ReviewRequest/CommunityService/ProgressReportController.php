@@ -45,7 +45,6 @@ class ProgressReportController extends Controller
         return Inertia::render('review-request/community-service/progress-report/Create', [
             'submission' => $submission,
             'detail' => $submission->latestDetail,
-            'schemas' => \App\Models\CommunityServiceSchema::all(),
         ]);
     }
 
@@ -53,12 +52,9 @@ class ProgressReportController extends Controller
     {
         $validated = $request->validate([
             'submission_id' => 'required|exists:community_service_submissions,id',
-            'leader_nidn' => 'required|string|max:50',
             'final_leader_name' => 'required|string|max:255',
             'final_title' => 'required|string',
-            'schema_id' => 'required|exists:community_service_schema,id', // Added schema validation
             'progress_report_path' => 'required|string',
-            'manuscript_path' => 'required|string',
             // Members removed from validation as they are not updated
         ]);
 
@@ -71,7 +67,6 @@ class ProgressReportController extends Controller
 
             // Mark files as used
             $uploadService->markAsUsed($validated['progress_report_path'], \App\Enums\StorageUploadAction::CS_PROGRESS_REPORT->name);
-            $uploadService->markAsUsed($validated['manuscript_path'], \App\Enums\StorageUploadAction::CS_MANUSCRIPT->name);
 
             $detail = CommunityServiceSubmissionDetail::create([
                 'community_service_submission_id' => $submission->id,
@@ -83,14 +78,14 @@ class ProgressReportController extends Controller
                 'proposal_path' => $latestDetail->proposal_path,
                 'leader_name' => $latestDetail->leader_name,
                 'title' => $latestDetail->title,
+                'community_service_schema_id' => $latestDetail->community_service_schema_id,
+                'leader_nidn' => $latestDetail->leader_nidn,
+                'leader_nuptk' => $latestDetail->leader_nuptk,
 
                 // Updated fields
-                'community_service_schema_id' => $validated['schema_id'], // Updated from input
-                'leader_nidn' => $validated['leader_nidn'],
                 'final_leader_name' => $validated['final_leader_name'],
                 'final_title' => $validated['final_title'],
                 'progress_report_path' => $validated['progress_report_path'],
-                'manuscript_path' => $validated['manuscript_path'],
             ]);
 
             // Replicate members from previous detail (No update allowed)
@@ -122,6 +117,11 @@ class ProgressReportController extends Controller
                 );
             }
         });
+
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Mengunggah laporan kemajuan pengabdian: {$validated['final_title']}"
+        ]);
 
         return redirect()->route('apply.community_service.progress_report.index')
             ->with('success', 'Laporan kemajuan berhasil dikirim.');
@@ -158,7 +158,6 @@ class ProgressReportController extends Controller
         return Inertia::render('review-request/community-service/progress-report/Edit', [
             'submission' => $submission,
             'detail' => $submission->latestDetail,
-            'schemas' => \App\Models\CommunityServiceSchema::all(),
         ]);
     }
 
@@ -168,12 +167,9 @@ class ProgressReportController extends Controller
 
         $validated = $request->validate([
             'submission_id' => 'required|exists:community_service_submissions,id',
-            'leader_nidn' => 'required|string|max:50',
             'final_leader_name' => 'required|string|max:255',
             'final_title' => 'required|string',
-            'schema_id' => 'required|exists:community_service_schema,id',
             'progress_report_path' => 'required|string',
-            'manuscript_path' => 'required|string',
         ]);
         // NOTE: The user manually changed schemas to `research_schema` and `community_service_schema` validation rule in previous turn.
         // Wait, the user changed schema validation table name.
@@ -185,7 +181,6 @@ class ProgressReportController extends Controller
 
             // Mark files as used
             $uploadService->markAsUsed($validated['progress_report_path'], \App\Enums\StorageUploadAction::CS_PROGRESS_REPORT->name);
-            $uploadService->markAsUsed($validated['manuscript_path'], \App\Enums\StorageUploadAction::CS_MANUSCRIPT->name);
 
             $detail = CommunityServiceSubmissionDetail::create([
                 'community_service_submission_id' => $submission->id,
@@ -197,14 +192,14 @@ class ProgressReportController extends Controller
                 'proposal_path' => $latestDetail->proposal_path,
                 'leader_name' => $latestDetail->leader_name,
                 'title' => $latestDetail->title,
+                'community_service_schema_id' => $latestDetail->community_service_schema_id,
+                'leader_nidn' => $latestDetail->leader_nidn,
+                'leader_nuptk' => $latestDetail->leader_nuptk,
 
                 // Updated fields
-                'community_service_schema_id' => $validated['schema_id'],
-                'leader_nidn' => $validated['leader_nidn'],
                 'final_leader_name' => $validated['final_leader_name'],
                 'final_title' => $validated['final_title'],
                 'progress_report_path' => $validated['progress_report_path'],
-                'manuscript_path' => $validated['manuscript_path'],
             ]);
 
             // Replicate members from previous detail
@@ -236,6 +231,11 @@ class ProgressReportController extends Controller
                 );
             }
         });
+
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Mengajukan revisi laporan kemajuan pengabdian: {$validated['final_title']}"
+        ]);
 
         return redirect()->route('apply.community_service.progress_report.index')
             ->with('success', 'Revisi laporan kemajuan berhasil dikirim.');

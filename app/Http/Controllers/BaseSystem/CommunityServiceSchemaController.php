@@ -42,6 +42,11 @@ class CommunityServiceSchemaController extends Controller
 
         \App\Models\CommunityServiceSchema::create($validated);
 
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Membuat Skema Pengabdian Masyarakat baru: {$validated['title']}"
+        ]);
+
         return redirect()->back()->with('success', 'Community Service Schema created successfully.');
     }
 
@@ -54,12 +59,23 @@ class CommunityServiceSchemaController extends Controller
 
         $communityServiceSchema->update($validated);
 
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Memperbarui Skema Pengabdian Masyarakat menjadi: {$validated['title']}"
+        ]);
+
         return redirect()->back()->with('success', 'Community Service Schema updated successfully.');
     }
 
     public function destroy(\App\Models\CommunityServiceSchema $communityServiceSchema)
     {
+        $title = $communityServiceSchema->title;
         $communityServiceSchema->delete();
+
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Menghapus Skema Pengabdian Masyarakat: {$title}"
+        ]);
 
         return redirect()->back()->with('success', 'Community Service Schema deleted successfully.');
     }

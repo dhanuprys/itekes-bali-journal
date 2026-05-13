@@ -5,6 +5,7 @@
     import Heading from '@/components/Heading.svelte';
     import FinalReportForm from '@/components/review-request/FinalReportForm.svelte';
     import { useForm } from '@inertiajs/svelte';
+    import { untrack } from 'svelte';
     import { Button } from '@/components/ui/button';
     import { toast } from 'svelte-sonner';
     import { uploadState } from '@/stores/upload-state.svelte';
@@ -18,10 +19,10 @@
         { title: 'Buat Laporan', href: '#' },
     ];
 
-    const form = useForm({
+    const form = useForm(untrack(() => ({
         submission_id: submission.id,
         final_report_path: '',
-    });
+    })));
 
     function submit() {
         $form.post(route('apply.research.final_report.store'), {

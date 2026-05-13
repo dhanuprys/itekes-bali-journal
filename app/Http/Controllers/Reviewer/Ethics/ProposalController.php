@@ -76,6 +76,11 @@ class ProposalController extends Controller
             'content' => $request->input('content'),
         ]);
 
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Memberikan komentar pada proposal etik kategori {$submission->category}"
+        ]);
+
         return back()->with('success', 'Komentar terkirim.');
     }
 
@@ -107,10 +112,29 @@ class ProposalController extends Controller
 
         $isApproved = $request->input('status') === 'approved';
 
-        $submission->update([
-            'status' => $isApproved ? EthicsStatus::APPROVED->value : $newStatus,
-            'stage' => $isApproved ? EthicsReviewStage::OUTPUT->value : $submission->stage,
-        ]);
+        \Illuminate\Support\Facades\DB::transaction(function () use ($submission, $isApproved, $newStatus) {
+            if ($isApproved) {
+                // Lock the table to prevent concurrent increments. 
+                // Using orderBy desc -> first instead of max() because PostgreSQL doesn't support FOR UPDATE with aggregates.
+                $latestSubmission = EthicalClearanceSubmission::lockForUpdate()
+                    ->whereNotNull('document_number')
+                    ->orderBy('document_number', 'desc')
+                    ->first();
+                
+                $maxNumber = $latestSubmission ? $latestSubmission->document_number : 0;
+
+                $submission->update([
+                    'status' => EthicsStatus::APPROVED->value,
+                    'stage'  => EthicsReviewStage::OUTPUT->value,
+                    'document_number' => $maxNumber + 1,
+                    'document_date' => now(),
+                ]);
+            } else {
+                $submission->update([
+                    'status' => $newStatus,
+                ]);
+            }
+        });
 
         // Notify applicant
         $statusLabel = strtoupper(str_replace('_', ' ', $request->input('status')));
@@ -125,6 +149,11 @@ class ProposalController extends Controller
             ),
             true
         );
+
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Mengubah status proposal etik kategori {$submission->category} menjadi '{$request->input('status')}'"
+        ]);
 
         return redirect()->route('review.ethics.index')->with('success', 'Status berhasil diperbarui.');
     }

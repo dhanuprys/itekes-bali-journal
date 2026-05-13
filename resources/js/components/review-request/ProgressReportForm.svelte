@@ -7,7 +7,7 @@
     import * as Select from '@/components/ui/select';
     import Label from '../ui/label/label.svelte';
 
-    let { form = $bindable(), data, type = 'research' } = $props();
+    let { form = $bindable(), data, type = 'research', mode = 'create' } = $props();
 
     // Derived states
     let isResearch = $derived(type === 'research');
@@ -37,37 +37,10 @@
                         </Field.Field>
 
                         <Field.Field>
-                            <Field.Label for="leader_nidn">NIDN/NIP Ketua</Field.Label>
-                            <Input id="leader_nidn" bind:value={form.leader_nidn} placeholder="Nomor Induk" />
-                            {#if form.errors?.leader_nidn}
-                                <Field.Error>{form.errors?.leader_nidn}</Field.Error>
-                            {/if}
-                        </Field.Field>
-                    </div>
-
-                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                        <Field.Field>
                             <Field.Label for="final_leader_name">{leaderLabel}</Field.Label>
                             <Input id="final_leader_name" bind:value={form.final_leader_name} placeholder="Nama Lengkap dengan Gelar" />
                             {#if form.errors?.final_leader_name}
                                 <Field.Error>{form.errors?.final_leader_name}</Field.Error>
-                            {/if}
-                        </Field.Field>
-
-                        <Field.Field>
-                            <Field.Label for="schema_id">Skema</Field.Label>
-                            <Select.Root type="single" bind:value={form.schema_id} name="schema_id">
-                                <Select.Trigger class="w-full">
-                                    {data.schemas.find((s: any) => s.id === form.schema_id)?.title ?? 'Pilih Skema'}
-                                </Select.Trigger>
-                                <Select.Content>
-                                    {#each data.schemas as schema (schema.id)}
-                                        <Select.Item value={schema.id} label={schema.title}>{schema.title}</Select.Item>
-                                    {/each}
-                                </Select.Content>
-                            </Select.Root>
-                            {#if form.errors?.schema_id}
-                                <Field.Error>{form.errors?.schema_id}</Field.Error>
                             {/if}
                         </Field.Field>
                     </div>
@@ -91,16 +64,10 @@
                             {#if form.errors?.progress_report_path}
                                 <p class="text-sm text-destructive mt-1">{form.errors.progress_report_path}</p>
                             {/if}
+                            {#if mode === 'revise'}
+                                <p class="text-[0.8rem] text-muted-foreground mt-1">Biarkan kosong jika tidak mengubah file.</p>
+                            {/if}
                         </div>
-                    </Field.Field>
-
-                    <Field.Field>
-                        <FileUpload
-                            label="Naskah Publikasi / Manuskrip (PDF/DOC, Max 4MB)"
-                            action={isResearch ? StorageUploadAction.RESEARCH_MANUSCRIPT : StorageUploadAction.CS_MANUSCRIPT}
-                            bind:value={form.manuscript_path}
-                            error={form.errors?.manuscript_path}
-                        />
                     </Field.Field>
                 </Field.Group>
             </Field.Set>

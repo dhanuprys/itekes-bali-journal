@@ -41,6 +41,11 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
+        \App\Models\UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Memperbarui profil pengguna"
+        ]);
+
         return to_route('profile.edit');
     }
 
@@ -58,6 +63,11 @@ class ProfileController extends Controller
         Auth::logout();
 
         $user->delete();
+
+        \App\Models\UserLog::create([
+            'user_id' => $user->id,
+            'comment' => "Menghapus akun pengguna"
+        ]);
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

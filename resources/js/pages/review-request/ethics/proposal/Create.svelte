@@ -8,6 +8,8 @@
     import * as Card from '@/components/ui/card';
     import * as RadioGroup from '@/components/ui/radio-group';
     import Label from '@/components/ui/label/label.svelte';
+    import { Switch } from '@/components/ui/switch';
+    import { Input } from '@/components/ui/input';
     import FileUpload from '@/components/FileUpload.svelte';
     import { StorageUploadAction } from '@/data/storage-upload';
     import { toast } from 'svelte-sonner';
@@ -175,6 +177,13 @@
         uploadedFiles[key] = { file_path: filePath, original_name: originalName };
     }
 
+    // Payment State
+    let isStudent = $state(false);
+    let studentNim = $state('');
+    let waliName = $state('');
+    let paymentProofPath = $state('');
+    let paymentProofName = $state('');
+
     // Check if all required templates are uploaded
     let allRequiredUploaded = $derived(() => {
         if (!templates.length) return false;
@@ -188,6 +197,10 @@
     const form = useForm({
         category: '',
         files: [] as any[],
+        is_student: false,
+        student_nim: '',
+        wali_name: '',
+        payment_proof_path: '',
     });
 
     function submit() {
@@ -200,6 +213,14 @@
             toast.error('Silakan unggah semua dokumen yang wajib (bertanda *).');
             return;
         }
+        if (isStudent && (!studentNim || !waliName)) {
+            toast.error('Silakan lengkapi NIM dan Nama Wali.');
+            return;
+        }
+        if (!paymentProofPath) {
+            toast.error('Silakan unggah Bukti Transfer.');
+            return;
+        }
 
         const filesPayload = Object.entries(uploadedFiles).map(([key, val]) => ({
             template_key: key,
@@ -209,6 +230,10 @@
 
         $form.category = selectedCategory;
         $form.files = filesPayload;
+        $form.is_student = isStudent;
+        $form.student_nim = studentNim;
+        $form.wali_name = waliName;
+        $form.payment_proof_path = paymentProofPath;
 
         $form.post(route('apply.ethics.proposal.store'), {
             onSuccess: () => {
@@ -382,12 +407,66 @@
                     </Card.Content>
                 </Card.Root>
 
+                <!-- Step 4: Payment -->
+                <Card.Root>
+                    <Card.Header>
+                        <Card.Title>Langkah 4: Informasi Pemohon & Pembayaran</Card.Title>
+                        <Card.Description>Lengkapi data pemohon dan unggah bukti transfer.</Card.Description>
+                    </Card.Header>
+                    <Card.Content>
+                        <div class="space-y-6">
+                            <div class="flex items-center justify-between border rounded-lg p-4 bg-muted/30">
+                                <div class="space-y-0.5">
+                                    <Label class="text-base">Pemohon adalah Mahasiswa ITEKES Bali?</Label>
+                                    <p class="text-sm text-muted-foreground">Aktifkan jika Anda adalah mahasiswa ITEKES Bali.</p>
+                                </div>
+                                <Switch bind:checked={isStudent} />
+                            </div>
+
+                            {#if isStudent}
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border rounded-lg p-4 bg-primary/5">
+                                    <div class="space-y-2">
+                                        <Label for="nim">NIM</Label>
+                                        <Input id="nim" bind:value={studentNim} placeholder="Masukkan NIM Anda" />
+                                    </div>
+                                    <div class="space-y-2">
+                                        <Label for="wali">Nama Wali</Label>
+                                        <Input id="wali" bind:value={waliName} placeholder="Masukkan Nama Wali (Orang Tua / Dosen Pembimbing)" />
+                                    </div>
+                                </div>
+                            {/if}
+
+                            <div class="space-y-4">
+                                <div class="p-4 rounded-lg bg-blue-50 border border-blue-100 dark:bg-blue-900/20 dark:border-blue-800">
+                                    <p class="font-medium text-blue-900 dark:text-blue-100">Informasi Biaya Etik:</p>
+                                    <ul class="list-disc list-inside mt-2 text-sm text-blue-800 dark:text-blue-200">
+                                        <li>Biaya Mahasiswa: <span class="font-bold">Rp 150.000</span></li>
+                                        <li>Biaya Publik / Umum: <span class="font-bold">Rp 250.000</span></li>
+                                    </ul>
+                                </div>
+
+                                <div class="space-y-2">
+                                    <Label>Bukti Transfer Pembayaran <span class="text-destructive">*</span></Label>
+                                    <FileUpload
+                                        action={StorageUploadAction.ETHICS_PAYMENT_PROOF}
+                                        bind:value={paymentProofPath}
+                                        bind:fileName={paymentProofName}
+                                        accept=".jpg,.jpeg,.png,.webp"
+                                        label="Unggah Bukti Transfer (JPG/PNG)"
+                                        description="Maksimal 4MB. Format: JPG, PNG."
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </Card.Content>
+                </Card.Root>
+
                 <!-- Submit -->
                 <div class="flex justify-end items-center gap-4">
                     {#if uploadState.isUploading}
                         <span class="text-sm text-muted-foreground animate-pulse">Mengunggah file...</span>
                     {/if}
-                    <Button onclick={submit} disabled={uploadState.isUploading || !allRequiredUploaded()} size="lg">Kirim Pengajuan</Button>
+                    <Button onclick={submit} disabled={uploadState.isUploading || !allRequiredUploaded() || !paymentProofPath || (isStudent && (!studentNim || !waliName))} size="lg">Kirim Pengajuan</Button>
                 </div>
             {/if}
         </div>

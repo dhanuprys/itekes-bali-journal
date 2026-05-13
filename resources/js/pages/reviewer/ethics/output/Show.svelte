@@ -94,8 +94,19 @@
                         </div>
                         <div>
                             <p class="text-sm text-muted-foreground">Tanggal Pengajuan</p>
-                            <p class="font-medium">{new Date(submission.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                            <p class="font-medium">
+                                {new Date(submission.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}
+                            </p>
                         </div>
+                    </div>
+                    <div class="mt-4 p-4 rounded-lg bg-muted/50 border border-muted-foreground/20">
+                        <p class="text-sm text-muted-foreground mb-1">Nomor Dokumen EC (Sistem)</p>
+                        <p class="font-mono text-xl font-bold tracking-tight">
+                            {submission.formatted_document_number ?? 'Belum ditetapkan'}
+                        </p>
+                        <p class="text-xs text-muted-foreground mt-2">
+                            Gunakan nomor di atas pada dokumen fisik/Word Ethical Clearance sebelum mengunggahnya.
+                        </p>
                     </div>
                 </Card.Content>
             </Card.Root>
@@ -137,7 +148,9 @@
                         <Card.Title class="text-green-800 dark:text-green-200">Dokumen EC yang Diterbitkan</Card.Title>
                     </Card.Header>
                     <Card.Content>
-                        <div class="flex items-center justify-between border border-green-200 dark:border-green-800 rounded-lg p-4 bg-white dark:bg-green-950/30">
+                        <div
+                            class="flex items-center justify-between border border-green-200 dark:border-green-800 rounded-lg p-4 bg-white dark:bg-green-950/30"
+                        >
                             <div class="flex items-center gap-3">
                                 <FileTextIcon class="h-6 w-6 text-green-600" />
                                 <div>
@@ -167,7 +180,10 @@
                     </Card.Header>
                     <Card.Content>
                         <form
-                            onsubmit={(e) => { e.preventDefault(); submitDocument(); }}
+                            onsubmit={(e) => {
+                                e.preventDefault();
+                                submitDocument();
+                            }}
                             class="space-y-4"
                         >
                             <div>
@@ -185,12 +201,7 @@
 
                             <div>
                                 <Label for="notes">Catatan (opsional)</Label>
-                                <Textarea
-                                    id="notes"
-                                    bind:value={$form.notes}
-                                    placeholder="Catatan tambahan untuk pengaju..."
-                                    rows={3}
-                                />
+                                <Textarea id="notes" bind:value={$form.notes} class="mt-2" placeholder="Catatan tambahan untuk pengaju..." rows={3} />
                             </div>
 
                             <div class="flex justify-end items-center gap-4">

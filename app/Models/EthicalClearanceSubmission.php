@@ -13,7 +13,25 @@ class EthicalClearanceSubmission extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['user_id', 'category', 'stage', 'status'];
+    protected $fillable = ['user_id', 'category', 'stage', 'status', 'is_student', 'student_nim', 'wali_name', 'payment_proof_path', 'document_number', 'document_date'];
+    
+    protected $appends = ['formatted_document_number'];
+
+    public function getFormattedDocumentNumberAttribute(): ?string
+    {
+        if (!$this->document_number || !$this->document_date) return null;
+
+        $date = \Carbon\Carbon::parse($this->document_date);
+        $monthRomani = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+        
+        $month = str_pad($date->month, 2, '0', STR_PAD_LEFT);
+        $romani = $monthRomani[$date->month - 1];
+        $year = $date->year;
+        
+        $paddedNumber = str_pad($this->document_number, 3, '0', STR_PAD_LEFT);
+
+        return "{$month}.{$paddedNumber}/KEPITEKES-BALI/{$romani}/{$year}";
+    }
 
     public function user(): BelongsTo
     {

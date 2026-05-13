@@ -101,7 +101,7 @@ Route::middleware(['auth', 'permission:' . PermissionRole::P_REVIEW_ETHICS->valu
 
             Route::prefix('wait-for-output')->as('wait_for_output.')->group(
                 function () {
-                    Route::get('', [Reviewer\Ethics\OutputController::class, 'index'])->name('index');
+                    Route::get('', [Reviewer\Ethics\OutputController::class, 'waitForOutput'])->name('index');
                     Route::get('{id}', [Reviewer\Ethics\OutputController::class, 'show'])->name('show');
 
                     Route::post('{id}/comment', [Reviewer\Ethics\OutputController::class, 'comment'])->name('comment');
