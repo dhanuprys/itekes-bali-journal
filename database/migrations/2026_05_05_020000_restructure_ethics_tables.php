@@ -33,6 +33,9 @@ return new class extends Migration {
 
             foreach ($columns as $column) {
                 if (Schema::hasColumn('ethical_clearance_details', $column)) {
+                    if ($column === 'ethical_clearance_subject_id') {
+                        $table->dropForeign(['ethical_clearance_subject_id']);
+                    }
                     $table->dropColumn($column);
                 }
             }
