@@ -40,6 +40,8 @@ class User extends Authenticatable
         'username',
         'password',
         'photo_path',
+        'max_active_research',
+        'max_active_community_service',
     ];
 
     /**

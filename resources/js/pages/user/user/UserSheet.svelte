@@ -15,6 +15,8 @@
         password: '',
         password_confirmation: '',
         roles: [] as string[],
+        max_active_research: 1,
+        max_active_community_service: 1,
     });
 
     let isEdit = $derived(!!selectedUser);
@@ -28,6 +30,8 @@
                     $form.username = selectedUser.username;
                     $form.email = selectedUser.email;
                     $form.roles = selectedUser.roles.map((r: any) => r.name);
+                    $form.max_active_research = selectedUser.max_active_research ?? 1;
+                    $form.max_active_community_service = selectedUser.max_active_community_service ?? 1;
                     $form.password = '';
                     $form.password_confirmation = '';
                 } else {
@@ -136,6 +140,23 @@
                 <FieldLabel>Konfirmasi Password</FieldLabel>
                 <Input id="password_confirmation" type="password" bind:value={$form.password_confirmation} />
             </Field>
+
+            <div class="grid grid-cols-2 gap-4">
+                <Field>
+                    <FieldLabel>Batas Proposal Penelitian</FieldLabel>
+                    <Input id="max_active_research" type="number" min="1" bind:value={$form.max_active_research} />
+                    {#if $form.errors.max_active_research}
+                        <FieldError>{$form.errors.max_active_research}</FieldError>
+                    {/if}
+                </Field>
+                <Field>
+                    <FieldLabel>Batas Proposal Pengabdian</FieldLabel>
+                    <Input id="max_active_community_service" type="number" min="1" bind:value={$form.max_active_community_service} />
+                    {#if $form.errors.max_active_community_service}
+                        <FieldError>{$form.errors.max_active_community_service}</FieldError>
+                    {/if}
+                </Field>
+            </div>
 
             <div class="flex justify-end pt-4">
                 <Button type="submit" disabled={$form.processing}>

@@ -33,13 +33,15 @@ class ProposalController extends Controller
 
     private function hasOngoingSubmission()
     {
-        return CommunityServiceSubmission::where('user_id', Auth::id())
+        $ongoingCount = CommunityServiceSubmission::where('user_id', Auth::id())
             ->whereNotIn('status', [CommunityServiceStatus::REJECTED->value, CommunityServiceStatus::CANCELED->value])
             ->where(function ($query) {
                 $query->where('stage', '!=', CommunityServiceReviewStage::FINAL_REPORT->value)
                     ->orWhere('status', '!=', CommunityServiceStatus::APPROVED->value);
             })
-            ->exists();
+            ->count();
+
+        return $ongoingCount >= Auth::user()->max_active_community_service;
     }
 
     public function index()

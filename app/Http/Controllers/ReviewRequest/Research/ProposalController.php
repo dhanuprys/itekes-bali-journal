@@ -31,13 +31,15 @@ class ProposalController extends Controller
 
     private function hasOngoingSubmission()
     {
-        return ResearchSubmission::where('user_id', Auth::id())
+        $ongoingCount = ResearchSubmission::where('user_id', Auth::id())
             ->whereNotIn('status', [ResearchStatus::REJECTED->value, ResearchStatus::CANCELED->value])
             ->where(function ($query) {
                 $query->where('stage', '!=', ResearchReviewStage::FINAL_REPORT->value)
                     ->orWhere('status', '!=', ResearchStatus::APPROVED->value);
             })
-            ->exists();
+            ->count();
+
+        return $ongoingCount >= Auth::user()->max_active_research;
     }
 
     public function index()

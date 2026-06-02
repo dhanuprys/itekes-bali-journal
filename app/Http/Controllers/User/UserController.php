@@ -61,6 +61,8 @@ class UserController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'roles' => ['array'],
             'roles.*' => ['exists:roles,name'],
+            'max_active_research' => ['required', 'integer', 'min:1'],
+            'max_active_community_service' => ['required', 'integer', 'min:1'],
         ]);
 
         $user = User::create([
@@ -68,6 +70,8 @@ class UserController extends Controller
             'username' => $validated['username'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
+            'max_active_research' => $validated['max_active_research'],
+            'max_active_community_service' => $validated['max_active_community_service'],
         ]);
 
         if (isset($validated['roles'])) {
@@ -111,12 +115,16 @@ class UserController extends Controller
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
             'roles' => ['array'],
             'roles.*' => ['exists:roles,name'],
+            'max_active_research' => ['required', 'integer', 'min:1'],
+            'max_active_community_service' => ['required', 'integer', 'min:1'],
         ]);
 
         $user->update([
             'name' => $validated['name'],
             'username' => $validated['username'],
             'email' => $validated['email'],
+            'max_active_research' => $validated['max_active_research'],
+            'max_active_community_service' => $validated['max_active_community_service'],
         ]);
 
         if (!empty($validated['password'])) {
