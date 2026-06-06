@@ -24,7 +24,7 @@
         value = $bindable(),
         fileName = $bindable(null),
         error = undefined,
-        accept = '.pdf,.doc,.docx',
+        accept = '.doc,.docx',
         maxSize = 4 * 1024 * 1024, // 4MB
         label = 'Upload File',
         description,
