@@ -57,7 +57,11 @@
                                         <Table.Cell>{getCategoryLabel(submission.category)}</Table.Cell>
                                         <Table.Cell class="font-mono text-sm">{submission.formatted_document_number ?? '-'}</Table.Cell>
                                         <Table.Cell>
-                                            {#if submission.latest_output?.document_path}
+                                            {#if submission.stage === 'output' && submission.status === 'need_review'}
+                                                <Badge variant="destructive">Revisi Dokumen</Badge>
+                                            {:else if submission.stage === 'verification'}
+                                                <Badge variant="secondary" class="bg-orange-100 text-orange-700 hover:bg-orange-100 border-orange-200">Sedang Diverifikasi</Badge>
+                                            {:else if submission.latest_output?.document_path}
                                                 <Badge>EC Diterbitkan</Badge>
                                             {:else}
                                                 <Badge variant="secondary">Belum Diterbitkan</Badge>
@@ -66,7 +70,13 @@
                                         <Table.Cell>{new Date(submission.created_at).toLocaleDateString('id-ID')}</Table.Cell>
                                         <Table.Cell class="text-right">
                                             <Button variant="outline" size="sm" onclick={() => router.visit(route('review.ethics.wait_for_output.show', submission.id))}>
-                                                Upload EC
+                                                {#if submission.stage === 'output' && submission.status === 'need_review'}
+                                                    Upload Revisi
+                                                {:else if submission.stage === 'verification' || submission.latest_output?.document_path}
+                                                    Detail
+                                                {:else}
+                                                    Upload EC
+                                                {/if}
                                             </Button>
                                         </Table.Cell>
                                     </Table.Row>

@@ -16,10 +16,14 @@ class OutputController extends Controller
         // Submissions approved at proposal stage, moved to output, but no EC document yet
         $submissions = EthicalClearanceSubmission::with(['latestDetail.files'])
             ->where('user_id', Auth::id())
-            ->where('stage', EthicsReviewStage::OUTPUT->value)
-            ->where('status', EthicsStatus::APPROVED->value)
-            ->whereDoesntHave('outputs', function ($q) {
-                $q->whereNotNull('document_path');
+            ->where(function ($query) {
+                // Currently in output stage (waiting for operator to upload/re-upload)
+                $query->where('stage', EthicsReviewStage::OUTPUT->value)
+                // In verification stage but not fully approved
+                ->orWhere(function ($q) {
+                    $q->where('stage', EthicsReviewStage::VERIFICATION->value)
+                        ->where('status', '!=', EthicsStatus::APPROVED->value);
+                });
             })
             ->latest()
             ->paginate(10);
@@ -33,7 +37,10 @@ class OutputController extends Controller
     {
         $submission = EthicalClearanceSubmission::with(['latestDetail.files', 'latestDetail.comments.user'])
             ->where('user_id', Auth::id())
-            ->where('stage', EthicsReviewStage::OUTPUT->value)
+            ->where(function ($q) {
+                $q->where('stage', EthicsReviewStage::OUTPUT->value)
+                  ->orWhere('stage', EthicsReviewStage::VERIFICATION->value);
+            })
             ->findOrFail($id);
 
         return Inertia::render('review-request/ethics/output/WaitForOutputDetail', [
@@ -46,10 +53,8 @@ class OutputController extends Controller
         // Submissions that have received their EC document
         $submissions = EthicalClearanceSubmission::with(['latestDetail.files', 'latestOutput'])
             ->where('user_id', Auth::id())
-            ->where('stage', EthicsReviewStage::OUTPUT->value)
-            ->whereHas('outputs', function ($q) {
-                $q->whereNotNull('document_path');
-            })
+            ->where('stage', EthicsReviewStage::VERIFICATION->value)
+            ->where('status', EthicsStatus::APPROVED->value)
             ->latest()
             ->paginate(10);
 

@@ -182,7 +182,12 @@ export function createMenu(user: User): Record<string, NavGroup> {
                             icon: CircleDotDashed,
                         },
                         {
-                            title: 'Output',
+                            title: 'Verifikasi Dokumen',
+                            href: '/review/ethics/verification',
+                            icon: CircleDotDashed,
+                        },
+                        {
+                            title: 'Lembar Etik Disahkan',
                             href: '/review/ethics/output',
                             icon: CircleCheckBigIcon,
                         },
@@ -203,6 +208,11 @@ export function createMenu(user: User): Record<string, NavGroup> {
                     title: 'Atur Reviewer Pengabdian',
                     href: '/assign-reviewer/community-service',
                     icon: UsersIcon,
+                }),
+                validate(permissions.ASSIGN_REVIEWER_ETHICS, {
+                    title: 'Atur Reviewer Etik',
+                    href: '/assign-reviewer/ethics',
+                    icon: FileTextIcon,
                 }),
             ],
         },

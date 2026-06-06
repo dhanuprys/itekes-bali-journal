@@ -40,7 +40,7 @@
                 <Link href="/" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
                     <img src="/assets/images/itekes-bali.webp" alt="ITEKES" class="h-8 w-8" />
                     <div class="border-l border-neutral-300 dark:border-neutral-700 pl-3 h-6 flex flex-col justify-center">
-                        <div class="text-sm font-semibold text-neutral-900 dark:text-neutral-100 leading-tight">ITEKES Journal</div>
+                        <div class="text-sm font-semibold text-neutral-900 dark:text-neutral-100 leading-tight">Sipandu ITEKES</div>
                     </div>
                 </Link>
 

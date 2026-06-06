@@ -34,10 +34,17 @@
         {/snippet}
 
         {#snippet actions()}
-            <Badge variant="secondary" class="px-3 py-1 gap-2 flex items-center">
-                <ClockIcon class="h-4 w-4" />
-                Menunggu Penerbitan EC
-            </Badge>
+            {#if submission.stage === 'verification'}
+                <Badge variant="secondary" class="px-3 py-1 gap-2 flex items-center bg-orange-100 text-orange-700 hover:bg-orange-100 border-orange-200">
+                    <ClockIcon class="h-4 w-4" />
+                    Sedang Diverifikasi
+                </Badge>
+            {:else}
+                <Badge variant="secondary" class="px-3 py-1 gap-2 flex items-center">
+                    <ClockIcon class="h-4 w-4" />
+                    Menunggu Penerbitan EC
+                </Badge>
+            {/if}
         {/snippet}
 
         <div class="space-y-6">

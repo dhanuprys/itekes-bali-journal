@@ -195,8 +195,7 @@
                                         <Checkbox
                                             id={`reviewer-${reviewer.id}`}
                                             checked={isSelected}
-                                            class="mt-1"
-                                            onCheckedChange={() => toggleSelection(reviewer.id.toString())}
+                                            class="mt-1 pointer-events-none"
                                         />
                                         <div class="flex-1 flex items-start gap-3">
                                             <Avatar.Root class="h-9 w-9 border">
@@ -205,7 +204,7 @@
                                                 </Avatar.Fallback>
                                             </Avatar.Root>
                                             <div class="space-y-0.5">
-                                                <Label for={`reviewer-${reviewer.id}`} class="text-sm font-medium cursor-pointer block">
+                                                <Label class="text-sm font-medium cursor-pointer block pointer-events-none">
                                                     {reviewer.name}
                                                 </Label>
                                                 <p class="text-xs text-muted-foreground">

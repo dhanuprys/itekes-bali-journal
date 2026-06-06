@@ -8,6 +8,7 @@ export const roles = {
     OPERATOR: 'operator',
     REVIEWER_RESEARCH: 'reviewer-research',
     REVIEWER_COMMUNITY_SERVICE: 'reviewer-community-service',
+    REVIEWER_ETHICS: 'reviewer-ethics',
 } as const;
 
 export const permissions = {
@@ -19,6 +20,7 @@ export const permissions = {
     REQUEST_ETHICS_REVIEW: 'request ethics review',
     ASSIGN_REVIEWER_RESEARCH: 'assign reviewer research',
     ASSIGN_REVIEWER_COMMUNITY_SERVICE: 'assign reviewer community service',
+    ASSIGN_REVIEWER_ETHICS: 'assign reviewer ethics',
     REVIEW_RESEARCH: 'review research',
     REVIEW_COMMUNITY_SERVICE: 'review community service',
     REVIEW_ETHICS: 'review ethics',

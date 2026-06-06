@@ -48,6 +48,7 @@ class HandleInertiaRequests extends Middleware
                     'roles' => $user->getRoleNames(),
                     'permissions' => $user->getPermissionsViaRoles()->pluck('name')->toArray(),
                 ] : null,
+                'is_impersonating' => session()->has('impersonate_by'),
             ],
             'ziggy' => [
                 ...(new Ziggy)->toArray(),

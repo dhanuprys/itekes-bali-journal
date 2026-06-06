@@ -33,8 +33,8 @@ class ProposalController extends Controller
         return EthicalClearanceSubmission::where('user_id', Auth::id())
             ->whereNotIn('status', [EthicsStatus::REJECTED->value, EthicsStatus::CANCELED->value])
             ->where(function ($query) {
-                // Not fully completed (output stage + approved)
-                $query->where('stage', '!=', EthicsReviewStage::OUTPUT->value)
+                // Not fully completed (verification stage + approved)
+                $query->where('stage', '!=', EthicsReviewStage::VERIFICATION->value)
                     ->orWhere('status', '!=', EthicsStatus::APPROVED->value);
             })
             ->exists();

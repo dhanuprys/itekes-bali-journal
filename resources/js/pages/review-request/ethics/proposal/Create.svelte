@@ -349,9 +349,7 @@
                 <Card.Root>
                     <Card.Header>
                         <Card.Title>Langkah 3: Unggah Dokumen</Card.Title>
-                        <Card.Description
-                            >Unggah dokumen yang telah diisi. Format yang diterima: PDF, DOC, DOCX. Maksimal 4MB per file.</Card.Description
-                        >
+                        <Card.Description>Unggah dokumen yang telah diisi. Format yang diterima: DOC, DOCX. Maksimal 4MB per file.</Card.Description>
                     </Card.Header>
                     <Card.Content>
                         <div class="space-y-4">
@@ -398,7 +396,7 @@
                                                 }
                                             }
                                         }
-                                        accept=".pdf,.doc,.docx"
+                                        accept=".doc,.docx"
                                         label="Pilih file atau seret ke sini"
                                     />
                                 </div>
@@ -466,7 +464,11 @@
                     {#if uploadState.isUploading}
                         <span class="text-sm text-muted-foreground animate-pulse">Mengunggah file...</span>
                     {/if}
-                    <Button onclick={submit} disabled={uploadState.isUploading || !allRequiredUploaded() || !paymentProofPath || (isStudent && (!studentNim || !waliName))} size="lg">Kirim Pengajuan</Button>
+                    <Button
+                        onclick={submit}
+                        disabled={uploadState.isUploading || !allRequiredUploaded() || !paymentProofPath || (isStudent && (!studentNim || !waliName))}
+                        size="lg">Kirim Pengajuan</Button
+                    >
                 </div>
             {/if}
         </div>

@@ -14,8 +14,16 @@ Route::middleware(['auth', 'permission:' . PermissionRole::P_MANAGE_USERS->value
             Route::post('', [User\UserController::class, 'store'])->name('store');
             Route::put('{user}', [User\UserController::class, 'update'])->name('update');
             Route::delete('{user}', [User\UserController::class, 'destroy'])->name('destroy');
+            Route::post('{user}/impersonate', [User\UserController::class, 'impersonate'])->name('impersonate');
         }
     );
+
+Route::middleware(['auth'])
+    ->prefix('users/impersonate')
+    ->as('users.users.impersonate.')
+    ->group(function () {
+        Route::post('leave', [User\UserController::class, 'leaveImpersonate'])->name('leave');
+    });
 
 Route::middleware(['auth', 'permission:' . PermissionRole::P_MANAGE_USERS->value])
     ->prefix('roles')

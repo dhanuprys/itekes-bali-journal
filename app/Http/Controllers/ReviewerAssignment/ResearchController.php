@@ -103,4 +103,9 @@ class ResearchController extends Controller
 
         return back()->with('success', 'Reviewers assigned successfully.');
     }
+
+    public function export()
+    {
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\ResearchRecapExport, 'Rekap_Penelitian.xlsx');
+    }
 }

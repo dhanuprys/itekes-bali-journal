@@ -15,6 +15,7 @@ Route::middleware(['auth'])
                 ->group(
                     function () {
                         Route::get('', [ReviewerAssignment\ResearchController::class, 'index'])->name('index');
+                        Route::get('export', [ReviewerAssignment\ResearchController::class, 'export'])->name('export');
                         Route::post('{id}/assign', [ReviewerAssignment\ResearchController::class, 'store'])->name('store');
                     }
                 );
@@ -25,7 +26,19 @@ Route::middleware(['auth'])
                 ->group(
                     function () {
                         Route::get('', [ReviewerAssignment\CommunityServiceController::class, 'index'])->name('index');
+                        Route::get('export', [ReviewerAssignment\CommunityServiceController::class, 'export'])->name('export');
                         Route::post('{id}/assign', [ReviewerAssignment\CommunityServiceController::class, 'store'])->name('store');
+                    }
+                );
+
+            Route::middleware(['permission:' . PermissionRole::P_ASSIGN_REVIEWER_ETHICS->value])
+                ->prefix('ethics')
+                ->as('ethics.')
+                ->group(
+                    function () {
+                        Route::get('', [ReviewerAssignment\EthicsController::class, 'index'])->name('index');
+                        Route::get('export', [ReviewerAssignment\EthicsController::class, 'export'])->name('export');
+                        Route::post('{id}/assign', [ReviewerAssignment\EthicsController::class, 'store'])->name('store');
                     }
                 );
         }

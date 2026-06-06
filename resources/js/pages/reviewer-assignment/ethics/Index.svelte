@@ -11,23 +11,23 @@
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Penugasan Reviewer', href: '#' },
-        { title: 'Penelitian', href: '#' },
+        { title: 'Etik', href: '#' },
     ];
 </script>
 
 <svelte:head>
-    <title>Atur Reviewer Penelitian</title>
+    <title>Atur Reviewer Etik</title>
 </svelte:head>
 
 <AppLayout {breadcrumbs}>
     <LayoutComposer>
         {#snippet header()}
-            <Heading title="Atur Reviewer Penelitian" description="Tetapkan reviewer untuk setiap usulan penelitian." />
+            <Heading title="Atur Reviewer Etik" description="Tetapkan reviewer untuk setiap usulan etik." />
         {/snippet}
 
         {#snippet actions()}
             <Button 
-                href={route('reviewer_assignment.research.export')} 
+                href={route('reviewer_assignment.ethics.export')} 
                 class="bg-green-600 hover:bg-green-700 text-white"
             >
                 <Sheet class="mr-2 h-4 w-4" />
@@ -36,7 +36,7 @@
         {/snippet}
 
         <div class="bg-background">
-            <AssignmentTable {submissions} {reviewers} {filters} assignRouteName="reviewer_assignment.research.store" />
+            <AssignmentTable {submissions} {reviewers} {filters} assignRouteName="reviewer_assignment.ethics.store" />
         </div>
     </LayoutComposer>
 </AppLayout>

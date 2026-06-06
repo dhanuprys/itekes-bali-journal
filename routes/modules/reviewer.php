@@ -116,5 +116,13 @@ Route::middleware(['auth', 'permission:' . PermissionRole::P_REVIEW_ETHICS->valu
                     Route::post('{id}/document', [Reviewer\Ethics\OutputController::class, 'updateDocument'])->name('update_document');
                 }
             );
+
+            Route::prefix('verification')->as('verification.')->group(
+                function () {
+                    Route::get('', [Reviewer\Ethics\OutputController::class, 'verificationIndex'])->name('index');
+                    Route::get('{id}', [Reviewer\Ethics\OutputController::class, 'verificationShow'])->name('show');
+                    Route::post('{id}/verify', [Reviewer\Ethics\OutputController::class, 'verify'])->name('verify');
+                }
+            );
         }
     );

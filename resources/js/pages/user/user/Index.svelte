@@ -15,6 +15,7 @@
     import * as AlertDialog from '@/components/ui/alert-dialog';
     import { untrack } from 'svelte';
     import { toast } from 'svelte-sonner';
+    import { page } from '@inertiajs/svelte';
 
     let { users, filters, roles = [] } = $props();
 
@@ -25,6 +26,8 @@
     let selectedUser: any = $state(null);
     let deleteDialogOpen = $state(false);
     let userToDelete: any = $state(null);
+    let isImpersonating = $derived($page.props.auth?.is_impersonating);
+    let currentUserId = $derived($page.props.auth?.user?.id);
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
@@ -173,6 +176,10 @@
                                             <DropdownMenu.Label>Aksi</DropdownMenu.Label>
                                             <DropdownMenu.Item onclick={() => router.visit(`/users/${user.id}`)}>Detail</DropdownMenu.Item>
                                             <DropdownMenu.Item onclick={() => openEdit(user)}>Edit</DropdownMenu.Item>
+                                            {#if !isImpersonating && user.id !== currentUserId}
+                                                <DropdownMenu.Separator />
+                                                <DropdownMenu.Item onclick={() => router.post(route('users.users.impersonate', user.id))}>Login Sebagai</DropdownMenu.Item>
+                                            {/if}
                                             <DropdownMenu.Separator />
                                             <DropdownMenu.Item onclick={() => openDeleteDialog(user)} class="text-destructive"
                                                 >Hapus</DropdownMenu.Item

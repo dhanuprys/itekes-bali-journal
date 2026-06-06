@@ -11,7 +11,7 @@
     import { StorageUploadAction } from '@/data/storage-upload';
     import { toast } from 'svelte-sonner';
     import { uploadState } from '@/stores/upload-state.svelte';
-    import { FileTextIcon, DownloadIcon, CheckCircleIcon } from 'lucide-svelte';
+    import { FileTextIcon, DownloadIcon, CheckCircleIcon, AlertCircleIcon, XCircleIcon } from 'lucide-svelte';
     import { Textarea } from '@/components/ui/textarea';
     import Label from '@/components/ui/label/label.svelte';
 
@@ -77,6 +77,31 @@
         {/snippet}
 
         <div class="space-y-6">
+            {#if submission.stage === 'output' && submission.status === 'need_review'}
+                <div class="rounded-lg bg-red-50 p-4 border border-red-200 dark:bg-red-950/20 dark:border-red-900">
+                    <div class="flex items-start gap-3">
+                        <AlertCircleIcon class="h-5 w-5 text-red-600 mt-0.5" />
+                        <div>
+                            <h3 class="font-medium text-red-800 dark:text-red-200">Dokumen Memerlukan Revisi</h3>
+                            <p class="text-sm text-red-700 dark:text-red-300 mt-1">Dokumen Ethical Clearance yang diunggah sebelumnya telah ditolak oleh reviewer. Silakan periksa catatan dari reviewer dan unggah kembali dokumen yang baru.</p>
+                            
+                            {#if output?.verifications?.length > 0}
+                                <div class="mt-3 space-y-2">
+                                    {#each output.verifications as verification}
+                                        {#if verification.status === 'rejected'}
+                                            <div class="text-sm bg-red-100 dark:bg-red-900/50 p-3 rounded-md border border-red-200 dark:border-red-800">
+                                                <span class="font-medium text-red-900 dark:text-red-100 block mb-1">Catatan Penolakan dari {verification.user?.name || 'Reviewer'}:</span>
+                                                <span class="text-red-800 dark:text-red-200 italic">"{verification.notes || 'Tanpa catatan'}"</span>
+                                            </div>
+                                        {/if}
+                                    {/each}
+                                </div>
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+            {/if}
+
             <!-- Submission Info -->
             <Card.Root>
                 <Card.Header>
@@ -145,7 +170,15 @@
             {#if hasDocument}
                 <Card.Root class="border-green-200 bg-green-50/50 dark:bg-green-950/20 dark:border-green-900">
                     <Card.Header>
-                        <Card.Title class="text-green-800 dark:text-green-200">Dokumen EC yang Diterbitkan</Card.Title>
+                        <Card.Title class="text-green-800 dark:text-green-200">
+                            {#if submission.stage === 'output' && submission.status === 'need_review'}
+                                Dokumen EC Sebelumnya (Ditolak)
+                            {:else if submission.stage === 'verification'}
+                                Dokumen EC yang Sedang Diverifikasi
+                            {:else}
+                                Dokumen EC yang Diterbitkan
+                            {/if}
+                        </Card.Title>
                     </Card.Header>
                     <Card.Content>
                         <div
@@ -171,12 +204,18 @@
                         </div>
                     </Card.Content>
                 </Card.Root>
-            {:else}
+            {/if}
+
+            {#if !hasDocument || (submission.stage === 'output' && submission.status === 'need_review')}
                 <!-- Upload EC Form -->
                 <Card.Root>
                     <Card.Header>
-                        <Card.Title>Upload Dokumen Ethical Clearance</Card.Title>
-                        <Card.Description>Unggah file dokumen Ethical Clearance resmi untuk diberikan kepada pengaju.</Card.Description>
+                        <Card.Title>{hasDocument ? 'Upload Ulang Dokumen (Revisi)' : 'Upload Dokumen Ethical Clearance'}</Card.Title>
+                        <Card.Description>
+                            {hasDocument 
+                                ? 'Unggah file dokumen Ethical Clearance yang telah direvisi.' 
+                                : 'Unggah file dokumen Ethical Clearance resmi untuk diverifikasi oleh reviewer sebelum diterbitkan kepada pengaju.'}
+                        </Card.Description>
                     </Card.Header>
                     <Card.Content>
                         <form
@@ -191,7 +230,7 @@
                                 <FileUpload
                                     action={StorageUploadAction.ETHICS_OUTPUT}
                                     bind:value={$form.document_path}
-                                    accept=".pdf,.doc,.docx"
+                                    accept=".doc,.docx"
                                     label="Pilih dokumen EC"
                                 />
                                 {#if $form.errors?.document_path}
@@ -201,7 +240,13 @@
 
                             <div>
                                 <Label for="notes">Catatan (opsional)</Label>
-                                <Textarea id="notes" bind:value={$form.notes} class="mt-2" placeholder="Catatan tambahan untuk pengaju..." rows={3} />
+                                <Textarea
+                                    id="notes"
+                                    bind:value={$form.notes}
+                                    class="mt-2"
+                                    placeholder="Catatan tambahan untuk reviewer..."
+                                    rows={3}
+                                />
                             </div>
 
                             <div class="flex justify-end items-center gap-4">
@@ -212,7 +257,7 @@
                                     {#if $form.processing}
                                         Menyimpan...
                                     {:else}
-                                        Terbitkan EC
+                                        Kirim ke Reviewer
                                     {/if}
                                 </Button>
                             </div>

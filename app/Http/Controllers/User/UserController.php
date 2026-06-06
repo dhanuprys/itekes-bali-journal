@@ -161,4 +161,41 @@ class UserController extends Controller
 
         return redirect()->back()->with('success', 'User deleted successfully.');
     }
+
+    public function impersonate(User $user)
+    {
+        if ($user->id === auth()->id()) {
+            return redirect()->back()->with('error', 'You cannot impersonate yourself.');
+        }
+
+        // Optional: Ensure an admin doesn't impersonate another super admin to prevent confusion
+        // if ($user->hasRole('super-admin')) { ... }
+
+        $originalUserId = auth()->id();
+        session()->put('impersonate_by', $originalUserId);
+        
+        \Illuminate\Support\Facades\Auth::login($user);
+
+        return redirect()->route('dashboard')->with('success', "You are now impersonating {$user->name}.");
+    }
+
+    public function leaveImpersonate()
+    {
+        if (!session()->has('impersonate_by')) {
+            return redirect()->back()->with('error', 'You are not impersonating anyone.');
+        }
+
+        $originalUserId = session()->get('impersonate_by');
+        $originalUser = User::find($originalUserId);
+
+        if (!$originalUser) {
+            session()->forget('impersonate_by');
+            return redirect()->route('login');
+        }
+
+        session()->forget('impersonate_by');
+        \Illuminate\Support\Facades\Auth::login($originalUser);
+
+        return redirect()->route('users.users.index')->with('success', 'You have left impersonation mode.');
+    }
 }

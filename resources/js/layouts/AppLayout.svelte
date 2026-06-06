@@ -3,6 +3,7 @@
     import type { BreadcrumbItemType } from '@/types';
     import type { Snippet } from 'svelte';
     import { Toaster } from '@/components/ui/sonner';
+    import { ModeWatcher } from 'mode-watcher';
 
     interface Props {
         breadcrumbs?: BreadcrumbItemType[];
@@ -10,7 +11,10 @@
     }
 
     let { breadcrumbs = [], children }: Props = $props();
+    
 </script>
+
+<ModeWatcher />
 
 <AppLayout {breadcrumbs}>
     {@render children?.()}

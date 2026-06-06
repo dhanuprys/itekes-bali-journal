@@ -4,13 +4,13 @@ namespace App\Http\Controllers\ReviewerAssignment;
 
 use App\Enums\PermissionRole;
 use App\Http\Controllers\Controller;
-use App\Models\CommunityServiceSubmission;
+use App\Models\EthicalClearanceSubmission;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
-class CommunityServiceController extends Controller
+class EthicsController extends Controller
 {
     protected $notificationService;
 
@@ -21,7 +21,7 @@ class CommunityServiceController extends Controller
 
     public function index(Request $request)
     {
-        $query = CommunityServiceSubmission::query()
+        $query = EthicalClearanceSubmission::query()
             ->with(['latestDetail', 'user', 'reviewers.user']);
 
         // Search filter
@@ -29,8 +29,7 @@ class CommunityServiceController extends Controller
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->whereHas('latestDetail', function ($q) use ($search) {
-                    $q->where('title', 'like', "%{$search}%")
-                        ->orWhere('final_title', 'like', "%{$search}%");
+                    $q->where('research_title', 'like', "%{$search}%");
                 })
                     ->orWhereHas('user', function ($q) use ($search) {
                         $q->where('name', 'like', "%{$search}%");
@@ -45,9 +44,9 @@ class CommunityServiceController extends Controller
 
         $submissions = $query->latest()->paginate(10)->withQueryString();
 
-        $reviewers = User::permission(PermissionRole::P_REVIEW_COMMUNITY_SERVICE->value)->get();
+        $reviewers = User::permission(PermissionRole::P_REVIEW_ETHICS->value)->get();
 
-        return Inertia::render('reviewer-assignment/community-service/Index', [
+        return Inertia::render('reviewer-assignment/ethics/Index', [
             'submissions' => $submissions,
             'reviewers' => $reviewers,
             'filters' => [
@@ -57,8 +56,6 @@ class CommunityServiceController extends Controller
         ]);
     }
 
-
-
     public function store(Request $request, $id)
     {
         $validated = $request->validate([
@@ -66,7 +63,7 @@ class CommunityServiceController extends Controller
             'reviewers.*' => 'exists:users,id',
         ]);
 
-        $submission = CommunityServiceSubmission::with('latestDetail')->findOrFail($id);
+        $submission = EthicalClearanceSubmission::with('latestDetail')->findOrFail($id);
 
         DB::transaction(function () use ($submission, $validated) {
             // Get existing reviewer IDs to compare
@@ -82,10 +79,10 @@ class CommunityServiceController extends Controller
                     if (!in_array($userId, $existingReviewers)) {
                         $this->notificationService->send(
                             $userId,
-                            "Anda ditugaskan sebagai Reviewer untuk proposal pengabdian: " . ($submission->latestDetail->title ?? 'Judul Tidak Tersedia') . ". Silakan mulai mereview.",
+                            "Anda ditugaskan sebagai Reviewer untuk pengajuan etik: " . ($submission->latestDetail->title ?? 'Judul Tidak Tersedia') . ". Silakan mulai mereview.",
                             new \App\DTO\NotificationPayload(
                                 title: "Tugas Review Baru",
-                                url: route('review.community_service.proposal.index'),
+                                url: route('review.ethics.proposal.index'),
                                 type: 'info'
                             ),
                             true
@@ -98,7 +95,7 @@ class CommunityServiceController extends Controller
         $title = $submission->latestDetail->title ?? 'Judul Tidak Tersedia';
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Menugaskan reviewer untuk proposal pengabdian: {$title}"
+            'comment' => "Menugaskan reviewer untuk pengajuan etik: {$title}"
         ]);
 
         return back()->with('success', 'Reviewers assigned successfully.');
@@ -106,6 +103,6 @@ class CommunityServiceController extends Controller
 
     public function export()
     {
-        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\CommunityServiceRecapExport, 'Rekap_PKM.xlsx');
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\EthicsRecapExport, 'Rekap_Etik.xlsx');
     }
 }

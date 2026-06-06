@@ -25,6 +25,9 @@ class ProposalController extends Controller
     public function index()
     {
         $submissions = EthicalClearanceSubmission::with(['latestDetail.files', 'user'])
+            ->whereHas('reviewers', function ($query) {
+                $query->where('user_id', Auth::id());
+            })
             ->where('stage', EthicsReviewStage::PROPOSAL->value)
             ->latest()
             ->paginate(10);
@@ -41,6 +44,9 @@ class ProposalController extends Controller
             'latestDetail.comments.user',
             'user',
         ])
+            ->whereHas('reviewers', function ($query) {
+                $query->where('user_id', Auth::id());
+            })
             ->where('stage', EthicsReviewStage::PROPOSAL->value)
             ->findOrFail($id);
 
@@ -52,7 +58,10 @@ class ProposalController extends Controller
 
     public function comment(Request $request, $id)
     {
-        $submission = EthicalClearanceSubmission::where('stage', EthicsReviewStage::PROPOSAL->value)
+        $submission = EthicalClearanceSubmission::whereHas('reviewers', function ($query) {
+                $query->where('user_id', Auth::id());
+            })
+            ->where('stage', EthicsReviewStage::PROPOSAL->value)
             ->findOrFail($id);
 
         if (!in_array($submission->status, [EthicsStatus::NEED_REVIEW->value, EthicsStatus::REVISION_NEEDED->value])) {
@@ -86,7 +95,10 @@ class ProposalController extends Controller
 
     public function changeState(Request $request, $id)
     {
-        $submission = EthicalClearanceSubmission::where('stage', EthicsReviewStage::PROPOSAL->value)
+        $submission = EthicalClearanceSubmission::whereHas('reviewers', function ($query) {
+                $query->where('user_id', Auth::id());
+            })
+            ->where('stage', EthicsReviewStage::PROPOSAL->value)
             ->findOrFail($id);
 
         if ($submission->status !== EthicsStatus::NEED_REVIEW->value) {

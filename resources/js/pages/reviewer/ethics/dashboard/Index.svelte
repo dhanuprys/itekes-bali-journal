@@ -8,7 +8,7 @@
     import { router } from '@inertiajs/svelte';
     import { FileTextIcon, UploadIcon, CheckCircleIcon } from 'lucide-svelte';
 
-    let { proposalCount = 0, waitForOutputCount = 0, outputCompletedCount = 0 } = $props();
+    let { proposalCount = 0, waitForOutputCount = 0, outputCompletedCount = 0, verificationCount = 0 } = $props();
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Reviewer Area', href: '#' },
@@ -27,7 +27,7 @@
             <Heading title="Dashboard Reviewer Etik" description="Ringkasan pengajuan ethical clearance." />
         {/snippet}
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <Card.Root class="cursor-pointer hover:shadow-md transition-shadow" onclick={() => router.visit(route('review.ethics.proposal.index'))}>
                 <Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
                     <Card.Title class="text-sm font-medium">Proposal untuk Ditinjau</Card.Title>
@@ -47,6 +47,17 @@
                 <Card.Content>
                     <div class="text-2xl font-bold">{waitForOutputCount}</div>
                     <p class="text-xs text-muted-foreground">pengajuan menunggu dokumen EC</p>
+                </Card.Content>
+            </Card.Root>
+
+            <Card.Root class="cursor-pointer hover:shadow-md transition-shadow" onclick={() => router.visit(route('review.ethics.verification.index'))}>
+                <Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <Card.Title class="text-sm font-medium">Menunggu Verifikasi</Card.Title>
+                    <CheckCircleIcon class="h-4 w-4 text-orange-500" />
+                </Card.Header>
+                <Card.Content>
+                    <div class="text-2xl font-bold text-orange-500">{verificationCount}</div>
+                    <p class="text-xs text-muted-foreground">pengajuan menunggu verifikasi Anda</p>
                 </Card.Content>
             </Card.Root>
             

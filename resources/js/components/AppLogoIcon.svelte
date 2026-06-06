@@ -2,4 +2,4 @@
     let { ...attrs } = $props();
 </script>
 
-<img src="/assets/images/itekes-bali.webp" {...attrs} alt="ITEKES Journal" />
+<img src="/assets/images/itekes-bali.webp" {...attrs} alt="Sipandu ITEKES" />

@@ -21,6 +21,7 @@ class PermissionAndRoleSeeder extends Seeder
         $operator = Role::updateOrCreate(['name' => PermissionRole::R_OPERATOR->value]);
         $reviewerResearch = Role::updateOrCreate(['name' => PermissionRole::R_REVIEWER_RESEARCH->value]);
         $reviewerCommunityService = Role::updateOrCreate(['name' => PermissionRole::R_REVIEWER_COMMUNITY_SERVICE->value]);
+        $reviewerEthics = Role::updateOrCreate(['name' => PermissionRole::R_REVIEWER_ETHICS->value]);
 
         // manage users, roles, permissions
         $permissionManageUsers = Permission::updateOrCreate(['name' => PermissionRole::P_MANAGE_USERS->value]);
@@ -35,6 +36,7 @@ class PermissionAndRoleSeeder extends Seeder
         // manage reviewer assignment
         $permissionAssignReviewerResearch = Permission::updateOrCreate(['name' => PermissionRole::P_ASSIGN_REVIEWER_RESEARCH->value]);
         $permissionAssignReviewerCommunityService = Permission::updateOrCreate(['name' => PermissionRole::P_ASSIGN_REVIEWER_COMMUNITY_SERVICE->value]);
+        $permissionAssignReviewerEthics = Permission::updateOrCreate(['name' => PermissionRole::P_ASSIGN_REVIEWER_ETHICS->value]);
         $permissionReviewResearch = Permission::updateOrCreate(['name' => PermissionRole::P_REVIEW_RESEARCH->value]);
         $permissionReviewCommunityService = Permission::updateOrCreate(['name' => PermissionRole::P_REVIEW_COMMUNITY_SERVICE->value]);
         $permissionReviewEthics = Permission::updateOrCreate(['name' => PermissionRole::P_REVIEW_ETHICS->value]);
@@ -57,11 +59,12 @@ class PermissionAndRoleSeeder extends Seeder
         $operator->givePermissionTo([
             $permissionAssignReviewerResearch,
             $permissionAssignReviewerCommunityService,
-            $permissionReviewEthics,
+            $permissionAssignReviewerEthics,
             $permissionManageForm,
             $permissionViewAllResearch,
             $permissionViewAllCommunityService,
             $permissionViewAllEthics,
+            $permissionReviewEthics,
             $permissionViewUserLogs
         ]);
 
@@ -73,6 +76,11 @@ class PermissionAndRoleSeeder extends Seeder
         $reviewerCommunityService->givePermissionTo([
             $permissionReviewCommunityService,
             $permissionViewAllCommunityService,
+        ]);
+
+        $reviewerEthics->givePermissionTo([
+            $permissionReviewEthics,
+            $permissionViewAllEthics,
         ]);
 
         $userAdmin = User::updateOrCreate([
@@ -128,5 +136,14 @@ class PermissionAndRoleSeeder extends Seeder
             'password' => bcrypt('password'),
         ]);
         $userReviewerCommunityService->assignRole($reviewerCommunityService);
+
+        $userReviewerEthics = User::updateOrCreate([
+            'email' => 'reviewer-ethics@itekes-bali.ac.id',
+        ], [
+            'name' => 'Reviewer Ethics',
+            'username' => 'reviewer-ethics',
+            'password' => bcrypt('password'),
+        ]);
+        $userReviewerEthics->assignRole($reviewerEthics);
     }
 }

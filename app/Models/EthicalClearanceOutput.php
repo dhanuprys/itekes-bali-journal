@@ -26,4 +26,9 @@ class EthicalClearanceOutput extends Model
     {
         return $this->belongsTo(EthicalClearanceSubmission::class, 'ethical_clearance_submission_id');
     }
+
+    public function verifications(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(EthicalClearanceOutputVerification::class);
+    }
 }

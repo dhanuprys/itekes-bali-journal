@@ -8,7 +8,7 @@
         <AppLogoIcon class="size-8" />
     </div>
     <div class="flex flex-col">
-        <span class="truncate text-sm font-semibold">ITEKES Journal</span>
+        <span class="truncate text-sm font-semibold">Sipandu ITEKES</span>
         <span class="text-[0.7rem] text-muted-foreground">{$page.props.version}</span>
     </div>
 </div>

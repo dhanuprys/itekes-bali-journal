@@ -72,7 +72,7 @@ class StorageUploadController extends Controller
 
     private function getValidatorByAction(StorageUploadAction $action, Request $request)
     {
-        // default max file size is 4MB
+        // default max file size is 10MB
         switch ($action) {
             case StorageUploadAction::RESEARCH_PROPOSAL:
                 return [

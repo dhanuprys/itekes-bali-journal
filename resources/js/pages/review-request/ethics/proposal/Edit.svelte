@@ -39,7 +39,7 @@
     // Get templates list based on existing keys (we don't change category on revision)
     let templateKeys = $derived(existingFiles.map((f: any) => f.template_key));
 
-    let hasAnyUpload = $derived(() => Object.values(uploadedFiles).some(v => v.file_path));
+    let hasAnyUpload = $derived(() => Object.values(uploadedFiles).some((v) => v.file_path));
 
     const form = useForm({ files: [] as any[] });
 
@@ -109,7 +109,9 @@
             <Card.Root>
                 <Card.Header>
                     <Card.Title>Unggah Ulang Dokumen</Card.Title>
-                    <Card.Description>Anda dapat mengunggah ulang dokumen yang perlu diperbaiki. Dokumen yang tidak diubah akan tetap menggunakan file sebelumnya.</Card.Description>
+                    <Card.Description
+                        >Anda dapat mengunggah ulang dokumen yang perlu diperbaiki. Dokumen yang tidak diubah akan tetap menggunakan file sebelumnya.</Card.Description
+                    >
                 </Card.Header>
                 <Card.Content>
                     <div class="space-y-4">
@@ -148,7 +150,7 @@
                                             }
                                         }
                                     }
-                                    accept=".pdf,.doc,.docx"
+                                    accept=".doc,.docx"
                                     label="Pilih file baru atau seret ke sini"
                                 />
                             </div>
@@ -161,9 +163,7 @@
                 {#if uploadState.isUploading}
                     <span class="text-sm text-muted-foreground animate-pulse">Mengunggah file...</span>
                 {/if}
-                <Button onclick={submit} disabled={uploadState.isUploading}>
-                    Kirim Revisi
-                </Button>
+                <Button onclick={submit} disabled={uploadState.isUploading}>Kirim Revisi</Button>
             </div>
         </div>
     </LayoutComposer>

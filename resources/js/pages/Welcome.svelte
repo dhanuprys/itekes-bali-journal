@@ -60,7 +60,7 @@
                 <div class="flex items-center gap-4">
                     <img src="/assets/images/itekes-bali.webp" alt="ITEKES" class="h-11 w-11" />
                     <div class="border-l border-neutral-300 dark:border-neutral-700 pl-4 h-8 flex flex-col justify-center">
-                        <div class="text-sm font-semibold text-neutral-900 dark:text-neutral-100 leading-tight">ITEKES Journal</div>
+                        <div class="text-sm font-semibold text-neutral-900 dark:text-neutral-100 leading-tight">Sipandu ITEKES</div>
                         <div class="text-[10px] text-neutral-500 dark:text-neutral-500 leading-tight">Sistem Revisi</div>
                     </div>
                 </div>
@@ -188,7 +188,7 @@
                         <span class="font-semibold">Manajemen Review</span>
                     </h2>
                     <p class="text-neutral-600 dark:text-neutral-400 leading-relaxed mb-6">
-                        ITEKES Journal adalah platform yang dirancang khusus untuk mempermudah proses review dan revisi penelitian serta pengabdian
+                        Sipandu ITEKES adalah platform yang dirancang khusus untuk mempermudah proses review dan revisi penelitian serta pengabdian
                         masyarakat di lingkungan Institut Teknologi dan Kesehatan Bali.
                     </p>
                     <p class="text-neutral-600 dark:text-neutral-400 leading-relaxed">

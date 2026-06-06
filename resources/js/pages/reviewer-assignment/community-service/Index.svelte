@@ -4,6 +4,8 @@
     import { type BreadcrumbItem } from '@/types';
     import Heading from '@/components/Heading.svelte';
     import AssignmentTable from '@/components/reviewer-assignment/AssignmentTable.svelte';
+    import { Button } from '@/components/ui/button';
+    import { Sheet } from 'lucide-svelte';
 
     let { submissions, reviewers, filters } = $props();
 
@@ -23,7 +25,17 @@
             <Heading title="Atur Reviewer Pengabdian" description="Tetapkan reviewer untuk setiap usulan pengabdian." />
         {/snippet}
 
-        <div class="bg-background shadow-sm rounded-lg">
+        {#snippet actions()}
+            <Button 
+                href={route('reviewer_assignment.community_service.export')} 
+                class="bg-green-600 hover:bg-green-700 text-white"
+            >
+                <Sheet class="mr-2 h-4 w-4" />
+                Export Rekap (XLSX)
+            </Button>
+        {/snippet}
+
+        <div class="bg-background">
             <AssignmentTable {submissions} {reviewers} {filters} assignRouteName="reviewer_assignment.community_service.store" />
         </div>
     </LayoutComposer>

@@ -58,7 +58,7 @@
                             <FileUpload
                                 action={type === 'research' ? StorageUploadAction.RESEARCH_PROGRESS_REPORT : StorageUploadAction.CS_PROGRESS_REPORT}
                                 bind:value={form.progress_report_path}
-                                accept=".pdf,.doc,.docx"
+                                accept=".doc,.docx"
                                 description="Upload laporan kemajuan."
                             />
                             {#if form.errors?.progress_report_path}

@@ -13,6 +13,7 @@ enum PermissionRole: string
     case R_OPERATOR = 'operator';
     case R_REVIEWER_RESEARCH = 'reviewer-research';
     case R_REVIEWER_COMMUNITY_SERVICE = 'reviewer-community-service';
+    case R_REVIEWER_ETHICS = 'reviewer-ethics';
 
 
     // BUILT-IN PERMISSIONS (IMMUTABLE)
@@ -24,6 +25,7 @@ enum PermissionRole: string
     case P_REQUEST_ETHICS_REVIEW = 'request ethics review';
     case P_ASSIGN_REVIEWER_RESEARCH = 'assign reviewer research';
     case P_ASSIGN_REVIEWER_COMMUNITY_SERVICE = 'assign reviewer community service';
+    case P_ASSIGN_REVIEWER_ETHICS = 'assign reviewer ethics';
     case P_REVIEW_RESEARCH = 'review research';
     case P_REVIEW_COMMUNITY_SERVICE = 'review community service';
     case P_REVIEW_ETHICS = 'review ethics';
@@ -41,6 +43,7 @@ enum PermissionRole: string
             self::R_OPERATOR,
             self::R_REVIEWER_RESEARCH,
             self::R_REVIEWER_COMMUNITY_SERVICE,
+            self::R_REVIEWER_ETHICS,
         ];
     }
 }

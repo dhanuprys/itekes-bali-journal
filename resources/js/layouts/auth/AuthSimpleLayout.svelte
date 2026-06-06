@@ -94,7 +94,7 @@
                     <Link href={route('home')} class="inline-flex flex-col items-center gap-2">
                         <img src="/assets/images/itekes-bali.webp" alt="ITEKES Bali" class="h-16 w-16" />
                         <div class="text-neutral-900 dark:text-neutral-100">
-                            <div class="text-sm font-semibold">ITEKES Journal</div>
+                            <div class="text-sm font-semibold">SipanduITEKES</div>
                             <div class="text-xs text-neutral-500">Sistem Revisi</div>
                         </div>
                     </Link>

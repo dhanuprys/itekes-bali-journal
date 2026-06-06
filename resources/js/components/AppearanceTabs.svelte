@@ -1,21 +1,16 @@
 <script lang="ts">
-    import type { Appearance } from '@/hooks/useAppearance.svelte';
-    import { useAppearance } from '@/hooks/useAppearance.svelte';
     import { Monitor, Moon, Sun } from 'lucide-svelte';
+    import { setMode, userPrefersMode } from 'mode-watcher';
 
     interface Props {
         class?: string;
     }
 
-    const appearanceManager = useAppearance();
-    // Create a local reactive variable that tracks the hook's value
-    let currentAppearance = $state(appearanceManager.appearance);
+    let currentAppearance = $derived(userPrefersMode.current);
 
     // Update the local state when the appearance changes
-    function handleUpdateAppearance(value: Appearance) {
-        appearanceManager.updateAppearance(value);
-        // Immediately update local state to ensure UI reflects the change
-        currentAppearance = value;
+    function handleUpdateAppearance(value: 'light' | 'dark' | 'system') {
+        setMode(value);
     }
 
     const tabs = [
