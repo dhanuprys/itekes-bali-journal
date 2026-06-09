@@ -14,7 +14,10 @@ return new class extends Migration
         Schema::create('ethical_clearance_output_verifications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('ethical_clearance_output_id')
-                ->constrained('ethical_clearance_outputs')
+                ->constrained(
+                    table: 'ethical_clearance_outputs',
+                    indexName: 'fk_ec_output_verifications_output_id'
+                )
                 ->cascadeOnDelete();
             $table->foreignId('user_id')
                 ->constrained('users');
