@@ -7,6 +7,7 @@
     import FileUpload from '@/components/FileUpload.svelte';
     import { StorageUploadAction } from '@/data/storage-upload';
     import * as Select from '@/components/ui/select';
+    import { CurrencyInput } from '@canutin/svelte-currency-input';
 
     let { form = $bindable(), data, type = 'research', mode = 'create' } = $props();
 
@@ -211,7 +212,15 @@
 
                         <Field.Field>
                             <Field.Label for="budget">Usulan Biaya (Rp)</Field.Label>
-                            <Input id="budget" type="number" bind:value={form.budget} placeholder="0" />
+                            <CurrencyInput 
+                                id="budget" 
+                                intlConfig={{ locale: 'id-ID', currency: 'IDR' }}
+                                decimalsLimit={0}
+                                disableAbbreviations={true}
+                                bind:value={form.budget}
+                                class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                placeholder="0" 
+                            />
                             {#if form.errors?.budget}
                                 <Field.Error>{form.errors?.budget}</Field.Error>
                             {/if}
