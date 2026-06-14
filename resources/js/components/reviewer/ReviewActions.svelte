@@ -12,6 +12,7 @@
 
     const form = useForm({
         status: '',
+        notes: '',
     });
 
     let dialogOpen = $state(false);
@@ -22,6 +23,7 @@
     function openConfirm(status: string) {
         selectedStatus = status;
         lgtmInput = ''; // Reset input
+        $form.notes = ''; // Reset notes
         if (status === 'approved') confirmMessage = 'Apakah Anda yakin ingin MENYETUJUI usulan ini?';
         if (status === 'revision_needed') confirmMessage = 'Apakah Anda yakin ingin meminta REVISI?';
         if (status === 'rejected') confirmMessage = 'Apakah Anda yakin ingin MENOLAK usulan ini?';
@@ -77,10 +79,18 @@
         <AlertDialog.Content>
             <AlertDialog.Header>
                 <AlertDialog.Title>Konfirmasi Keputusan</AlertDialog.Title>
-                <AlertDialog.Description class="space-y-4">
+                <AlertDialog.Description class="space-y-4 text-left">
                     <p>{confirmMessage}</p>
-                    <div class="space-y-2">
-                        <Label>Ketik "LGTM" untuk mengonfirmasi</Label>
+                    <div class="space-y-2 mt-4 text-left">
+                        <Label class="text-left block text-foreground font-semibold">Catatan (Opsional)</Label>
+                        <textarea
+                            class="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            placeholder="Tambahkan catatan jika diperlukan..."
+                            bind:value={$form.notes}
+                        ></textarea>
+                    </div>
+                    <div class="space-y-2 mt-4 text-left">
+                        <Label class="text-left block text-foreground font-semibold">Ketik "LGTM" untuk mengonfirmasi</Label>
                         <Input type="text" placeholder="LGTM" bind:value={lgtmInput} />
                     </div>
                 </AlertDialog.Description>

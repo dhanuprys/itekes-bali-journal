@@ -7,12 +7,19 @@
     import * as Card from '@/components/ui/card';
     import ReviewerSplitLayout from '@/components/reviewer/ReviewerSplitLayout.svelte';
     import ReviewerChatPanel from '@/components/reviewer/ReviewerChatPanel.svelte';
-    import { FileTextIcon, ClockIcon, CheckCircleIcon, AlertCircleIcon, DownloadIcon } from 'lucide-svelte';
+    import { FileTextIcon, ClockIcon, CheckCircleIcon, AlertCircleIcon, DownloadIcon, XCircleIcon } from 'lucide-svelte';
+    import { page } from '@inertiajs/svelte';
 
     let { submission, comments } = $props();
+    const currentUser = $derived($page.props.auth.user);
+    
     let detail = $derived(submission?.latest_detail);
     let files = $derived(detail?.files ?? []);
-    let canReview = $derived(submission?.status === 'need_review');
+    
+    let proposalReviews = $derived(submission.proposal_reviews || []);
+    const currentUserReview = $derived(proposalReviews.find((r: any) => r.user_id === currentUser.id));
+
+    let canReview = $derived(submission?.status === 'need_review' && !currentUserReview);
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Reviewer Area', href: '#' },
@@ -144,6 +151,53 @@
                                         <DownloadIcon class="h-3.5 w-3.5" />
                                         Unduh
                                     </a>
+                                </div>
+                            {/each}
+                        </div>
+                    </div>
+
+                    <!-- Status Reviewer -->
+                    <div>
+                        <h3 class="text-lg font-semibold mb-3">Status Reviewer</h3>
+                        <div class="space-y-2">
+                            {#each submission.reviewers as reviewer}
+                                {@const revVerif = proposalReviews.find((v: any) => v.user_id === reviewer.user_id)}
+                                <div class="flex items-start justify-between p-3 rounded-lg border bg-muted/20">
+                                    <div class="space-y-1">
+                                        <span class="text-sm font-medium block">
+                                            {reviewer.user?.name}
+                                            {#if reviewer.user_id === currentUser.id}
+                                                <span class="text-xs text-muted-foreground ml-1">(Anda)</span>
+                                            {/if}
+                                        </span>
+                                        {#if revVerif}
+                                            {#if revVerif.status === 'approved'}
+                                                <Badge variant="outline" class="text-green-600 border-green-200 bg-green-50">Disetujui</Badge>
+                                            {:else if revVerif.status === 'revision_needed'}
+                                                <Badge variant="outline" class="text-orange-500 border-orange-200 bg-orange-50">Perlu Revisi</Badge>
+                                            {:else}
+                                                <Badge variant="destructive">Ditolak</Badge>
+                                            {/if}
+                                            {#if revVerif.notes}
+                                                <p class="text-xs text-muted-foreground mt-2 italic border-l-2 pl-2">"{revVerif.notes}"</p>
+                                            {/if}
+                                        {:else}
+                                            <Badge variant="outline" class="text-blue-500 border-blue-200 bg-blue-50">Menunggu</Badge>
+                                        {/if}
+                                    </div>
+                                    <div>
+                                        {#if revVerif}
+                                            {#if revVerif.status === 'approved'}
+                                                <CheckCircleIcon class="h-5 w-5 text-green-500" />
+                                            {:else if revVerif.status === 'revision_needed'}
+                                                <AlertCircleIcon class="h-5 w-5 text-orange-400" />
+                                            {:else}
+                                                <XCircleIcon class="h-5 w-5 text-red-500" />
+                                            {/if}
+                                        {:else}
+                                            <ClockIcon class="h-5 w-5 text-blue-400" />
+                                        {/if}
+                                    </div>
                                 </div>
                             {/each}
                         </div>

@@ -63,6 +63,11 @@ class EthicalClearanceSubmission extends Model
         return $this->hasMany(EthicalClearanceSubmissionReviewer::class);
     }
 
+    public function proposalReviews(): HasMany
+    {
+        return $this->hasMany(EthicalClearanceProposalReview::class);
+    }
+
     public function logs(): HasMany
     {
         return $this->hasMany(EthicalClearanceSubmissionLog::class);

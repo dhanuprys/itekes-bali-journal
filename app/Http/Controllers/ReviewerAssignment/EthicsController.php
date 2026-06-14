@@ -90,6 +90,12 @@ class EthicsController extends Controller
                     }
                 }
             }
+
+            // Clean up orphaned proposal reviews if any reviewers were removed
+            $newReviewerIds = $validated['reviewers'] ?? [];
+            \App\Models\EthicalClearanceProposalReview::where('ethical_clearance_submission_id', $submission->id)
+                ->whereNotIn('user_id', $newReviewerIds)
+                ->delete();
         });
 
         $title = $submission->latestDetail->title ?? 'Judul Tidak Tersedia';

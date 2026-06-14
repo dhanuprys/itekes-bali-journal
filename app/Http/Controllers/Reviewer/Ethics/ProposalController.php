@@ -44,6 +44,8 @@ class ProposalController extends Controller
             'latestDetail.comments.user',
             'user',
             'studyProgram',
+            'reviewers.user',
+            'proposalReviews',
         ])
             ->whereHas('reviewers', function ($query) {
                 $query->where('user_id', Auth::id());
@@ -106,27 +108,102 @@ class ProposalController extends Controller
             abort(403, 'Review not active.');
         }
 
+        // Prevent duplicate voting - reviewer who already decided cannot change their vote
+        $existingReview = \App\Models\EthicalClearanceProposalReview::where('ethical_clearance_submission_id', $submission->id)
+            ->where('user_id', Auth::id())
+            ->first();
+
+        if ($existingReview) {
+            abort(403, 'Anda sudah memberikan keputusan untuk proposal ini.');
+        }
+
         $request->validate([
             'status' => 'required|in:approved,rejected,revision_needed',
+            'notes' => 'nullable|string',
         ]);
 
-        $statusMap = [
-            'approved' => EthicsStatus::APPROVED->value,
-            'rejected' => EthicsStatus::REJECTED->value,
-            'revision_needed' => EthicsStatus::REVISION_NEEDED->value,
-        ];
-
-        $newStatus = $statusMap[$request->input('status')];
+        $status = $request->input('status');
 
         EthicalClearanceSubdetailReviewer::firstOrCreate([
             'user_id' => Auth::id(),
             'ethical_clearance_subdetail_id' => $submission->latestDetail->id,
         ]);
 
-        $isApproved = $request->input('status') === 'approved';
+        \App\Models\EthicalClearanceProposalReview::updateOrCreate(
+            [
+                'ethical_clearance_submission_id' => $submission->id,
+                'user_id' => Auth::id(),
+            ],
+            [
+                'status' => $status,
+                'notes' => $request->input('notes'),
+            ]
+        );
 
-        \Illuminate\Support\Facades\DB::transaction(function () use ($submission, $isApproved, $newStatus) {
-            if ($isApproved) {
+        if ($status === 'rejected') {
+            $submission->update([
+                'status' => EthicsStatus::REJECTED->value,
+            ]);
+
+            $this->notificationService->send(
+                $submission->user,
+                "Proposal etik Anda ditolak. Silakan cek detailnya.",
+                new \App\DTO\NotificationPayload(
+                    title: "Status Pengajuan Etik Diperbarui",
+                    url: route('apply.ethics.proposal.show', $submission->id),
+                    type: 'info',
+                    metadata: ['submission_id' => $submission->id, 'status' => 'rejected']
+                ),
+                true
+            );
+
+            \App\Models\UserLog::create([
+                'user_id' => auth()->id(),
+                'comment' => "Menolak proposal etik kategori {$submission->category}"
+            ]);
+
+            return redirect()->route('review.ethics.index')->with('success', 'Status berhasil diperbarui.');
+        }
+
+        if ($status === 'revision_needed') {
+            // Reset reviews for next round
+            $submission->proposalReviews()->delete();
+            
+            $submission->update([
+                'status' => EthicsStatus::REVISION_NEEDED->value,
+            ]);
+
+            $this->notificationService->send(
+                $submission->user,
+                "Proposal etik Anda memerlukan revisi. Silakan cek detailnya.",
+                new \App\DTO\NotificationPayload(
+                    title: "Status Pengajuan Etik Diperbarui",
+                    url: route('apply.ethics.proposal.show', $submission->id),
+                    type: 'info',
+                    metadata: ['submission_id' => $submission->id, 'status' => 'revision_needed']
+                ),
+                true
+            );
+
+            \App\Models\UserLog::create([
+                'user_id' => auth()->id(),
+                'comment' => "Meminta revisi proposal etik kategori {$submission->category}"
+            ]);
+
+            return redirect()->route('review.ethics.index')->with('success', 'Status berhasil diperbarui.');
+        }
+
+        // status === 'approved' -> check if unanimous
+        $assignedReviewerIds = $submission->reviewers->pluck('user_id')->toArray();
+        $approvedReviewerIds = \App\Models\EthicalClearanceProposalReview::where('ethical_clearance_submission_id', $submission->id)
+            ->where('status', 'approved')
+            ->pluck('user_id')
+            ->toArray();
+
+        $allApproved = empty(array_diff($assignedReviewerIds, $approvedReviewerIds));
+
+        if ($allApproved) {
+            \Illuminate\Support\Facades\DB::transaction(function () use ($submission) {
                 // Lock the table to prevent concurrent increments. 
                 // Using orderBy desc -> first instead of max() because PostgreSQL doesn't support FOR UPDATE with aggregates.
                 $latestSubmission = EthicalClearanceSubmission::lockForUpdate()
@@ -142,32 +219,33 @@ class ProposalController extends Controller
                     'document_number' => $maxNumber + 1,
                     'document_date' => now(),
                 ]);
-            } else {
-                $submission->update([
-                    'status' => $newStatus,
-                ]);
-            }
-        });
+            });
 
-        // Notify applicant
-        $statusLabel = strtoupper(str_replace('_', ' ', $request->input('status')));
-        $this->notificationService->send(
-            $submission->user,
-            "Reviewer memperbarui status pengajuan etik Anda menjadi {$statusLabel}. Silakan cek detailnya.",
-            new \App\DTO\NotificationPayload(
-                title: "Status Pengajuan Etik Diperbarui",
-                url: route('apply.ethics.proposal.show', $submission->id),
-                type: 'info',
-                metadata: ['submission_id' => $submission->id, 'status' => $request->input('status')]
-            ),
-            true
-        );
+            $this->notificationService->send(
+                $submission->user,
+                "Proposal etik Anda telah disetujui. Silakan cek detailnya.",
+                new \App\DTO\NotificationPayload(
+                    title: "Status Pengajuan Etik Diperbarui",
+                    url: route('apply.ethics.proposal.show', $submission->id),
+                    type: 'info',
+                    metadata: ['submission_id' => $submission->id, 'status' => 'approved']
+                ),
+                true
+            );
+
+            \App\Models\UserLog::create([
+                'user_id' => auth()->id(),
+                'comment' => "Menyetujui proposal etik kategori {$submission->category}"
+            ]);
+
+            return redirect()->route('review.ethics.index')->with('success', 'Semua reviewer telah menyetujui. Proposal disetujui.');
+        }
 
         \App\Models\UserLog::create([
-            'user_id' => auth()->id(),
-            'comment' => "Mengubah status proposal etik kategori {$submission->category} menjadi '{$request->input('status')}'"
+                'user_id' => auth()->id(),
+                'comment' => "Menyetujui proposal etik kategori {$submission->category} (Menunggu Reviewer Lain)"
         ]);
 
-        return redirect()->route('review.ethics.index')->with('success', 'Status berhasil diperbarui.');
+        return back()->with('success', 'Keputusan Anda tersimpan. Menunggu reviewer lain.');
     }
 }

@@ -199,6 +199,8 @@ class ProposalController extends Controller
                 ]);
             }
 
+            $submission->proposalReviews()->delete();
+
             $submission->update([
                 'status' => EthicsStatus::NEED_REVIEW->value,
             ]);
