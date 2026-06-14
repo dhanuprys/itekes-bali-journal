@@ -92,6 +92,20 @@
             path: '/assets/templates/form-ajuan-untuk-etik-klinik-atau-uji-coba-hewan/7 CV PENELITI dan CV PEMBIMBING.docx',
             required: true,
         },
+        {
+            key: 'form_etik_hewan_coba',
+            name: '8. Form Etik Hewan Coba',
+            description: 'Formulir tambahan untuk etik hewan coba.',
+            path: '/assets/templates/form-ajuan-untuk-etik-klinik-atau-uji-coba-hewan/8. FORM ETIK HEWAN COBA ITEKES.doc',
+            required: true,
+        },
+        {
+            key: 'lembar_perlakuan_hewan_coba',
+            name: '9. Lembar Perlakuan Sebelum, Selama, dan Sesudah Penelitian',
+            description: 'Lembar perlakuan penelitian.',
+            path: '/assets/templates/form-ajuan-untuk-etik-klinik-atau-uji-coba-hewan/9. LEMBAR PERLAKUAN SEBELUM SELAMA DAN SESUDAH PENELITIAN.docx',
+            required: true,
+        },
     ];
 
     const nonClinicalTemplates: TemplateFile[] = [
@@ -150,20 +164,6 @@
             description: 'Curriculum Vitae peneliti dan pembimbing.',
             path: '/assets/templates/form-ajuan-untuk-etik-non-klinis/7 CV PENELITI dan CV PEMBIMBING.docx',
             required: true,
-        },
-        {
-            key: 'form_etik_hewan_coba',
-            name: 'Form Etik Hewan Coba',
-            description: 'Formulir etik khusus untuk penelitian hewan coba.',
-            path: '/assets/templates/form-ajuan-untuk-etik-non-klinis/FORM ETIK HEWAN COBA ITEKES.doc',
-            required: false,
-        },
-        {
-            key: 'lembar_perlakuan',
-            name: 'Lembar Perlakuan Sebelum, Selama, dan Sesudah Penelitian',
-            description: 'Lembar pencatatan perlakuan subjek penelitian.',
-            path: '/assets/templates/form-ajuan-untuk-etik-non-klinis/Lembar Perlakuan Sebelum, Selama, dan Sesudah Penelitian_ITEKES.docx',
-            required: false,
         },
     ];
 
