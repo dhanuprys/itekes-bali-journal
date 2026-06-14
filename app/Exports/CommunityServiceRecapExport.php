@@ -17,7 +17,7 @@ class CommunityServiceRecapExport implements FromCollection, WithHeadings, WithM
 
     public function __construct()
     {
-        $this->submissions = CommunityServiceSubmission::with(['latestDetail.members', 'latestDetail.schema'])->get();
+        $this->submissions = CommunityServiceSubmission::with(['latestDetail.members', 'latestDetail.schema', 'latestDetail.target'])->get();
     }
 
     public function collection()
@@ -35,6 +35,7 @@ class CommunityServiceRecapExport implements FromCollection, WithHeadings, WithM
             'Judul PKM',
             'Skema PKM',
             'Dana yang Diajukan',
+            'Target Luaran',
             'Status',
         ];
     }
@@ -52,7 +53,8 @@ class CommunityServiceRecapExport implements FromCollection, WithHeadings, WithM
         $membersString = empty($members) ? '-' : implode("\n", $members);
 
         $title = $detail->final_title ?: $detail->title;
-        $schema = $detail->schema ? $detail->schema->name : '-';
+        $schema = $detail->schema ? $detail->schema->title : '-';
+        $target = $detail->target ? $detail->target->title : '-';
 
         return [
             $submission->created_at->format('d-m-Y H:i'),
@@ -62,6 +64,7 @@ class CommunityServiceRecapExport implements FromCollection, WithHeadings, WithM
             $title,
             $schema,
             $detail->budget,
+            $target,
             str_replace('_', ' ', strtoupper($submission->status)),
         ];
     }
@@ -76,7 +79,8 @@ class CommunityServiceRecapExport implements FromCollection, WithHeadings, WithM
             'E' => 60, // Judul
             'F' => 30, // Skema
             'G' => 20, // Dana
-            'H' => 20, // Status
+            'H' => 30, // Target Luaran
+            'I' => 20, // Status
         ];
     }
 

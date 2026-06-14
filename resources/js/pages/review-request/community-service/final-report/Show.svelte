@@ -70,12 +70,12 @@
 
                         <div>
                             <dt class="text-sm font-medium text-muted-foreground">Skema Pengabdian</dt>
-                            <dd class="text-base font-semibold">{detail?.schema?.name || '-'}</dd>
+                            <dd class="text-base font-semibold">{detail?.schema?.title || '-'}</dd>
                         </div>
 
                         <div>
                             <dt class="text-sm font-medium text-muted-foreground">Target Luaran</dt>
-                            <dd class="text-base font-semibold">{detail?.target?.name || '-'}</dd>
+                            <dd class="text-base font-semibold">{detail?.target?.title || '-'}</dd>
                         </div>
 
                         <div>
