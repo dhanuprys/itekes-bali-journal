@@ -35,21 +35,45 @@
             {/if}
         </div>
 
-        <div>
-            <Label for="supplementary_path">File Pelengkap (LOA/HKI/JURNAL) *</Label>
+        <div class="space-y-3">
+            <Label for="supplementary_path">File Luaran (LOA, HKI, Modul, Buku, Artikel Jurnal dll) *</Label>
+            <div
+                class="bg-blue-50/50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300 p-3 rounded-lg border border-blue-200 dark:border-blue-800 text-sm flex gap-3"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="shrink-0 mt-0.5"><circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" /></svg
+                >
+                <div class="space-y-1">
+                    <p class="font-medium">Perhatian</p>
+                    <p class="text-blue-700/90 dark:text-blue-400/90 text-xs leading-relaxed">
+                        Mohon satukan file luaran (berisi LOA, HKI, Modul, Buku, Artikel Jurnal, dll) ke dalam bentuk <strong>.ZIP</strong> dengan
+                        maksimal <strong>6 MB</strong>. Nama file akan diubah secara otomatis menjadi File Luaran.
+                    </p>
+                </div>
+            </div>
             <FileUpload
                 action={type === 'research' ? StorageUploadAction.RESEARCH_SUPPLEMENTARY : StorageUploadAction.CS_SUPPLEMENTARY}
                 bind:value={form.supplementary_path}
-                accept=".doc,.docx"
-                description="Upload file pelengkap. Format: DOC, DOCX. Maksimal 4MB."
+                accept=".zip"
+                maxSize={6 * 1024 * 1024}
+                description="Upload file luaran. Format: ZIP. Maksimal 6MB."
             />
             {#if form.errors?.supplementary_path}
                 <p class="text-sm text-destructive mt-1">{form.errors.supplementary_path}</p>
             {/if}
         </div>
 
-        <div>
-            <Label for="notes">Keterangan *</Label>
+        <div class="space-y-3">
+            <Label for="notes">Keterangan</Label>
             <Input id="notes" bind:value={form.notes} placeholder="Tambahkan keterangan..." />
             {#if form.errors?.notes}
                 <p class="text-sm text-destructive mt-1">{form.errors.notes}</p>

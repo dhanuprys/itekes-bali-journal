@@ -58,7 +58,7 @@
 
                     <!-- Tagline -->
                     <div class="space-y-4">
-                        <p class="text-neutral-300 leading-relaxed">
+                        <p class="text-neutral-300 leading-relaxed text-sm">
                             SIPANDU ITEKES Bali (Sistem Informasi Penelitian dan Pengabdian Terpadu) merupakan platform digital terintegrasi yang
                             dirancang khusus oleh Institut Teknologi dan Kesehatan Bali untuk mengelola seluruh siklus kegiatan tri dharma perguruan
                             tinggi, khususnya di bidang penelitian dan pengabdian kepada masyarakat. Sistem ini berfungsi sebagai pusat kendali yang

@@ -204,7 +204,7 @@
                             {/if}
                         </p>
                         <p class="text-xs text-muted-foreground">
-                            Supported formats: {accept.replace(/\./g, ' ').toUpperCase()} (Max {maxSize / 1024 / 1024}MB)
+                            Supported formats: {accept.replace(/\./g, '').split(',').join(', ').toUpperCase()} (Max {maxSize / 1024 / 1024}MB)
                         </p>
                     </div>
                 </div>

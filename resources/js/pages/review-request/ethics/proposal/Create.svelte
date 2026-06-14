@@ -39,7 +39,7 @@
             name: '1. Surat Pengantar (Mahasiswa Itekes Bali)',
             description: 'Surat pengantar untuk mahasiswa Itekes Bali.',
             path: '/assets/templates/form-ajuan-untuk-etik-klinik-atau-uji-coba-hewan/1. SURAT PENGANTAR (Untuk MAHASISWA Itekes Bali).docx',
-            required: true,
+            required: false,
         },
         {
             key: 'surat_pengantar_umum',
@@ -438,8 +438,10 @@
                                 <div class="p-4 rounded-lg bg-blue-50 border border-blue-100 dark:bg-blue-900/20 dark:border-blue-800">
                                     <p class="font-medium text-blue-900 dark:text-blue-100">Informasi Biaya Etik:</p>
                                     <ul class="list-disc list-inside mt-2 text-sm text-blue-800 dark:text-blue-200">
-                                        <li>Biaya Mahasiswa: <span class="font-bold">Rp 150.000</span></li>
+                                        <li>Biaya Mahasiswa ITEKES BALI: <span class="font-bold">Rp 150.000</span></li>
+                                        <li>Biaya Dosen ITEKES BALI: <span class="font-bold">Rp 200.000</span></li>
                                         <li>Biaya Publik / Umum: <span class="font-bold">Rp 250.000</span></li>
+                                        <li>Biaya Asing: <span class="font-bold">Rp 1.000.000</span></li>
                                     </ul>
                                 </div>
 

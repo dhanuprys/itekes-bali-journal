@@ -105,7 +105,7 @@ class StorageUploadController extends Controller
             case StorageUploadAction::RESEARCH_SUPPLEMENTARY:
                 return [
                     'rules' => [
-                        'file' => 'required|file|mimes:doc,docx|max:4096',
+                        'file' => 'required|file|mimes:zip|max:6144',
                     ],
                     'path' => 'research/supplementary',
                 ];
@@ -140,7 +140,7 @@ class StorageUploadController extends Controller
             case StorageUploadAction::CS_SUPPLEMENTARY:
                 return [
                     'rules' => [
-                        'file' => 'required|file|mimes:doc,docx|max:4096',
+                        'file' => 'required|file|mimes:zip|max:6144',
                     ],
                     'path' => 'community-service/supplementary',
                 ];

@@ -56,16 +56,16 @@ class FinalReportController extends Controller
             'final_report_path' => 'required|string',
             'manuscript_path' => 'required|string',
             'supplementary_path' => 'required|string',
-            'notes' => 'required|string',
+            'notes' => 'nullable|string',
         ]);
 
         $submission = ResearchSubmission::where('user_id', Auth::id())
             ->where('id', $validated['submission_id'])
             ->firstOrFail();
 
-        DB::transaction(function () use ($validated, $request, $submission, $uploadService) {
-            $latestDetail = $submission->latestDetail;
+        $latestDetail = $submission->latestDetail;
 
+        DB::transaction(function () use ($validated, $latestDetail, $submission, $uploadService) {
             // Mark files as used
             $uploadService->markAsUsed($validated['final_report_path'], \App\Enums\StorageUploadAction::RESEARCH_FINAL_REPORT->name);
             $uploadService->markAsUsed($validated['manuscript_path'], \App\Enums\StorageUploadAction::RESEARCH_MANUSCRIPT->name);
@@ -180,12 +180,12 @@ class FinalReportController extends Controller
             'final_report_path' => 'required|string',
             'manuscript_path' => 'required|string',
             'supplementary_path' => 'required|string',
-            'notes' => 'required|string',
+            'notes' => 'nullable|string',
         ]);
 
-        DB::transaction(function () use ($validated, $request, $submission, $uploadService) {
-            $latestDetail = $submission->latestDetail;
+        $latestDetail = $submission->latestDetail;
 
+        DB::transaction(function () use ($validated, $latestDetail, $submission, $uploadService) {
             // Mark files as used
             $uploadService->markAsUsed($validated['final_report_path'], \App\Enums\StorageUploadAction::RESEARCH_FINAL_REPORT->name);
             $uploadService->markAsUsed($validated['manuscript_path'], \App\Enums\StorageUploadAction::RESEARCH_MANUSCRIPT->name);

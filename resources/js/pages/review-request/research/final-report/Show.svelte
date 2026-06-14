@@ -104,7 +104,7 @@
             </Card.Root>
 
             <!-- Dokumen -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <Card.Root>
                     <Card.Header>
                         <Card.Title>Laporan Akhir</Card.Title>
@@ -160,6 +160,31 @@
                                     variant="outline"
                                     size="sm"
                                     href={`/storage/${detail.manuscript_path}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer">Unduh</Button
+                                >
+                            </div>
+                        {:else}
+                            <p class="text-muted-foreground text-sm">File tidak tersedia.</p>
+                        {/if}
+                    </Card.Content>
+                </Card.Root>
+
+                <Card.Root>
+                    <Card.Header>
+                        <Card.Title>File Luaran</Card.Title>
+                    </Card.Header>
+                    <Card.Content>
+                        {#if detail?.supplementary_path}
+                            <div class="flex items-center gap-3 p-3 border rounded-md">
+                                <FileTextIcon class="h-8 w-8 text-primary" />
+                                <div class="flex-1 overflow-hidden">
+                                    <p class="text-sm font-medium truncate">File Luaran (ZIP)</p>
+                                </div>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    href={`/storage/${detail.supplementary_path}`}
                                     target="_blank"
                                     rel="noopener noreferrer">Unduh</Button
                                 >

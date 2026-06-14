@@ -24,6 +24,9 @@
     const form = useForm(untrack(() => ({
         submission_id: submission.id,
         final_report_path: detail.final_report_path || '',
+        manuscript_path: detail.manuscript_path || '',
+        supplementary_path: detail.supplementary_path || '',
+        notes: detail.notes || '',
     })));
 
     function submit() {

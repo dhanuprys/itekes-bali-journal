@@ -158,7 +158,7 @@
 
                         <div class="flex items-center gap-4">
                             <div>
-                                <span class="text-sm font-semibold">Pelengkap (LOA/HKI/Jurnal)</span>
+                                <span class="text-sm font-semibold">Luaran (LOA/HKI/Modul/Buku/Artikel)</span>
                             </div>
                             {#if detail?.supplementary_path}
                                 <Button href={`/storage/${detail?.supplementary_path}`} target="_blank" rel="noopener noreferrer" variant="outline" size="sm">Unduh</Button>
