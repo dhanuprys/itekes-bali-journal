@@ -55,7 +55,12 @@
                     {#if detail?.members && detail.members.length > 0}
                         <ul class="list-disc list-inside text-sm">
                             {#each detail.members as member, i (i)}
-                                <li>{member.name}</li>
+                                <li>
+                                    {member.name}
+                                    {#if member.identifier}
+                                        <span class="text-muted-foreground"> ({member.identifier})</span>
+                                    {/if}
+                                </li>
                             {/each}
                         </ul>
                     {:else}

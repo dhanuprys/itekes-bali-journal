@@ -25,7 +25,7 @@
     function addMember(e: Event) {
         e.preventDefault();
         if (!form.members) form.members = [];
-        form.members = [...form.members, { name: '' }];
+        form.members = [...form.members, { name: '', identifier: '' }];
     }
 
     function removeMember(index: number) {
@@ -153,6 +153,12 @@
                                     <Input id={`member-${i}`} bind:value={member.name} placeholder={`Nama Anggota ${i + 1}`} />
                                     {#if form.errors?.[`members.${i}.name`]}
                                         <Field.Error>{form.errors?.[`members.${i}.name`]}</Field.Error>
+                                    {/if}
+                                </Field.Field>
+                                <Field.Field class="flex-1">
+                                    <Input id={`member-id-${i}`} bind:value={member.identifier} placeholder="NIM / NUPTK (Opsional)" />
+                                    {#if form.errors?.[`members.${i}.identifier`]}
+                                        <Field.Error>{form.errors?.[`members.${i}.identifier`]}</Field.Error>
                                     {/if}
                                 </Field.Field>
                                 <Button type="button" variant="ghost" size="icon" onclick={() => removeMember(i)} class="mb-0.5">

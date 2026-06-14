@@ -10,7 +10,7 @@ class ResearchMember extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['research_subdetail_id', 'name'];
+    protected $fillable = ['research_subdetail_id', 'name', 'identifier'];
 
     public function detail(): BelongsTo
     {

@@ -86,6 +86,7 @@ class ProposalController extends Controller
             'proposal_path' => 'required|string|max:2048',
             'members' => 'nullable|array',
             'members.*.name' => 'required|string|max:255',
+            'members.*.identifier' => 'nullable|string|max:50',
             'community_service_schema_id' => 'required|exists:community_service_schema,id',
             'leader_nidn' => 'nullable|string',
             'leader_nuptk' => 'required|string|max:50',
@@ -120,6 +121,7 @@ class ProposalController extends Controller
                     CommunityServiceMember::create([
                         'community_service_subdetail_id' => $detail->id,
                         'name' => $member['name'],
+                        'identifier' => $member['identifier'] ?? null,
                     ]);
                 }
             }
@@ -194,6 +196,7 @@ class ProposalController extends Controller
             'proposal_path' => 'required|string|max:2048',
             'members' => 'nullable|array',
             'members.*.name' => 'required|string|max:255',
+            'members.*.identifier' => 'nullable|string|max:50',
             'community_service_schema_id' => 'required|exists:community_service_schema,id',
             'leader_nidn' => 'nullable|string',
             'leader_nuptk' => 'required|string|max:50',
@@ -223,6 +226,7 @@ class ProposalController extends Controller
                     CommunityServiceMember::create([
                         'community_service_subdetail_id' => $newDetail->id,
                         'name' => $member['name'],
+                        'identifier' => $member['identifier'] ?? null,
                     ]);
                 }
             }

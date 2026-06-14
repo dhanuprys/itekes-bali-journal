@@ -10,7 +10,7 @@ class EthicalClearanceMember extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['ethical_clearance_subdetail_id', 'name'];
+    protected $fillable = ['ethical_clearance_subdetail_id', 'name', 'identifier'];
 
     public function detail(): BelongsTo
     {

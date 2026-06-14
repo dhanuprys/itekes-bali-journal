@@ -10,7 +10,7 @@ class CommunityServiceMember extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['community_service_subdetail_id', 'name'];
+    protected $fillable = ['community_service_subdetail_id', 'name', 'identifier'];
 
     public function detail(): BelongsTo
     {
