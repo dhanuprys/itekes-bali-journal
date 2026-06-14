@@ -43,6 +43,7 @@ class ProposalController extends Controller
             'latestDetail.files',
             'latestDetail.comments.user',
             'user',
+            'studyProgram',
         ])
             ->whereHas('reviewers', function ($query) {
                 $query->where('user_id', Auth::id());

@@ -17,6 +17,7 @@
         maxSize?: number; // in bytes
         label?: string;
         description?: string;
+        id?: string;
     }
 
     let {
@@ -28,6 +29,7 @@
         maxSize = 4 * 1024 * 1024, // 4MB
         label = 'Upload File',
         description,
+        id = 'file-upload-' + Math.random().toString(36).substring(2, 11),
     }: Props = $props();
 
     let isLocalDragging = $state(false);
@@ -157,11 +159,11 @@
         <div
             role="button"
             tabindex="0"
-            onkeydown={(e) => e.key === 'Enter' && document.getElementById('file-upload-input-' + label)?.click()}
+            onkeydown={(e) => e.key === 'Enter' && document.getElementById(id)?.click()}
             ondrop={handleDrop}
             ondragover={handleDragOver}
             ondragleave={handleDragLeave}
-            onclick={() => document.getElementById('file-upload-input-' + label)?.click()}
+            onclick={() => document.getElementById(id)?.click()}
             class={cn(
                 'relative flex flex-col items-center justify-center w-full p-8 border-2 border-dashed rounded-lg transition-colors cursor-pointer',
                 isLocalDragging ? 'border-primary bg-primary/5' : 'border-muted-foreground/25 hover:bg-muted/50',
@@ -169,7 +171,7 @@
                 (localError || error) && 'border-destructive/50 bg-destructive/5',
             )}
         >
-            <input id={'file-upload-input-' + label} type="file" class="hidden" onchange={handleFileSelect} {accept} disabled={isUploading} />
+            <input {id} type="file" class="hidden" onchange={handleFileSelect} {accept} disabled={isUploading} />
 
             {#if isUploading && progress < 100}
                 <div class="w-full max-w-xs space-y-4 text-center">

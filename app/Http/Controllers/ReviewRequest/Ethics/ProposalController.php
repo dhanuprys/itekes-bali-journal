@@ -60,7 +60,9 @@ class ProposalController extends Controller
             abort(403, 'Anda masih memiliki pengajuan etik yang sedang berjalan.');
         }
 
-        return Inertia::render('review-request/ethics/proposal/Create');
+        return Inertia::render('review-request/ethics/proposal/Create', [
+            'studyPrograms' => \App\Models\StudyProgram::all(),
+        ]);
     }
 
     public function store(Request $request)
@@ -77,6 +79,7 @@ class ProposalController extends Controller
             'files.*.original_name' => 'required|string|max:255',
             'is_student' => 'required|boolean',
             'student_nim' => 'required_if:is_student,true|nullable|string|max:255',
+            'study_program_id' => 'required_if:is_student,true|nullable|exists:study_programs,id',
             'wali_name' => 'required_if:is_student,true|nullable|string|max:255',
             'payment_proof_path' => 'required|string|max:2048',
         ]);
@@ -89,6 +92,7 @@ class ProposalController extends Controller
                 'stage' => EthicsReviewStage::PROPOSAL->value,
                 'is_student' => $validated['is_student'],
                 'student_nim' => $validated['is_student'] ? $validated['student_nim'] : null,
+                'study_program_id' => $validated['is_student'] ? $validated['study_program_id'] : null,
                 'wali_name' => $validated['is_student'] ? $validated['wali_name'] : null,
                 'payment_proof_path' => $validated['payment_proof_path'],
             ]);
@@ -137,6 +141,7 @@ class ProposalController extends Controller
         $submission = EthicalClearanceSubmission::with([
             'latestDetail.files',
             'latestDetail.comments.user',
+            'studyProgram',
         ])
             ->where('user_id', Auth::id())
             ->findOrFail($id);
@@ -148,7 +153,7 @@ class ProposalController extends Controller
 
     public function edit($id)
     {
-        $submission = EthicalClearanceSubmission::with(['latestDetail.files', 'latestDetail.comments.user'])
+        $submission = EthicalClearanceSubmission::with(['latestDetail.files', 'latestDetail.comments.user', 'studyProgram'])
             ->where('user_id', Auth::id())
             ->findOrFail($id);
 

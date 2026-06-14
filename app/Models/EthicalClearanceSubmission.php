@@ -13,7 +13,7 @@ class EthicalClearanceSubmission extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['user_id', 'category', 'stage', 'status', 'is_student', 'student_nim', 'wali_name', 'payment_proof_path', 'document_number', 'document_date'];
+    protected $fillable = ['user_id', 'category', 'stage', 'status', 'is_student', 'student_nim', 'study_program_id', 'wali_name', 'payment_proof_path', 'document_number', 'document_date'];
     
     protected $appends = ['formatted_document_number'];
 
@@ -36,6 +36,11 @@ class EthicalClearanceSubmission extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function studyProgram(): BelongsTo
+    {
+        return $this->belongsTo(StudyProgram::class);
     }
 
     public function details(): HasMany

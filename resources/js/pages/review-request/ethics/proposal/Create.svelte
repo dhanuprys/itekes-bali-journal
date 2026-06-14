@@ -16,6 +16,8 @@
     import { uploadState } from '@/stores/upload-state.svelte';
     import { DownloadIcon, FileTextIcon, CheckCircle2Icon, XCircleIcon } from 'lucide-svelte';
 
+    let { studyPrograms } = $props();
+
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Permintaan Review', href: '#' },
         { title: 'Etik', href: '#' },
@@ -180,6 +182,7 @@
     // Payment State
     let isStudent = $state(false);
     let studentNim = $state('');
+    let studyProgramId = $state('');
     let waliName = $state('');
     let paymentProofPath = $state('');
     let paymentProofName = $state('');
@@ -199,6 +202,7 @@
         files: [] as any[],
         is_student: false,
         student_nim: '',
+        study_program_id: '',
         wali_name: '',
         payment_proof_path: '',
     });
@@ -213,8 +217,8 @@
             toast.error('Silakan unggah semua dokumen yang wajib (bertanda *).');
             return;
         }
-        if (isStudent && (!studentNim || !waliName)) {
-            toast.error('Silakan lengkapi NIM dan Nama Wali.');
+        if (isStudent && (!studentNim || !studyProgramId || !waliName)) {
+            toast.error('Silakan lengkapi NIM, Nama Prodi, dan Nama Wali.');
             return;
         }
         if (!paymentProofPath) {
@@ -232,6 +236,7 @@
         $form.files = filesPayload;
         $form.is_student = isStudent;
         $form.student_nim = studentNim;
+        $form.study_program_id = studyProgramId;
         $form.wali_name = waliName;
         $form.payment_proof_path = paymentProofPath;
 
@@ -398,6 +403,7 @@
                                         }
                                         accept=".doc,.docx"
                                         label="Pilih file atau seret ke sini"
+                                        id={`upload-${template.key}`}
                                     />
                                 </div>
                             {/each}
@@ -422,10 +428,23 @@
                             </div>
 
                             {#if isStudent}
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border rounded-lg p-4 bg-primary/5">
+                                <div class="space-y-4 border rounded-lg p-4 bg-primary/5">
                                     <div class="space-y-2">
                                         <Label for="nim">NIM</Label>
                                         <Input id="nim" bind:value={studentNim} placeholder="Masukkan NIM Anda" />
+                                    </div>
+                                    <div class="space-y-2">
+                                        <Label for="prodi">Program Studi</Label>
+                                        <select
+                                            id="prodi"
+                                            bind:value={studyProgramId}
+                                            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                        >
+                                            <option value="" disabled selected>Pilih Program Studi</option>
+                                            {#each studyPrograms as prodi}
+                                                <option value={prodi.id}>{prodi.name}</option>
+                                            {/each}
+                                        </select>
                                     </div>
                                     <div class="space-y-2">
                                         <Label for="wali">Nama Wali</Label>
@@ -468,7 +487,7 @@
                     {/if}
                     <Button
                         onclick={submit}
-                        disabled={uploadState.isUploading || !allRequiredUploaded() || !paymentProofPath || (isStudent && (!studentNim || !waliName))}
+                        disabled={uploadState.isUploading || !allRequiredUploaded() || !paymentProofPath || (isStudent && (!studentNim || !studyProgramId || !waliName))}
                         size="lg">Kirim Pengajuan</Button
                     >
                 </div>

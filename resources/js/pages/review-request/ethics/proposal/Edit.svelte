@@ -152,6 +152,7 @@
                                     }
                                     accept=".doc,.docx"
                                     label="Pilih file baru atau seret ke sini"
+                                    id={`upload-${file.template_key}`}
                                 />
                             </div>
                         {/each}

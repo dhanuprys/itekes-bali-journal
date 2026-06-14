@@ -99,6 +99,10 @@
                                 <p class="font-medium">{submission.student_nim ?? '-'}</p>
                             </div>
                             <div>
+                                <p class="text-sm text-muted-foreground">Program Studi</p>
+                                <p class="font-medium">{submission.study_program?.name ?? '-'}</p>
+                            </div>
+                            <div>
                                 <p class="text-sm text-muted-foreground">Nama Wali</p>
                                 <p class="font-medium">{submission.wali_name ?? '-'}</p>
                             </div>
