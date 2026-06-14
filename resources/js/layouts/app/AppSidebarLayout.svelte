@@ -15,7 +15,7 @@
     }
 
     let { breadcrumbs = [], children }: Props = $props();
-    
+
     let isImpersonating = $derived($page.props.auth?.is_impersonating);
     let currentUser = $derived($page.props.auth?.user);
 </script>
@@ -31,9 +31,9 @@
                     <span class="sm:hidden">Impersonasi:</span>
                     {currentUser?.name}
                 </div>
-                <Button 
-                    variant="secondary" 
-                    size="sm" 
+                <Button
+                    variant="secondary"
+                    size="sm"
                     class="h-7 text-xs gap-1.5 bg-white text-red-600 hover:bg-red-50 hover:text-red-700 font-semibold"
                     onclick={() => router.post(route('users.users.impersonate.leave'))}
                 >
@@ -44,6 +44,8 @@
             </div>
         {/if}
         <AppSidebarHeader {breadcrumbs} />
-        {@render children?.()}
+        <div class="w-full mx-auto max-w-7xl">
+            {@render children?.()}
+        </div>
     </AppContent>
 </AppShell>
