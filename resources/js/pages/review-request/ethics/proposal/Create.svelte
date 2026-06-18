@@ -354,7 +354,7 @@
                 <Card.Root>
                     <Card.Header>
                         <Card.Title>Langkah 3: Unggah Dokumen</Card.Title>
-                        <Card.Description>Unggah dokumen yang telah diisi. Format yang diterima: DOC, DOCX. Maksimal 4MB per file.</Card.Description>
+                        <Card.Description>Unggah dokumen yang telah diisi. Format yang diterima: DOC, DOCX. Maksimal 5MB per file.</Card.Description>
                     </Card.Header>
                     <Card.Content>
                         <div class="space-y-4">
@@ -472,7 +472,7 @@
                                         bind:fileName={paymentProofName}
                                         accept=".jpg,.jpeg,.png,.webp"
                                         label="Unggah Bukti Transfer (JPG/PNG)"
-                                        description="Maksimal 4MB. Format: JPG, PNG."
+                                        description="Maksimal 5MB. Format: JPG, PNG."
                                     />
                                 </div>
                             </div>
@@ -487,7 +487,10 @@
                     {/if}
                     <Button
                         onclick={submit}
-                        disabled={uploadState.isUploading || !allRequiredUploaded() || !paymentProofPath || (isStudent && (!studentNim || !studyProgramId || !waliName))}
+                        disabled={uploadState.isUploading ||
+                            !allRequiredUploaded() ||
+                            !paymentProofPath ||
+                            (isStudent && (!studentNim || !studyProgramId || !waliName))}
                         size="lg">Kirim Pengajuan</Button
                     >
                 </div>

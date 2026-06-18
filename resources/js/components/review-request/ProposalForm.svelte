@@ -218,14 +218,14 @@
 
                         <Field.Field>
                             <Field.Label for="budget">Usulan Biaya (Rp)</Field.Label>
-                            <CurrencyInput 
-                                id="budget" 
+                            <CurrencyInput
+                                id="budget"
                                 intlConfig={{ locale: 'id-ID', currency: 'IDR' }}
                                 decimalsLimit={0}
                                 disableAbbreviations={true}
                                 bind:value={form.budget}
                                 class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                placeholder="0" 
+                                placeholder="0"
                             />
                             {#if form.errors?.budget}
                                 <Field.Error>{form.errors?.budget}</Field.Error>
@@ -243,7 +243,7 @@
                 <Field.Group>
                     <Field.Field>
                         <FileUpload
-                            label="File Proposal (DOC, Max 4MB)"
+                            label="File Proposal (DOC, Max 5MB)"
                             action={isResearch ? StorageUploadAction.RESEARCH_PROPOSAL : StorageUploadAction.CS_PROPOSAL}
                             bind:value={form.proposal_path}
                             error={form.errors?.proposal_path}

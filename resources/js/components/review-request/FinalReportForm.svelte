@@ -15,7 +15,7 @@
                 action={type === 'research' ? StorageUploadAction.RESEARCH_FINAL_REPORT : StorageUploadAction.CS_FINAL_REPORT}
                 bind:value={form.final_report_path}
                 accept=".doc,.docx"
-                description="Upload laporan akhir. Format: DOC, DOCX. Maksimal 4MB."
+                description="Upload laporan akhir. Format: DOC, DOCX. Maksimal 5MB."
             />
             {#if form.errors?.final_report_path}
                 <p class="text-sm text-destructive mt-1">{form.errors.final_report_path}</p>
@@ -28,7 +28,7 @@
                 action={type === 'research' ? StorageUploadAction.RESEARCH_MANUSCRIPT : StorageUploadAction.CS_MANUSCRIPT}
                 bind:value={form.manuscript_path}
                 accept=".doc,.docx"
-                description="Upload manuskrip. Format: DOC, DOCX. Maksimal 4MB."
+                description="Upload manuskrip. Format: DOC, DOCX. Maksimal 5MB."
             />
             {#if form.errors?.manuscript_path}
                 <p class="text-sm text-destructive mt-1">{form.errors.manuscript_path}</p>

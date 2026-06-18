@@ -26,7 +26,7 @@
         fileName = $bindable(null),
         error = undefined,
         accept = '.doc,.docx',
-        maxSize = 4 * 1024 * 1024, // 4MB
+        maxSize = 5 * 1024 * 1024, // 5MB
         label = 'Upload File',
         description,
         id = 'file-upload-' + Math.random().toString(36).substring(2, 11),

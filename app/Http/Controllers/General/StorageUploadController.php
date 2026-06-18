@@ -77,28 +77,28 @@ class StorageUploadController extends Controller
             case StorageUploadAction::RESEARCH_PROPOSAL:
                 return [
                     'rules' => [
-                        'file' => 'required|file|mimes:doc,docx|max:4096',
+                        'file' => 'required|file|mimes:doc,docx|max:5120',
                     ],
                     'path' => 'research/proposals',
                 ];
             case StorageUploadAction::RESEARCH_PROGRESS_REPORT:
                 return [
                     'rules' => [
-                        'file' => 'required|file|mimes:doc,docx|max:4096',
+                        'file' => 'required|file|mimes:doc,docx|max:5120',
                     ],
                     'path' => 'research/progress-reports',
                 ];
             case StorageUploadAction::RESEARCH_FINAL_REPORT:
                 return [
                     'rules' => [
-                        'file' => 'required|file|mimes:doc,docx|max:4096',
+                        'file' => 'required|file|mimes:doc,docx|max:5120',
                     ],
                     'path' => 'research/final-reports',
                 ];
             case StorageUploadAction::RESEARCH_MANUSCRIPT:
                 return [
                     'rules' => [
-                        'file' => 'required|file|mimes:doc,docx|max:4096',
+                        'file' => 'required|file|mimes:doc,docx|max:5120',
                     ],
                     'path' => 'research/manuscripts',
                 ];
@@ -112,28 +112,28 @@ class StorageUploadController extends Controller
             case StorageUploadAction::CS_PROPOSAL:
                 return [
                     'rules' => [
-                        'file' => 'required|file|mimes:doc,docx|max:4096',
+                        'file' => 'required|file|mimes:doc,docx|max:5120',
                     ],
                     'path' => 'community-service/proposals',
                 ];
             case StorageUploadAction::CS_PROGRESS_REPORT:
                 return [
                     'rules' => [
-                        'file' => 'required|file|mimes:doc,docx|max:4096',
+                        'file' => 'required|file|mimes:doc,docx|max:5120',
                     ],
                     'path' => 'community-service/progress-reports',
                 ];
             case StorageUploadAction::CS_FINAL_REPORT:
                 return [
                     'rules' => [
-                        'file' => 'required|file|mimes:doc,docx|max:4096',
+                        'file' => 'required|file|mimes:doc,docx|max:5120',
                     ],
                     'path' => 'community-service/final-reports',
                 ];
             case StorageUploadAction::CS_MANUSCRIPT:
                 return [
                     'rules' => [
-                        'file' => 'required|file|mimes:doc,docx|max:4096',
+                        'file' => 'required|file|mimes:doc,docx|max:5120',
                     ],
                     'path' => 'community-service/manuscripts',
                 ];
@@ -147,21 +147,21 @@ class StorageUploadController extends Controller
             case StorageUploadAction::ETHICS_PROPOSAL:
                 return [
                     'rules' => [
-                        'file' => 'required|file|mimes:doc,docx|max:4096',
+                        'file' => 'required|file|mimes:doc,docx|max:5120',
                     ],
                     'path' => 'ethics/proposals',
                 ];
             case StorageUploadAction::ETHICS_OUTPUT:
                 return [
                     'rules' => [
-                        'file' => 'required|file|mimes:doc,docx|max:4096',
+                        'file' => 'required|file|mimes:doc,docx|max:5120',
                     ],
                     'path' => 'ethics/outputs',
                 ];
             case StorageUploadAction::ETHICS_PAYMENT_PROOF:
                 return [
                     'rules' => [
-                        'file' => 'required|file|image|mimes:jpg,jpeg,png,webp|max:4096',
+                        'file' => 'required|file|image|mimes:jpg,jpeg,png,webp|max:5120',
                     ],
                     'path' => 'ethics/payment-proofs',
                 ];
