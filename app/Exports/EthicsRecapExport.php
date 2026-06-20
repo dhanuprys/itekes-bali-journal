@@ -9,7 +9,6 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
 class EthicsRecapExport implements FromCollection, WithHeadings, WithMapping, WithColumnWidths, WithStyles
 {
@@ -17,7 +16,12 @@ class EthicsRecapExport implements FromCollection, WithHeadings, WithMapping, Wi
 
     public function __construct()
     {
-        $this->submissions = EthicalClearanceSubmission::with(['latestDetail.members', 'user'])->get();
+        $this->submissions = EthicalClearanceSubmission::with([
+            'user',
+            'studyProgram',
+            'reviewers.user',
+            'latestDetail.files',
+        ])->get();
     }
 
     public function collection()
@@ -28,60 +32,89 @@ class EthicsRecapExport implements FromCollection, WithHeadings, WithMapping, Wi
     public function headings(): array
     {
         return [
+            'No',
             'Tanggal Pengajuan',
-            'No. Dokumen',
-            'Nama Ketua / Pengusul',
-            'Anggota',
-            'Kategori Pengusul',
+            'No. Dokumen EC',
+            'Nama Pengusul',
+            'Jenis Pengusul',
+            'Kategori Etik',
             'NIM',
-            'Institusi',
-            'Judul Penelitian',
-            'Lokasi Penelitian',
+            'Program Studi',
+            'Nama Wali',
+            'Jumlah Dokumen',
+            'Reviewer',
+            'Tahap',
             'Status',
         ];
     }
 
     public function map($submission): array
     {
-        $detail = $submission->latestDetail;
-        if (!$detail) {
-            return [];
+        static $no = 0;
+        $no++;
+
+        // Jenis Pengusul
+        $jenisPengusul = $submission->is_student ? 'Mahasiswa' : 'Umum / Dosen';
+
+        // Kategori Etik
+        $kategoriEtik = $submission->category === 'clinical' ? 'Klinik / Uji Coba Hewan' : 'Non-Klinis';
+
+        // Jumlah Dokumen Terunggah
+        $fileCount = 0;
+        if ($submission->latestDetail) {
+            $fileCount = $submission->latestDetail->files->count();
         }
 
-        $leaderName = $detail->leader_name ?: ($submission->user ? $submission->user->name : '-');
-        
-        $members = $detail->members->pluck('name')->toArray();
-        $membersString = empty($members) ? '-' : implode("\n", $members);
+        // Assigned Reviewers
+        $reviewers = '-';
+        if ($submission->reviewers->count() > 0) {
+            $reviewers = $submission->reviewers->map(fn ($r) => $r->user?->name ?? '-')->implode("\n");
+        }
 
-        $kategori = $submission->is_student ? 'Mahasiswa' : 'Umum / Dosen';
+        // Tahap
+        $stageMap = [
+            'proposal' => 'Proposal',
+            'output' => 'Output / EC',
+            'verification' => 'Verifikasi',
+        ];
+        $stage = $stageMap[$submission->stage] ?? ucfirst($submission->stage);
+
+        // Status (human-readable)
+        $status = str_replace('_', ' ', ucwords(str_replace('_', ' ', $submission->status)));
 
         return [
+            $no,
             $submission->created_at->format('d-m-Y H:i'),
             $submission->formatted_document_number ?: '-',
-            $leaderName,
-            $membersString,
-            $kategori,
+            $submission->user ? $submission->user->name : '-',
+            $jenisPengusul,
+            $kategoriEtik,
             $submission->student_nim ?: '-',
-            $detail->institution_details ?: '-',
-            $detail->research_title ?: '-',
-            $detail->research_location ?: '-',
-            str_replace('_', ' ', strtoupper($submission->status)),
+            $submission->studyProgram ? $submission->studyProgram->name : '-',
+            $submission->wali_name ?: '-',
+            $fileCount . ' file',
+            $reviewers,
+            $stage,
+            $status,
         ];
     }
 
     public function columnWidths(): array
     {
         return [
-            'A' => 20, // Tanggal
-            'B' => 25, // No. Dokumen
-            'C' => 25, // Nama Ketua
-            'D' => 25, // Anggota
-            'E' => 18, // Kategori
-            'F' => 15, // NIM
-            'G' => 30, // Institusi
-            'H' => 50, // Judul
-            'I' => 30, // Lokasi
-            'J' => 20, // Status
+            'A' => 5,   // No
+            'B' => 20,  // Tanggal
+            'C' => 30,  // No. Dokumen
+            'D' => 28,  // Nama Pengusul
+            'E' => 18,  // Jenis Pengusul
+            'F' => 25,  // Kategori Etik
+            'G' => 15,  // NIM
+            'H' => 30,  // Program Studi
+            'I' => 25,  // Nama Wali
+            'J' => 15,  // Jumlah Dokumen
+            'K' => 25,  // Reviewer
+            'L' => 18,  // Tahap
+            'M' => 20,  // Status
         ];
     }
 
@@ -89,12 +122,12 @@ class EthicsRecapExport implements FromCollection, WithHeadings, WithMapping, Wi
     {
         $highestColumn = $sheet->getHighestColumn();
         return [
-            1    => ['font' => ['bold' => true]],
+            1 => ['font' => ['bold' => true]],
             "A:{$highestColumn}" => [
                 'alignment' => [
                     'wrapText' => true,
-                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP
-                ]
+                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP,
+                ],
             ],
         ];
     }
