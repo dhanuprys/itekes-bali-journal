@@ -18,6 +18,7 @@
         label?: string;
         description?: string;
         id?: string;
+        expectedFileName?: string;
     }
 
     let {
@@ -30,6 +31,7 @@
         label = 'Upload File',
         description,
         id = 'file-upload-' + Math.random().toString(36).substring(2, 11),
+        expectedFileName,
     }: Props = $props();
 
     let isLocalDragging = $state(false);
@@ -45,6 +47,11 @@
     });
 
     function validateFile(file: File): boolean {
+        if (expectedFileName && file.name !== expectedFileName) {
+            localError = `Nama file harus sama persis dengan template: "${expectedFileName}".`;
+            return false;
+        }
+
         if (maxSize && file.size > maxSize) {
             localError = `File size exceeds ${maxSize / 1024 / 1024}MB limit.`;
             return false;

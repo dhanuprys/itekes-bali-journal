@@ -11,7 +11,7 @@
     import { StorageUploadAction } from '@/data/storage-upload';
     import { toast } from 'svelte-sonner';
     import { uploadState } from '@/stores/upload-state.svelte';
-    import { CheckCircle2Icon, XCircleIcon, FileTextIcon } from 'lucide-svelte';
+    import { CheckCircle2Icon, XCircleIcon, FileTextIcon, AlertCircleIcon } from 'lucide-svelte';
 
     let { submission } = $props();
     let detail = $derived(submission.latest_detail);
@@ -114,6 +114,13 @@
                     >
                 </Card.Header>
                 <Card.Content>
+                    <div class="mb-6 p-4 rounded-lg bg-yellow-50 border border-yellow-200 text-yellow-800 dark:bg-yellow-900/20 dark:border-yellow-800 dark:text-yellow-200 flex items-start gap-3">
+                        <AlertCircleIcon class="h-5 w-5 shrink-0 mt-0.5" />
+                        <div class="text-sm">
+                            <p class="font-semibold mb-1">Penting: Penamaan File</p>
+                            <p>Nama file yang Anda unggah <strong>harus sama persis</strong> dengan nama file template yang Anda unduh sebelumnya. Jangan mengubah nama file (termasuk penambahan angka otomatis seperti <code>(1)</code>), atau sistem akan menolak unggahan Anda.</p>
+                        </div>
+                    </div>
                     <div class="space-y-4">
                         {#each existingFiles as file (file.id)}
                             <div class="border rounded-lg p-4 space-y-2">
@@ -153,6 +160,7 @@
                                     accept=".doc,.docx"
                                     label="Pilih file baru atau seret ke sini"
                                     id={`upload-${file.template_key}`}
+                                    expectedFileName={file.original_name}
                                 />
                             </div>
                         {/each}
