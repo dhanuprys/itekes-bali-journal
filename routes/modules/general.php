@@ -3,12 +3,19 @@
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 use App\Http\Controllers\General;
+use Laravel\Fortify\Http\Controllers\RegisteredUserController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canRegister' => Features::enabled(Features::registration()),
     ]);
 })->name('home');
+
+// Override Fortify's register route to add rate limiting
+if (Features::enabled(Features::registration())) {
+    Route::post('/register', [RegisteredUserController::class, 'store'])
+        ->middleware(['guest', 'throttle:register']);
+}
 
 Route::middleware(['auth'])
     ->group(function () {
