@@ -5,9 +5,10 @@
 
     interface Props {
         user: User;
+        showEmail?: boolean;
     }
 
-    let { user }: Props = $props();
+    let { user, showEmail = false }: Props = $props();
 
     const { getInitials } = useInitials();
 
@@ -28,5 +29,5 @@
 
 <div class="grid flex-1 text-left text-sm leading-tight">
     <span class="truncate font-medium">{user.name}</span>
-    <span class="truncate text-xs text-muted-foreground">#{user.username}</span>
+    <span class="truncate text-xs text-muted-foreground">{showEmail ? user.email : `#${user.username}`}</span>
 </div>

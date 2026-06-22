@@ -7,6 +7,7 @@
     import axios from 'axios';
     import { cn } from '@/lib/utils';
     import { tick } from 'svelte';
+    import { StorageUploadAction } from '@/data/storage-upload';
 
     interface Props {
         action: string;

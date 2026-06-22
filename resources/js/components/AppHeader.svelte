@@ -10,7 +10,6 @@
     import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
     import UserMenuContent from '@/components/UserMenuContent.svelte';
     import { getInitials } from '@/hooks/useInitials';
-    import { dashboard } from '@/routes';
     import type { BreadcrumbItem } from '@/types';
     import { Link, page } from '@inertiajs/svelte';
     import { cva } from 'class-variance-authority';
@@ -106,7 +105,7 @@
                 </Sheet>
             </div>
 
-            <Link href={dashboard()} class="flex items-center gap-x-2">
+            <Link href={route('dashboard')} class="flex items-center gap-x-2">
                 <AppLogo />
             </Link>
 
