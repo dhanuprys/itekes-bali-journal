@@ -72,6 +72,7 @@
                             <a
                                 href={'/storage/' + output.document_path}
                                 target="_blank"
+                                download={output.original_name || 'Dokumen_Output.pdf'}
                                 class="inline-flex items-center gap-2 rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 transition-colors"
                             >
                                 <DownloadIcon class="h-4 w-4" />
@@ -122,6 +123,7 @@
                                 <a
                                     href={'/storage/' + file.file_path}
                                     target="_blank"
+                                    download={file.original_name || file.template_key}
                                     class="inline-flex items-center gap-1.5 rounded-md bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/20 transition-colors shrink-0"
                                 >
                                     <DownloadIcon class="h-3.5 w-3.5" />

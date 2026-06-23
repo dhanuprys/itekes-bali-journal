@@ -118,6 +118,7 @@
                                     <a
                                         href={'/storage/' + submission.payment_proof_path}
                                         target="_blank"
+                                        download={`Bukti_Pembayaran_Etik_${submission.user?.name}.png`}
                                         class="inline-flex items-center gap-1.5 rounded-md border border-input bg-background px-3 py-1.5 text-xs font-medium hover:bg-accent hover:text-accent-foreground transition-colors shrink-0"
                                     >
                                         <FileTextIcon class="h-3.5 w-3.5" />
@@ -146,6 +147,7 @@
                                     <a
                                         href={'/storage/' + file.file_path}
                                         target="_blank"
+                                        download={file.original_name || file.template_key}
                                         class="inline-flex items-center gap-1.5 rounded-md bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/20 transition-colors shrink-0"
                                     >
                                         <DownloadIcon class="h-3.5 w-3.5" />
