@@ -411,6 +411,7 @@
                                         accept=".doc,.docx"
                                         label="Pilih file atau seret ke sini"
                                         id={`upload-${template.key}`}
+                                        contextHint={template.name}
                                     />
                                 </div>
                             {/each}

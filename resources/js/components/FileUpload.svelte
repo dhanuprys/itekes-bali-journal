@@ -20,6 +20,7 @@
         description?: string;
         id?: string;
         expectedFileName?: string;
+        contextHint?: string;
     }
 
     let {
@@ -33,6 +34,7 @@
         description,
         id = 'file-upload-' + Math.random().toString(36).substring(2, 11),
         expectedFileName,
+        contextHint,
     }: Props = $props();
 
     let isLocalDragging = $state(false);
@@ -271,11 +273,13 @@
     {/if}
 
     {#if requiresConventionCheck}
+        {@const contextLabel = contextHint || 'JenisDokumen'}
+        {@const exampleContext = contextHint || 'Proposal'}
         <div class="mt-2 text-xs text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 p-2.5 rounded-md border border-blue-200 dark:border-blue-800">
             <span class="font-semibold block mb-1">Format Penamaan File Wajib:</span> 
-            <code class="font-mono bg-blue-100 dark:bg-blue-900 px-1 py-0.5 rounded">Nama_Kategori_NIM/NUPTK_JenisDokumen</code>
+            <code class="font-mono bg-blue-100 dark:bg-blue-900 px-1 py-0.5 rounded">Nama_Kategori_NIM/NUPTK_{contextLabel}</code>
             <br />
-            <span class="text-[0.7rem] opacity-90 block mt-1">Contoh: I Gede Hendrayana_PKM_1912040_Proposal.docx</span>
+            <span class="text-[0.7rem] opacity-90 block mt-1">Contoh: I Gede Hendrayana_PKM_1912040_{exampleContext}.docx</span>
         </div>
     {/if}
 </div>

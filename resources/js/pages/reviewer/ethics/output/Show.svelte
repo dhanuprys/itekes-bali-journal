@@ -234,6 +234,7 @@
                                     bind:value={$form.document_path}
                                     accept=".doc,.docx"
                                     label="Pilih dokumen EC"
+                                    contextHint="Dokumen Output EC"
                                 />
                                 {#if $form.errors?.document_path}
                                     <p class="text-sm text-destructive mt-1">{$form.errors.document_path}</p>

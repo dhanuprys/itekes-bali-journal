@@ -160,6 +160,7 @@
                                     accept=".doc,.docx"
                                     label="Pilih file baru atau seret ke sini"
                                     id={`upload-${file.template_key}`}
+                                    contextHint={file.template_key.split('_').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                                 />
                             </div>
                         {/each}
