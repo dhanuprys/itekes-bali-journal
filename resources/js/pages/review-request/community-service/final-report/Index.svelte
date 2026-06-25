@@ -89,28 +89,34 @@
                                                     <MoreHorizontalIcon class="h-4 w-4" />
                                                 </DropdownMenu.Trigger>
                                                 <DropdownMenu.Content align="end">
-                                                    <DropdownMenu.Item onclick={() => router.visit(route('apply.community_service.revisions', submission.id))}>
+                                                    <DropdownMenu.Item
+                                                        onclick={() => router.visit(route('apply.community_service.revisions', submission.id))}
+                                                    >
                                                         Riwayat Revisi
                                                     </DropdownMenu.Item>
                                                     {#if !hasSubmittedReport(submission)}
                                                         <DropdownMenu.Item
                                                             onclick={() =>
                                                                 router.visit(
-                                                                    route('apply.community_service.final_report.create', { submission_id: submission.id }),
+                                                                    route('apply.community_service.final_report.create', {
+                                                                        submission_id: submission.id,
+                                                                    }),
                                                                 )}
                                                         >
                                                             Buat Laporan
                                                         </DropdownMenu.Item>
                                                     {:else if submission.status === 'revision_needed'}
                                                         <DropdownMenu.Item
-                                                            onclick={() => router.visit(route('apply.community_service.final_report.edit', submission.id))}
+                                                            onclick={() =>
+                                                                router.visit(route('apply.community_service.final_report.edit', submission.id))}
                                                         >
                                                             Revisi
                                                         </DropdownMenu.Item>
                                                     {/if}
                                                     {#if hasSubmittedReport(submission)}
                                                         <DropdownMenu.Item
-                                                            onclick={() => router.visit(route('apply.community_service.final_report.show', submission.id))}
+                                                            onclick={() =>
+                                                                router.visit(route('apply.community_service.final_report.show', submission.id))}
                                                         >
                                                             Detail
                                                         </DropdownMenu.Item>

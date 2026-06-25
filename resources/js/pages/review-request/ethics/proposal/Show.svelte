@@ -66,11 +66,19 @@
                         </div>
                         <div>
                             <p class="text-sm text-muted-foreground">Tanggal Pengajuan</p>
-                            <p class="font-medium">{new Date(submission.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                            <p class="font-medium">
+                                {new Date(submission.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}
+                            </p>
                         </div>
                         <div>
                             <p class="text-sm text-muted-foreground">Status</p>
-                            <Badge variant={submission.status === 'approved' ? 'default' : submission.status === 'rejected' ? 'destructive' : 'secondary'}>
+                            <Badge
+                                variant={submission.status === 'approved'
+                                    ? 'default'
+                                    : submission.status === 'rejected'
+                                      ? 'destructive'
+                                      : 'secondary'}
+                            >
                                 {submission.status.replace('_', ' ').toUpperCase()}
                             </Badge>
                         </div>

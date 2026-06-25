@@ -26,10 +26,7 @@
         {/snippet}
 
         {#snippet actions()}
-            <Button 
-                href={route('reviewer_assignment.community_service.export')} 
-                class="bg-green-600 hover:bg-green-700 text-white"
-            >
+            <Button href={route('reviewer_assignment.community_service.export')} class="bg-green-600 hover:bg-green-700 text-white">
                 <Sheet class="mr-2 h-4 w-4" />
                 Export Rekap (XLSX)
             </Button>

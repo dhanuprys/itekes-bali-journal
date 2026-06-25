@@ -39,7 +39,10 @@
                 </Card.Content>
             </Card.Root>
 
-            <Card.Root class="cursor-pointer hover:shadow-md transition-shadow" onclick={() => router.visit(route('review.ethics.wait_for_output.index'))}>
+            <Card.Root
+                class="cursor-pointer hover:shadow-md transition-shadow"
+                onclick={() => router.visit(route('review.ethics.wait_for_output.index'))}
+            >
                 <Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
                     <Card.Title class="text-sm font-medium">Menunggu Upload EC</Card.Title>
                     <UploadIcon class="h-4 w-4 text-muted-foreground" />
@@ -50,7 +53,10 @@
                 </Card.Content>
             </Card.Root>
 
-            <Card.Root class="cursor-pointer hover:shadow-md transition-shadow" onclick={() => router.visit(route('review.ethics.verification.index'))}>
+            <Card.Root
+                class="cursor-pointer hover:shadow-md transition-shadow"
+                onclick={() => router.visit(route('review.ethics.verification.index'))}
+            >
                 <Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
                     <Card.Title class="text-sm font-medium">Menunggu Verifikasi</Card.Title>
                     <CheckCircleIcon class="h-4 w-4 text-orange-500" />
@@ -60,7 +66,7 @@
                     <p class="text-xs text-muted-foreground">pengajuan menunggu verifikasi Anda</p>
                 </Card.Content>
             </Card.Root>
-            
+
             <Card.Root class="cursor-pointer hover:shadow-md transition-shadow" onclick={() => router.visit(route('review.ethics.output.index'))}>
                 <Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
                     <Card.Title class="text-sm font-medium">Lembar Etik Disahkan</Card.Title>

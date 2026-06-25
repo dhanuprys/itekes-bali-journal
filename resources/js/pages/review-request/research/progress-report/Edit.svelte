@@ -21,14 +21,16 @@
         { title: 'Revisi', href: '#' },
     ];
 
-    const form = useForm(untrack(() => ({
-        submission_id: submission.id, // Keep submission_id for reference
-        final_leader_name: detail.final_leader_name || '',
-        final_title: detail.final_title || '',
-        members: detail.members ? detail.members.map((m: any) => ({ name: m.name })) : [],
-        progress_report_path: detail.progress_report_path || '',
-        manuscript_path: detail.manuscript_path || '',
-    })));
+    const form = useForm(
+        untrack(() => ({
+            submission_id: submission.id, // Keep submission_id for reference
+            final_leader_name: detail.final_leader_name || '',
+            final_title: detail.final_title || '',
+            members: detail.members ? detail.members.map((m: any) => ({ name: m.name })) : [],
+            progress_report_path: detail.progress_report_path || '',
+            manuscript_path: detail.manuscript_path || '',
+        })),
+    );
 
     function submit() {
         if (uploadState.isUploading) return;

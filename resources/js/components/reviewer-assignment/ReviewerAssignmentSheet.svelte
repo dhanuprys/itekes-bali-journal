@@ -192,11 +192,7 @@
                                             }
                                         }}
                                     >
-                                        <Checkbox
-                                            id={`reviewer-${reviewer.id}`}
-                                            checked={isSelected}
-                                            class="mt-1 pointer-events-none"
-                                        />
+                                        <Checkbox id={`reviewer-${reviewer.id}`} checked={isSelected} class="mt-1 pointer-events-none" />
                                         <div class="flex-1 flex items-start gap-3">
                                             <Avatar.Root class="h-9 w-9 border">
                                                 <Avatar.Fallback class={isSelected ? 'bg-primary/10 text-primary' : ''}>

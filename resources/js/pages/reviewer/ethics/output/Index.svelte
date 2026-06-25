@@ -65,7 +65,11 @@
                                         </Table.Cell>
                                         <Table.Cell>{new Date(submission.created_at).toLocaleDateString('id-ID')}</Table.Cell>
                                         <Table.Cell class="text-right">
-                                            <Button variant="outline" size="sm" onclick={() => router.visit(route('review.ethics.output.show', submission.id))}>
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                onclick={() => router.visit(route('review.ethics.output.show', submission.id))}
+                                            >
                                                 Lihat Dokumen
                                             </Button>
                                         </Table.Cell>

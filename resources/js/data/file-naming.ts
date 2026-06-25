@@ -1,6 +1,6 @@
 /**
  * Centralized file naming convention configuration.
- * 
+ *
  * All naming hints and examples are defined here so that if the client
  * changes the convention, you only need to update this single file.
  */

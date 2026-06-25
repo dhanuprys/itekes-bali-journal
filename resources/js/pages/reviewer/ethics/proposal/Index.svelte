@@ -20,11 +20,16 @@
 
     function getStatusVariant(status: string) {
         switch (status) {
-            case 'approved': return 'default';
-            case 'rejected': return 'destructive';
-            case 'revision_needed': return 'destructive';
-            case 'need_review': return 'secondary';
-            default: return 'outline';
+            case 'approved':
+                return 'default';
+            case 'rejected':
+                return 'destructive';
+            case 'revision_needed':
+                return 'destructive';
+            case 'need_review':
+                return 'secondary';
+            default:
+                return 'outline';
         }
     }
 
@@ -71,7 +76,11 @@
                                         </Table.Cell>
                                         <Table.Cell>{new Date(submission.created_at).toLocaleDateString('id-ID')}</Table.Cell>
                                         <Table.Cell class="text-right">
-                                            <Button variant="outline" size="sm" onclick={() => router.visit(route('review.ethics.proposal.show', submission.id))}>
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                onclick={() => router.visit(route('review.ethics.proposal.show', submission.id))}
+                                            >
                                                 Tinjau
                                             </Button>
                                         </Table.Cell>

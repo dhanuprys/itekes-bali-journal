@@ -43,7 +43,9 @@
                 <TableBody>
                     {#if submissions.data.length === 0}
                         <TableRow>
-                            <TableCell colspan={4} class="text-center py-8 text-muted-foreground">Tidak ada dokumen yang menunggu verifikasi.</TableCell>
+                            <TableCell colspan={4} class="text-center py-8 text-muted-foreground"
+                                >Tidak ada dokumen yang menunggu verifikasi.</TableCell
+                            >
                         </TableRow>
                     {:else}
                         {#each submissions.data as submission}
@@ -73,17 +75,18 @@
                                 </TableCell>
                                 <TableCell>
                                     {#if output?.verifications?.find((v: any) => v.user_id === currentUser.id)}
-                                        <Badge variant="outline" class="text-green-600 border-green-600 bg-green-50">
-                                            Telah Anda Verifikasi
-                                        </Badge>
+                                        <Badge variant="outline" class="text-green-600 border-green-600 bg-green-50">Telah Anda Verifikasi</Badge>
                                     {:else}
-                                        <Badge variant="outline" class="text-orange-500 border-orange-500">
-                                            Menunggu Verifikasi Anda
-                                        </Badge>
+                                        <Badge variant="outline" class="text-orange-500 border-orange-500">Menunggu Verifikasi Anda</Badge>
                                     {/if}
                                 </TableCell>
                                 <TableCell>
-                                    <Button variant="outline" size="sm" class="gap-2" onclick={() => router.visit(route('review.ethics.verification.show', submission.id))}>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        class="gap-2"
+                                        onclick={() => router.visit(route('review.ethics.verification.show', submission.id))}
+                                    >
                                         <EyeIcon class="h-4 w-4" />
                                         Detail
                                     </Button>

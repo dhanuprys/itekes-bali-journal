@@ -83,14 +83,21 @@
                         <AlertCircleIcon class="h-5 w-5 text-red-600 mt-0.5" />
                         <div>
                             <h3 class="font-medium text-red-800 dark:text-red-200">Dokumen Memerlukan Revisi</h3>
-                            <p class="text-sm text-red-700 dark:text-red-300 mt-1">Dokumen Ethical Clearance yang diunggah sebelumnya telah ditolak oleh reviewer. Silakan periksa catatan dari reviewer dan unggah kembali dokumen yang baru.</p>
-                            
+                            <p class="text-sm text-red-700 dark:text-red-300 mt-1">
+                                Dokumen Ethical Clearance yang diunggah sebelumnya telah ditolak oleh reviewer. Silakan periksa catatan dari reviewer
+                                dan unggah kembali dokumen yang baru.
+                            </p>
+
                             {#if output?.verifications?.length > 0}
                                 <div class="mt-3 space-y-2">
                                     {#each output.verifications as verification}
                                         {#if verification.status === 'rejected'}
-                                            <div class="text-sm bg-red-100 dark:bg-red-900/50 p-3 rounded-md border border-red-200 dark:border-red-800">
-                                                <span class="font-medium text-red-900 dark:text-red-100 block mb-1">Catatan Penolakan dari {verification.user?.name || 'Reviewer'}:</span>
+                                            <div
+                                                class="text-sm bg-red-100 dark:bg-red-900/50 p-3 rounded-md border border-red-200 dark:border-red-800"
+                                            >
+                                                <span class="font-medium text-red-900 dark:text-red-100 block mb-1"
+                                                    >Catatan Penolakan dari {verification.user?.name || 'Reviewer'}:</span
+                                                >
                                                 <span class="text-red-800 dark:text-red-200 italic">"{verification.notes || 'Tanpa catatan'}"</span>
                                             </div>
                                         {/if}
@@ -214,8 +221,8 @@
                     <Card.Header>
                         <Card.Title>{hasDocument ? 'Upload Ulang Dokumen (Revisi)' : 'Upload Dokumen Ethical Clearance'}</Card.Title>
                         <Card.Description>
-                            {hasDocument 
-                                ? 'Unggah file dokumen Ethical Clearance yang telah direvisi.' 
+                            {hasDocument
+                                ? 'Unggah file dokumen Ethical Clearance yang telah direvisi.'
                                 : 'Unggah file dokumen Ethical Clearance resmi untuk diverifikasi oleh reviewer sebelum diterbitkan kepada pengaju.'}
                         </Card.Description>
                     </Card.Header>

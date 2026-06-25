@@ -47,7 +47,15 @@
                 resetOnError={['password', 'password_confirmation', 'current_password']}
                 class="space-y-6"
             >
-                {#snippet children({ errors, processing, recentlySuccessful }: { errors: Record<string, string>; processing: boolean; recentlySuccessful: boolean })}
+                {#snippet children({
+                    errors,
+                    processing,
+                    recentlySuccessful,
+                }: {
+                    errors: Record<string, string>;
+                    processing: boolean;
+                    recentlySuccessful: boolean;
+                })}
                     <div class="grid gap-2">
                         <Label for="current_password">Password saat ini</Label>
                         <Input

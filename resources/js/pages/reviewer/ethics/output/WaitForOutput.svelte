@@ -60,7 +60,9 @@
                                             {#if submission.stage === 'output' && submission.status === 'need_review'}
                                                 <Badge variant="destructive">Revisi Dokumen</Badge>
                                             {:else if submission.stage === 'verification'}
-                                                <Badge variant="secondary" class="bg-orange-100 text-orange-700 hover:bg-orange-100 border-orange-200">Sedang Diverifikasi</Badge>
+                                                <Badge variant="secondary" class="bg-orange-100 text-orange-700 hover:bg-orange-100 border-orange-200"
+                                                    >Sedang Diverifikasi</Badge
+                                                >
                                             {:else if submission.latest_output?.document_path}
                                                 <Badge>EC Diterbitkan</Badge>
                                             {:else}
@@ -69,7 +71,11 @@
                                         </Table.Cell>
                                         <Table.Cell>{new Date(submission.created_at).toLocaleDateString('id-ID')}</Table.Cell>
                                         <Table.Cell class="text-right">
-                                            <Button variant="outline" size="sm" onclick={() => router.visit(route('review.ethics.wait_for_output.show', submission.id))}>
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                onclick={() => router.visit(route('review.ethics.wait_for_output.show', submission.id))}
+                                            >
                                                 {#if submission.stage === 'output' && submission.status === 'need_review'}
                                                     Upload Revisi
                                                 {:else if submission.stage === 'verification' || submission.latest_output?.document_path}

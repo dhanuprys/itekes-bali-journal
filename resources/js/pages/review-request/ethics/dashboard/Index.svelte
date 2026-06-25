@@ -19,11 +19,16 @@
 
     function getStatusVariant(status: string) {
         switch (status) {
-            case 'approved': return 'default';
-            case 'rejected': return 'destructive';
-            case 'revision_needed': return 'destructive';
-            case 'need_review': return 'secondary';
-            default: return 'outline';
+            case 'approved':
+                return 'default';
+            case 'rejected':
+                return 'destructive';
+            case 'revision_needed':
+                return 'destructive';
+            case 'need_review':
+                return 'secondary';
+            default:
+                return 'outline';
         }
     }
 
@@ -54,7 +59,9 @@
                 </Card.Header>
                 <Card.Content>
                     {#if submissions.data.length === 0}
-                        <div class="text-center py-10 text-muted-foreground">Belum ada pengajuan. Silakan buat pengajuan baru melalui halaman Proposal.</div>
+                        <div class="text-center py-10 text-muted-foreground">
+                            Belum ada pengajuan. Silakan buat pengajuan baru melalui halaman Proposal.
+                        </div>
                     {:else}
                         <div class="space-y-3">
                             {#each submissions.data as submission (submission.id)}
@@ -71,7 +78,11 @@
                                         <Badge variant={getStatusVariant(submission.status)}>
                                             {submission.status.replace('_', ' ').toUpperCase()}
                                         </Badge>
-                                        <Button variant="outline" size="sm" onclick={() => router.visit(route('apply.ethics.proposal.show', submission.id))}>
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onclick={() => router.visit(route('apply.ethics.proposal.show', submission.id))}
+                                        >
                                             Detail
                                         </Button>
                                     </div>

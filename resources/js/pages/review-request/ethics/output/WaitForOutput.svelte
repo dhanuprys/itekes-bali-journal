@@ -55,13 +55,21 @@
                                     </div>
                                     <div class="flex items-center gap-2">
                                         {#if submission.stage === 'output' && submission.status === 'need_review'}
-                                            <Badge variant="secondary" class="bg-red-100 text-red-700 hover:bg-red-100 border-red-200">Revisi Dokumen</Badge>
+                                            <Badge variant="secondary" class="bg-red-100 text-red-700 hover:bg-red-100 border-red-200"
+                                                >Revisi Dokumen</Badge
+                                            >
                                         {:else if submission.stage === 'verification'}
-                                            <Badge variant="secondary" class="bg-orange-100 text-orange-700 hover:bg-orange-100 border-orange-200">Sedang Diverifikasi</Badge>
+                                            <Badge variant="secondary" class="bg-orange-100 text-orange-700 hover:bg-orange-100 border-orange-200"
+                                                >Sedang Diverifikasi</Badge
+                                            >
                                         {:else}
                                             <Badge variant="secondary">Menunggu EC</Badge>
                                         {/if}
-                                        <Button variant="outline" size="sm" onclick={() => router.visit(route('apply.ethics.wait_for_output.show', submission.id))}>
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onclick={() => router.visit(route('apply.ethics.wait_for_output.show', submission.id))}
+                                        >
                                             Detail
                                         </Button>
                                     </div>

@@ -20,15 +20,17 @@
     ];
 
     // Initialize form with proposal data
-    const form = useForm(untrack(() => ({
-        submission_id: submission.id,
-        final_title: detail.final_title || detail.title,
-        final_leader_name: detail.final_leader_name || detail.leader_name,
-        // Ensure members is an array
-        members: detail.members ? detail.members.map((m: any) => ({ name: m.name })) : [],
-        progress_report_path: '',
-        manuscript_path: '',
-    })));
+    const form = useForm(
+        untrack(() => ({
+            submission_id: submission.id,
+            final_title: detail.final_title || detail.title,
+            final_leader_name: detail.final_leader_name || detail.leader_name,
+            // Ensure members is an array
+            members: detail.members ? detail.members.map((m: any) => ({ name: m.name })) : [],
+            progress_report_path: '',
+            manuscript_path: '',
+        })),
+    );
 
     function submit() {
         $form.post(route('apply.research.progress_report.store'), {

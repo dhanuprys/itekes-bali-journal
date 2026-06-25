@@ -45,7 +45,7 @@
     function handleVerify() {
         const status = confirmDialogTarget;
         if (!status) return;
-        
+
         processing = true;
         router.post(
             route('review.ethics.verification.verify', submission.id),
@@ -82,8 +82,8 @@
         </AlertDialog.Header>
         <AlertDialog.Footer>
             <AlertDialog.Cancel disabled={processing}>Batal</AlertDialog.Cancel>
-            <AlertDialog.Action 
-                class={confirmDialogTarget === 'approved' ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'} 
+            <AlertDialog.Action
+                class={confirmDialogTarget === 'approved' ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'}
                 disabled={processing}
                 onclick={(e) => {
                     e.preventDefault();
@@ -147,7 +147,7 @@
                                     class="min-h-[100px]"
                                 />
                             </div>
-                            
+
                             <div class="flex items-center space-x-3 bg-muted/50 p-4 rounded-lg border">
                                 <Checkbox id="check-document" bind:checked={hasCheckedDocument} />
                                 <Label for="check-document" class="font-medium cursor-pointer leading-snug">
@@ -156,7 +156,12 @@
                             </div>
 
                             <div class="flex gap-3 pt-2">
-                                <Button variant="destructive" class="flex-1 gap-2" disabled={processing || !hasCheckedDocument} onclick={() => triggerVerify('rejected')}>
+                                <Button
+                                    variant="destructive"
+                                    class="flex-1 gap-2"
+                                    disabled={processing || !hasCheckedDocument}
+                                    onclick={() => triggerVerify('rejected')}
+                                >
                                     <XIcon class="h-4 w-4" />
                                     Tolak Dokumen
                                 </Button>

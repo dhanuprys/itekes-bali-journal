@@ -136,7 +136,13 @@
                             <div>
                                 <span class="text-sm font-semibold">Laporan Kemajuan</span>
                             </div>
-                            <Button href={`/storage/${detail?.progress_report_path}`} target="_blank" rel="noopener noreferrer" variant="outline" size="sm">Unduh</Button>
+                            <Button
+                                href={`/storage/${detail?.progress_report_path}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                variant="outline"
+                                size="sm">Unduh</Button
+                            >
                         </div>
                     {/if}
 
@@ -145,7 +151,13 @@
                             <div>
                                 <span class="text-sm font-semibold">Laporan Akhir</span>
                             </div>
-                            <Button href={`/storage/${detail?.final_report_path}`} target="_blank" rel="noopener noreferrer" variant="outline" size="sm">Unduh</Button>
+                            <Button
+                                href={`/storage/${detail?.final_report_path}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                variant="outline"
+                                size="sm">Unduh</Button
+                            >
                         </div>
                     {/if}
 
@@ -155,7 +167,13 @@
                                 <span class="text-sm font-semibold">Manuskrip</span>
                             </div>
                             {#if detail?.manuscript_path}
-                                <Button href={`/storage/${detail?.manuscript_path}`} target="_blank" rel="noopener noreferrer" variant="outline" size="sm">Unduh</Button>
+                                <Button
+                                    href={`/storage/${detail?.manuscript_path}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    variant="outline"
+                                    size="sm">Unduh</Button
+                                >
                             {:else}
                                 <span class="text-xs text-muted-foreground">Tidak ada file</span>
                             {/if}
@@ -166,7 +184,13 @@
                                 <span class="text-sm font-semibold">Luaran (LOA/HKI/Modul/Buku/Artikel)</span>
                             </div>
                             {#if detail?.supplementary_path}
-                                <Button href={`/storage/${detail?.supplementary_path}`} target="_blank" rel="noopener noreferrer" variant="outline" size="sm">Unduh</Button>
+                                <Button
+                                    href={`/storage/${detail?.supplementary_path}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    variant="outline"
+                                    size="sm">Unduh</Button
+                                >
                             {:else}
                                 <span class="text-xs text-muted-foreground">Tidak ada file</span>
                             {/if}

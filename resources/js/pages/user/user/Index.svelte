@@ -178,7 +178,9 @@
                                             <DropdownMenu.Item onclick={() => openEdit(user)}>Edit</DropdownMenu.Item>
                                             {#if !isImpersonating && user.id !== currentUserId}
                                                 <DropdownMenu.Separator />
-                                                <DropdownMenu.Item onclick={() => router.post(route('users.users.impersonate', user.id))}>Login Sebagai</DropdownMenu.Item>
+                                                <DropdownMenu.Item onclick={() => router.post(route('users.users.impersonate', user.id))}
+                                                    >Login Sebagai</DropdownMenu.Item
+                                                >
                                             {/if}
                                             <DropdownMenu.Separator />
                                             <DropdownMenu.Item onclick={() => openDeleteDialog(user)} class="text-destructive"

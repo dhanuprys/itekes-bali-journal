@@ -35,7 +35,10 @@
 
         {#snippet actions()}
             {#if submission.stage === 'verification'}
-                <Badge variant="secondary" class="px-3 py-1 gap-2 flex items-center bg-orange-100 text-orange-700 hover:bg-orange-100 border-orange-200">
+                <Badge
+                    variant="secondary"
+                    class="px-3 py-1 gap-2 flex items-center bg-orange-100 text-orange-700 hover:bg-orange-100 border-orange-200"
+                >
                     <ClockIcon class="h-4 w-4" />
                     Sedang Diverifikasi
                 </Badge>
@@ -60,7 +63,9 @@
                         </div>
                         <div>
                             <p class="text-sm text-muted-foreground">Tanggal Pengajuan</p>
-                            <p class="font-medium">{new Date(submission.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                            <p class="font-medium">
+                                {new Date(submission.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}
+                            </p>
                         </div>
                     </div>
                 </Card.Content>

@@ -23,11 +23,16 @@
 
     function getStatusVariant(status: string) {
         switch (status) {
-            case 'approved': return 'default';
-            case 'rejected': return 'destructive';
-            case 'revision_needed': return 'destructive';
-            case 'need_review': return 'secondary';
-            default: return 'outline';
+            case 'approved':
+                return 'default';
+            case 'rejected':
+                return 'destructive';
+            case 'revision_needed':
+                return 'destructive';
+            case 'need_review':
+                return 'secondary';
+            default:
+                return 'outline';
         }
     }
 
@@ -58,7 +63,8 @@
                     <InfoIcon class="h-4 w-4 text-blue-800 dark:text-blue-200" />
                     <Alert.Title>Perhatian</Alert.Title>
                     <Alert.Description>
-                        Anda masih memiliki pengajuan etik yang sedang berjalan. Anda baru dapat mengajukan pengajuan baru setelah pengajuan saat ini selesai atau ditolak.
+                        Anda masih memiliki pengajuan etik yang sedang berjalan. Anda baru dapat mengajukan pengajuan baru setelah pengajuan saat ini
+                        selesai atau ditolak.
                     </Alert.Description>
                 </Alert.Root>
             {/if}

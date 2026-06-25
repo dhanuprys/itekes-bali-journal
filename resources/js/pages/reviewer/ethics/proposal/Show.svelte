@@ -12,10 +12,10 @@
 
     let { submission, comments } = $props();
     const currentUser = $derived($page.props.auth.user);
-    
+
     let detail = $derived(submission?.latest_detail);
     let files = $derived(detail?.files ?? []);
-    
+
     let proposalReviews = $derived(submission.proposal_reviews || []);
     const currentUserReview = $derived(proposalReviews.find((r: any) => r.user_id === currentUser.id));
 
@@ -34,7 +34,11 @@
             case 'rejected':
                 return { color: 'bg-red-500/10 text-red-600 hover:bg-red-500/20 border-red-200', label: 'Ditolak', icon: AlertCircleIcon };
             case 'revision_needed':
-                return { color: 'bg-orange-500/10 text-orange-600 hover:bg-orange-500/20 border-orange-200', label: 'Perlu Revisi', icon: AlertCircleIcon };
+                return {
+                    color: 'bg-orange-500/10 text-orange-600 hover:bg-orange-500/20 border-orange-200',
+                    label: 'Perlu Revisi',
+                    icon: AlertCircleIcon,
+                };
             case 'need_review':
                 return { color: 'bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 border-blue-200', label: 'Menunggu Review', icon: ClockIcon };
             default:
@@ -85,7 +89,9 @@
                             </div>
                             <div>
                                 <p class="text-sm text-muted-foreground">Tanggal Pengajuan</p>
-                                <p class="font-medium">{new Date(submission.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                                <p class="font-medium">
+                                    {new Date(submission.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}
+                                </p>
                             </div>
                         </div>
                     </div>

@@ -57,7 +57,7 @@
 
     function validateFileNameConvention(fileName: string): boolean {
         if (!requiresConventionCheck) return true;
-        
+
         // Relaxed validation: Just ensure there are at least 2 parts separated by underscores
         // e.g. "Template_Name" or "Prodi_Ketua_Context"
         const parts = fileName.split('_');
@@ -267,7 +267,9 @@
     {/if}
 
     {#if requiresConventionCheck && namingHint}
-        <div class="mt-2 text-xs text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 p-2.5 rounded-md border border-blue-200 dark:border-blue-800">
+        <div
+            class="mt-2 text-xs text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 p-2.5 rounded-md border border-blue-200 dark:border-blue-800"
+        >
             <span class="font-semibold block mb-1">Format Penamaan File Wajib:</span>
             <code class="font-mono bg-blue-100 dark:bg-blue-900 px-1 py-0.5 rounded">{namingHint.format}</code>
             <br />

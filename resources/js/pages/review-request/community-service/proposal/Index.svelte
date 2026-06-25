@@ -59,7 +59,8 @@
                     <InfoIcon class="h-4 w-4 text-blue-800 dark:text-blue-200" />
                     <Alert.Title>Perhatian</Alert.Title>
                     <Alert.Description>
-                        Anda masih memiliki usulan pengabdian masyarakat yang sedang berjalan. Anda baru dapat mengajukan usulan baru setelah usulan saat ini selesai (Laporan Akhir disetujui) atau dibatalkan/ditolak.
+                        Anda masih memiliki usulan pengabdian masyarakat yang sedang berjalan. Anda baru dapat mengajukan usulan baru setelah usulan
+                        saat ini selesai (Laporan Akhir disetujui) atau dibatalkan/ditolak.
                     </Alert.Description>
                 </Alert.Root>
             {/if}

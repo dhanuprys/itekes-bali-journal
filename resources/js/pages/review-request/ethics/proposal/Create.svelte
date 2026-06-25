@@ -364,7 +364,10 @@
                             <AlertCircleIcon class="h-5 w-5 shrink-0 mt-0.5" />
                             <div class="text-sm">
                                 <p class="font-semibold mb-1">Penting: Format Penamaan File</p>
-                                <p>Harap perhatikan format penamaan file saat mengunggah dokumen Anda. Ikuti petunjuk format yang muncul pada setiap kotak unggahan di bawah ini.</p>
+                                <p>
+                                    Harap perhatikan format penamaan file saat mengunggah dokumen Anda. Ikuti petunjuk format yang muncul pada setiap
+                                    kotak unggahan di bawah ini.
+                                </p>
                             </div>
                         </div>
                         <div class="space-y-4">

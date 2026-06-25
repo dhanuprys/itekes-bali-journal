@@ -11,7 +11,6 @@
     }
 
     let { breadcrumbs = [], children }: Props = $props();
-    
 </script>
 
 <ModeWatcher />
