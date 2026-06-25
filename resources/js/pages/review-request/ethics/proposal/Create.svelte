@@ -97,14 +97,14 @@
             name: '8. Form Etik Hewan Coba',
             description: 'Formulir tambahan untuk etik hewan coba.',
             path: '/assets/templates/form-ajuan-untuk-etik-klinik-atau-uji-coba-hewan/8. FORM ETIK HEWAN COBA ITEKES.doc',
-            required: true,
+            required: false,
         },
         {
             key: 'lembar_perlakuan_hewan_coba',
             name: '9. Lembar Perlakuan Sebelum, Selama, dan Sesudah Penelitian',
             description: 'Lembar perlakuan penelitian.',
             path: '/assets/templates/form-ajuan-untuk-etik-klinik-atau-uji-coba-hewan/9. LEMBAR PERLAKUAN SEBELUM SELAMA DAN SESUDAH PENELITIAN.docx',
-            required: true,
+            required: false,
         },
     ];
 
@@ -357,11 +357,17 @@
                         <Card.Description>Unggah dokumen yang telah diisi. Format yang diterima: DOC, DOCX. Maksimal 5MB per file.</Card.Description>
                     </Card.Header>
                     <Card.Content>
-                        <div class="mb-6 p-4 rounded-lg bg-yellow-50 border border-yellow-200 text-yellow-800 dark:bg-yellow-900/20 dark:border-yellow-800 dark:text-yellow-200 flex items-start gap-3">
+                        <div
+                            class="mb-6 p-4 rounded-lg bg-yellow-50 border border-yellow-200 text-yellow-800 dark:bg-yellow-900/20 dark:border-yellow-800 dark:text-yellow-200 flex items-start gap-3"
+                        >
                             <AlertCircleIcon class="h-5 w-5 shrink-0 mt-0.5" />
                             <div class="text-sm">
                                 <p class="font-semibold mb-1">Penting: Format Penamaan File</p>
-                                <p>Harap perhatikan format penamaan file saat mengunggah dokumen Anda. Semua file harus dinamai dengan format: <strong>Nama_Kategori_NIM_JenisDokumen</strong>.</p>
+                                <p>
+                                    Harap perhatikan format penamaan file saat mengunggah dokumen Anda. Semua file harus dinamai dengan format: <strong
+                                        >Nama_Kategori_NIM_JenisDokumen</strong
+                                    >.
+                                </p>
                             </div>
                         </div>
                         <div class="space-y-4">
