@@ -9,6 +9,8 @@
     import Label from '@/components/ui/label/label.svelte';
     import FileUpload from '@/components/FileUpload.svelte';
     import { StorageUploadAction } from '@/data/storage-upload';
+    import { NamingHints } from '@/data/file-naming';
+    import { snakeToTitleCase } from '@/lib/utils';
     import { toast } from 'svelte-sonner';
     import { uploadState } from '@/stores/upload-state.svelte';
     import { CheckCircle2Icon, XCircleIcon, FileTextIcon, AlertCircleIcon } from 'lucide-svelte';
@@ -118,15 +120,16 @@
                         <AlertCircleIcon class="h-5 w-5 shrink-0 mt-0.5" />
                         <div class="text-sm">
                             <p class="font-semibold mb-1">Penting: Format Penamaan File</p>
-                            <p>Harap perhatikan format penamaan file saat mengunggah dokumen Anda. Semua file harus dinamai dengan format: <strong>Nama_Kategori_NIM_JenisDokumen</strong>.</p>
+                            <p>Harap perhatikan format penamaan file saat mengunggah dokumen Anda. Ikuti petunjuk format yang muncul pada setiap kotak unggahan di bawah ini.</p>
                         </div>
                     </div>
                     <div class="space-y-4">
                         {#each existingFiles as file (file.id)}
+                            {@const templateName = snakeToTitleCase(file.template_key)}
                             <div class="border rounded-lg p-4 space-y-2">
                                 <div class="flex items-center justify-between">
                                     <Label class="font-medium">
-                                        <span class="capitalize">{file.template_key.replace(/_/g, ' ')}</span>
+                                        <span>{templateName}</span>
                                     </Label>
                                     {#if uploadedFiles[file.template_key]?.file_path}
                                         <span class="flex items-center gap-1 text-xs text-green-600">
@@ -160,7 +163,7 @@
                                     accept=".doc,.docx"
                                     label="Pilih file baru atau seret ke sini"
                                     id={`upload-${file.template_key}`}
-                                    contextHint={file.template_key.split('_').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                                    namingHint={NamingHints.ethicsTemplate(templateName)}
                                 />
                             </div>
                         {/each}

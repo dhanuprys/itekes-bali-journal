@@ -3,6 +3,7 @@
     import { Label } from '@/components/ui/label';
     import FileUpload from '@/components/FileUpload.svelte';
     import { StorageUploadAction } from '@/data/storage-upload';
+    import { getFinalReportHint, NamingHints } from '@/data/file-naming';
 
     let { form = $bindable(), type = 'research', mode = 'create' } = $props();
 </script>
@@ -16,6 +17,7 @@
                 bind:value={form.final_report_path}
                 accept=".doc,.docx"
                 description="Upload laporan akhir. Format: DOC, DOCX. Maksimal 5MB."
+                namingHint={getFinalReportHint(type as 'research' | 'community-service')}
             />
             {#if form.errors?.final_report_path}
                 <p class="text-sm text-destructive mt-1">{form.errors.final_report_path}</p>
@@ -29,6 +31,7 @@
                 bind:value={form.manuscript_path}
                 accept=".doc,.docx"
                 description="Upload manuskrip. Format: DOC, DOCX. Maksimal 5MB."
+                namingHint={NamingHints.MANUSCRIPT}
             />
             {#if form.errors?.manuscript_path}
                 <p class="text-sm text-destructive mt-1">{form.errors.manuscript_path}</p>
@@ -66,6 +69,7 @@
                 accept=".zip"
                 maxSize={6 * 1024 * 1024}
                 description="Upload file luaran. Format: ZIP. Maksimal 6MB."
+                namingHint={NamingHints.SUPPLEMENTARY}
             />
             {#if form.errors?.supplementary_path}
                 <p class="text-sm text-destructive mt-1">{form.errors.supplementary_path}</p>

@@ -6,6 +6,7 @@
     import { Trash2Icon, PlusIcon } from 'lucide-svelte';
     import FileUpload from '@/components/FileUpload.svelte';
     import { StorageUploadAction } from '@/data/storage-upload';
+    import { getProposalHint } from '@/data/file-naming';
     import * as Select from '@/components/ui/select';
     import { CurrencyInput } from '@canutin/svelte-currency-input';
 
@@ -247,6 +248,7 @@
                             action={isResearch ? StorageUploadAction.RESEARCH_PROPOSAL : StorageUploadAction.CS_PROPOSAL}
                             bind:value={form.proposal_path}
                             error={form.errors?.proposal_path}
+                            namingHint={getProposalHint(type as 'research' | 'community-service', mode as 'create' | 'revise')}
                         />
                         {#if mode === 'revise'}
                             <Field.Description>Biarkan kosong jika tidak mengubah file.</Field.Description>

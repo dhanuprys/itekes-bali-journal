@@ -8,6 +8,7 @@
     import { cn } from '@/lib/utils';
     import { tick } from 'svelte';
     import { StorageUploadAction } from '@/data/storage-upload';
+    import type { NamingHint } from '@/data/file-naming';
 
     interface Props {
         action: string;
@@ -19,8 +20,7 @@
         label?: string;
         description?: string;
         id?: string;
-        expectedFileName?: string;
-        contextHint?: string;
+        namingHint?: NamingHint;
     }
 
     let {
@@ -33,8 +33,7 @@
         label = 'Upload File',
         description,
         id = 'file-upload-' + Math.random().toString(36).substring(2, 11),
-        expectedFileName,
-        contextHint,
+        namingHint,
     }: Props = $props();
 
     let isLocalDragging = $state(false);
@@ -49,22 +48,20 @@
         }
     });
 
-    // A flag to optionally disable the convention check if it's Ethical Clearance template strict matching
-    // Also skip convention check for Profile Photos and Payment Proofs
+    // Also skip convention check for Profile Photos, Payment Proofs, and Reviewer EC output
     let requiresConventionCheck = $derived(
-        !expectedFileName &&
-            action !== StorageUploadAction.USER_PROFILE_PHOTO &&
-            action !== StorageUploadAction.ETHICS_PAYMENT_PROOF,
+        action !== StorageUploadAction.USER_PROFILE_PHOTO &&
+            action !== StorageUploadAction.ETHICS_PAYMENT_PROOF &&
+            action !== StorageUploadAction.ETHICS_OUTPUT,
     );
 
     function validateFileNameConvention(fileName: string): boolean {
         if (!requiresConventionCheck) return true;
         
-        // Relaxed validation: Just ensure there are at least 4 parts separated by underscores
-        // (Name_Category_Identifier_ContextFile.ext)
-        // This allows variations like "Pengabdian Masyarakat" without breaking.
+        // Relaxed validation: Just ensure there are at least 2 parts separated by underscores
+        // e.g. "Template_Name" or "Prodi_Ketua_Context"
         const parts = fileName.split('_');
-        if (parts.length < 4) return false;
+        if (parts.length < 2) return false;
 
         // Ensure the last part has an extension
         const lastPart = parts[parts.length - 1];
@@ -74,13 +71,10 @@
     }
 
     function validateFile(file: File): boolean {
-        if (expectedFileName && file.name !== expectedFileName) {
-            localError = `Nama file harus sama persis dengan template: "${expectedFileName}".`;
-            return false;
-        }
-
         if (requiresConventionCheck && !validateFileNameConvention(file.name)) {
-            localError = `Format nama file tidak sesuai. Gunakan format: Nama_Kategori_NIM_JenisDokumen`;
+            localError = namingHint
+                ? `Format nama file tidak sesuai. Lihat petunjuk di bawah.`
+                : `Format nama file tidak sesuai. Gunakan pemisah underscore (_) pada nama file.`;
             return false;
         }
 
@@ -272,14 +266,12 @@
         </p>
     {/if}
 
-    {#if requiresConventionCheck}
-        {@const contextLabel = contextHint || 'JenisDokumen'}
-        {@const exampleContext = contextHint || 'Proposal'}
+    {#if requiresConventionCheck && namingHint}
         <div class="mt-2 text-xs text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 p-2.5 rounded-md border border-blue-200 dark:border-blue-800">
-            <span class="font-semibold block mb-1">Format Penamaan File Wajib:</span> 
-            <code class="font-mono bg-blue-100 dark:bg-blue-900 px-1 py-0.5 rounded">Nama_Kategori_NIM/NUPTK_{contextLabel}</code>
+            <span class="font-semibold block mb-1">Format Penamaan File Wajib:</span>
+            <code class="font-mono bg-blue-100 dark:bg-blue-900 px-1 py-0.5 rounded">{namingHint.format}</code>
             <br />
-            <span class="text-[0.7rem] opacity-90 block mt-1">Contoh: I Gede Hendrayana_PKM_1912040_{exampleContext}.docx</span>
+            <span class="text-[0.7rem] opacity-90 block mt-1">Contoh: {namingHint.example}</span>
         </div>
     {/if}
 </div>

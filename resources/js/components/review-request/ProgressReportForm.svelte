@@ -4,6 +4,7 @@
     import * as Card from '@/components/ui/card';
     import FileUpload from '@/components/FileUpload.svelte';
     import { StorageUploadAction } from '@/data/storage-upload';
+    import { getProgressReportHint } from '@/data/file-naming';
     import * as Select from '@/components/ui/select';
     import Label from '../ui/label/label.svelte';
 
@@ -60,6 +61,7 @@
                                 bind:value={form.progress_report_path}
                                 accept=".doc,.docx"
                                 description="Upload laporan kemajuan."
+                                namingHint={getProgressReportHint(type as 'research' | 'community-service')}
                             />
                             {#if form.errors?.progress_report_path}
                                 <p class="text-sm text-destructive mt-1">{form.errors.progress_report_path}</p>

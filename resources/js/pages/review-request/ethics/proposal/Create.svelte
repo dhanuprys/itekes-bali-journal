@@ -12,6 +12,7 @@
     import { Input } from '@/components/ui/input';
     import FileUpload from '@/components/FileUpload.svelte';
     import { StorageUploadAction } from '@/data/storage-upload';
+    import { NamingHints } from '@/data/file-naming';
     import { toast } from 'svelte-sonner';
     import { uploadState } from '@/stores/upload-state.svelte';
     import { DownloadIcon, FileTextIcon, CheckCircle2Icon, XCircleIcon, AlertCircleIcon } from 'lucide-svelte';
@@ -363,11 +364,7 @@
                             <AlertCircleIcon class="h-5 w-5 shrink-0 mt-0.5" />
                             <div class="text-sm">
                                 <p class="font-semibold mb-1">Penting: Format Penamaan File</p>
-                                <p>
-                                    Harap perhatikan format penamaan file saat mengunggah dokumen Anda. Semua file harus dinamai dengan format: <strong
-                                        >Nama_Kategori_NIM_JenisDokumen</strong
-                                    >.
-                                </p>
+                                <p>Harap perhatikan format penamaan file saat mengunggah dokumen Anda. Ikuti petunjuk format yang muncul pada setiap kotak unggahan di bawah ini.</p>
                             </div>
                         </div>
                         <div class="space-y-4">
@@ -417,7 +414,7 @@
                                         accept=".doc,.docx"
                                         label="Pilih file atau seret ke sini"
                                         id={`upload-${template.key}`}
-                                        contextHint={template.name}
+                                        namingHint={NamingHints.ethicsTemplate(template.name)}
                                     />
                                 </div>
                             {/each}

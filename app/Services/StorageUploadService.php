@@ -26,9 +26,9 @@ class StorageUploadService
         // Backend validation for file naming convention
         if ($this->requiresConventionCheck($action)) {
             $parts = explode('_', pathinfo($originalName, PATHINFO_FILENAME));
-            if (count($parts) < 4) {
+            if (count($parts) < 2) {
                 throw \Illuminate\Validation\ValidationException::withMessages([
-                    'file' => 'Format nama file tidak sesuai. Gunakan format: Nama_Kategori_NIM_JenisDokumen',
+                    'file' => 'Format nama file tidak sesuai. Pastikan nama file menggunakan pemisah underscore (_).',
                 ]);
             }
         }
@@ -89,10 +89,10 @@ class StorageUploadService
      */
     private function requiresConventionCheck(StorageUploadAction $action): bool
     {
-        // Don't enforce on profile photos and payment proofs
         return !in_array($action, [
             StorageUploadAction::USER_PROFILE_PHOTO,
             StorageUploadAction::ETHICS_PAYMENT_PROOF,
+            StorageUploadAction::ETHICS_OUTPUT,
         ]);
     }
 }
