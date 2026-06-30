@@ -44,7 +44,7 @@
             </div>
         {/if}
         <AppSidebarHeader {breadcrumbs} />
-        <div class="w-full mx-auto max-w-7xl">
+        <div class="w-full mx-auto max-w-400">
             {@render children?.()}
         </div>
     </AppContent>
