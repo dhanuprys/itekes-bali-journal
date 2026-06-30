@@ -195,10 +195,19 @@
                     {#each submissions.data as submission (submission.id)}
                         <Table.Row class="group hover:bg-muted/50 transition-colors">
                             <Table.Cell class="font-medium">
-                                <div class="max-w-md">
-                                    <p class="truncate" title={submission.latest_detail?.title || submission.latest_detail?.final_title}>
-                                        {submission.latest_detail?.title || submission.latest_detail?.final_title || 'Judul Tidak Tersedia'}
-                                    </p>
+                                <div class="max-w-[250px]">
+                                    <Tooltip.Root>
+                                        <Tooltip.Trigger class="text-left w-full">
+                                            <p class="truncate">
+                                                {submission.latest_detail?.title || submission.latest_detail?.final_title || 'Judul Tidak Tersedia'}
+                                            </p>
+                                        </Tooltip.Trigger>
+                                        <Tooltip.Content class="max-w-[400px]">
+                                            <p class="text-sm">
+                                                {submission.latest_detail?.title || submission.latest_detail?.final_title || 'Judul Tidak Tersedia'}
+                                            </p>
+                                        </Tooltip.Content>
+                                    </Tooltip.Root>
                                 </div>
                             </Table.Cell>
                             <Table.Cell>
