@@ -14,9 +14,37 @@
         status?: string;
         canResetPassword: boolean;
         canRegister: boolean;
+        loginNonce: string;
+        loginPuzzle: string;
     }
 
-    let { status, canResetPassword, canRegister }: Props = $props();
+    let { status, canResetPassword, canRegister, loginNonce, loginPuzzle }: Props = $props();
+
+    let rawPassword = $state('');
+
+    function solvePuzzle(pwd: string, puzzleBase64: string): string {
+        if (!pwd || !puzzleBase64) return pwd;
+        try {
+            const puzzle = JSON.parse(atob(puzzleBase64));
+            let chars = Array.from(pwd);
+            
+            if (puzzle.action === 'reverse') chars = chars.reverse();
+            
+            let processed = '';
+            for (let i = 0; i < chars.length; i++) {
+                let code = chars[i].codePointAt(0) || 0;
+                if (puzzle.action === 'shift') code = (code + puzzle.key);
+                if (puzzle.action === 'xor') code = (code ^ puzzle.key);
+                
+                processed += code.toString(16).padStart(6, '0');
+            }
+            return processed;
+        } catch (e) {
+            return pwd;
+        }
+    }
+
+    let obfuscatedPassword = $derived(solvePuzzle(rawPassword, loginPuzzle));
 </script>
 
 <svelte:head>
@@ -30,9 +58,10 @@
         </div>
     {/if}
 
-    <Form method="post" action={route('login')} resetOnSuccess={['password']} class="flex flex-col gap-6">
+    <Form method="post" action={route('login')} class="flex flex-col gap-6">
         {#snippet children({ errors, processing }: BaseFormSnippetProps)}
             <div class="grid gap-6">
+                <input type="hidden" name="login_nonce" value={loginNonce} />
                 <div class="grid gap-2">
                     <Label for="email">Alamat Email</Label>
                     <Input id="email" name="email" type="email" required autofocus tabindex={1} autocomplete="email" placeholder="email@contoh.com" />
@@ -47,14 +76,15 @@
                         {/if}
                     </div>
                     <Input
-                        id="password"
-                        name="password"
+                        id="raw_password"
                         type="password"
                         required
                         tabindex={2}
                         autocomplete="current-password"
                         placeholder="Kata Sandi"
+                        bind:value={rawPassword}
                     />
+                    <input type="hidden" name="password" value={obfuscatedPassword} />
                     <InputError message={errors.password} />
                 </div>
 

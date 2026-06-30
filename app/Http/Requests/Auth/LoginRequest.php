@@ -5,6 +5,7 @@ namespace App\Http\Requests\Auth;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -29,6 +30,7 @@ class LoginRequest extends FormRequest
         return [
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
+            'login_nonce' => ['required', 'string'],
         ];
     }
 
@@ -40,6 +42,36 @@ class LoginRequest extends FormRequest
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
+
+        $nonceKey = 'login_nonce_' . session()->getId() . '_' . $this->input('login_nonce');
+        
+        $puzzle = Cache::pull($nonceKey);
+        
+        if (!$puzzle) {
+            RateLimiter::hit($this->throttleKey());
+            throw ValidationException::withMessages([
+                'email' => 'Sesi login tidak valid atau sudah digunakan (Replay Attack dicegah). Silakan muat ulang halaman.',
+            ]);
+        }
+
+        $hex = $this->input('password');
+        $chars = [];
+        
+        if (is_string($hex) && strlen($hex) % 6 === 0) {
+            foreach (str_split($hex, 6) as $chunk) {
+                $code = hexdec($chunk);
+                if ($puzzle['action'] === 'shift') $code = $code - $puzzle['key'];
+                elseif ($puzzle['action'] === 'xor') $code = $code ^ $puzzle['key'];
+                
+                $chars[] = mb_chr($code, 'UTF-8');
+            }
+            
+            if ($puzzle['action'] === 'reverse') {
+                $chars = array_reverse($chars);
+            }
+            
+            $this->merge(['password' => implode('', $chars)]);
+        }
 
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
