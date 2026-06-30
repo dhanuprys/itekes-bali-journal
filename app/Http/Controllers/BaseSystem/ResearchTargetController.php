@@ -20,7 +20,7 @@ class ResearchTargetController extends Controller
             ->paginate($limit)
             ->withQueryString();
 
-        return Inertia::render('base-system/research-target/Index', [
+        return Inertia::render('base-system/research-target/index', [
             'researchTargets' => $researchTargets,
             'filters' => $request->only(['search', 'limit']),
         ]);
@@ -28,7 +28,7 @@ class ResearchTargetController extends Controller
 
     public function show(\App\Models\ResearchTarget $researchTarget)
     {
-        return Inertia::render('base-system/research-target/Show', [
+        return Inertia::render('base-system/research-target/show', [
             'researchTarget' => $researchTarget,
         ]);
     }

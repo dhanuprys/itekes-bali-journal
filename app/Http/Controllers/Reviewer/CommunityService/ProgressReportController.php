@@ -30,7 +30,7 @@ class ProgressReportController extends Controller
             ->latest()
             ->paginate(10);
 
-        return Inertia::render('reviewer/community-service/progress-report/Index', [
+        return Inertia::render('reviewer/community-service/progress-report/index', [
             'submissions' => $submissions,
         ]);
     }
@@ -56,7 +56,7 @@ class ProgressReportController extends Controller
             'latestDetail.comments.user'
         ]);
 
-        return Inertia::render('reviewer/community-service/progress-report/Show', [
+        return Inertia::render('reviewer/community-service/progress-report/show', [
             'submission' => $submission,
             'comments' => $submission->latestDetail->comments,
         ]);

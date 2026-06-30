@@ -20,7 +20,7 @@ class CommunityServiceTargetController extends Controller
             ->paginate($limit)
             ->withQueryString();
 
-        return Inertia::render('base-system/community-service-target/Index', [
+        return Inertia::render('base-system/community-service-target/index', [
             'communityServiceTargets' => $communityServiceTargets,
             'filters' => $request->only(['search', 'limit']),
         ]);
@@ -28,7 +28,7 @@ class CommunityServiceTargetController extends Controller
 
     public function show(\App\Models\CommunityServiceTarget $communityServiceTarget)
     {
-        return Inertia::render('base-system/community-service-target/Show', [
+        return Inertia::render('base-system/community-service-target/show', [
             'communityServiceTarget' => $communityServiceTarget,
         ]);
     }

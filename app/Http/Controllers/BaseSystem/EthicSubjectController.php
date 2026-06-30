@@ -20,7 +20,7 @@ class EthicSubjectController extends Controller
             ->paginate($limit)
             ->withQueryString();
 
-        return Inertia::render('base-system/ethic-subject/Index', [
+        return Inertia::render('base-system/ethic-subject/index', [
             'ethicalClearanceSubjects' => $ethicalClearanceSubjects,
             'filters' => $request->only(['search', 'limit']),
         ]);
@@ -28,7 +28,7 @@ class EthicSubjectController extends Controller
 
     public function show(\App\Models\EthicalClearanceSubject $ethicalClearanceSubject)
     {
-        return Inertia::render('base-system/ethic-subject/Show', [
+        return Inertia::render('base-system/ethic-subject/show', [
             'ethicalClearanceSubject' => $ethicalClearanceSubject,
         ]);
     }

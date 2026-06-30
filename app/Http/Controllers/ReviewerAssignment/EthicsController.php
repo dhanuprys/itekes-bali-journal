@@ -49,7 +49,7 @@ class EthicsController extends Controller
 
         $reviewers = User::permission(PermissionRole::P_REVIEW_ETHICS->value)->get();
 
-        return Inertia::render('reviewer-assignment/ethics/Index', [
+        return Inertia::render('reviewer-assignment/ethics/index', [
             'submissions' => $submissions,
             'reviewers' => $reviewers,
             'filters' => [

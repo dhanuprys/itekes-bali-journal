@@ -28,7 +28,7 @@ class OutputController extends Controller
             ->latest()
             ->paginate(10);
 
-        return Inertia::render('review-request/ethics/output/WaitForOutput', [
+        return Inertia::render('review-request/ethics/output/wait-for-output', [
             'submissions' => $submissions,
         ]);
     }
@@ -43,7 +43,7 @@ class OutputController extends Controller
             })
             ->findOrFail($id);
 
-        return Inertia::render('review-request/ethics/output/WaitForOutputDetail', [
+        return Inertia::render('review-request/ethics/output/wait-for-output-detail', [
             'submission' => $submission,
         ]);
     }
@@ -58,7 +58,7 @@ class OutputController extends Controller
             ->latest()
             ->paginate(10);
 
-        return Inertia::render('review-request/ethics/output/Index', [
+        return Inertia::render('review-request/ethics/output/index', [
             'submissions' => $submissions,
         ]);
     }
@@ -73,7 +73,7 @@ class OutputController extends Controller
             ->where('user_id', Auth::id())
             ->findOrFail($id);
 
-        return Inertia::render('review-request/ethics/output/Show', [
+        return Inertia::render('review-request/ethics/output/show', [
             'submission' => $submission,
         ]);
     }

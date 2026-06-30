@@ -32,7 +32,7 @@ class ProposalController extends Controller
             ->latest()
             ->paginate(10);
 
-        return Inertia::render('reviewer/ethics/proposal/Index', [
+        return Inertia::render('reviewer/ethics/proposal/index', [
             'submissions' => $submissions,
         ]);
     }
@@ -53,7 +53,7 @@ class ProposalController extends Controller
             ->where('stage', EthicsReviewStage::PROPOSAL->value)
             ->findOrFail($id);
 
-        return Inertia::render('reviewer/ethics/proposal/Show', [
+        return Inertia::render('reviewer/ethics/proposal/show', [
             'submission' => $submission,
             'comments' => $submission->latestDetail->comments ?? [],
         ]);

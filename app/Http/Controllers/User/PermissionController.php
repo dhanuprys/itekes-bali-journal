@@ -21,7 +21,7 @@ class PermissionController extends Controller
             ->paginate($limit)
             ->withQueryString();
 
-        return Inertia::render('user/permission/Index', [
+        return Inertia::render('user/permission/index', [
             'permissions' => $permissions,
             'filters' => $request->only(['search', 'limit']),
         ]);
@@ -31,7 +31,7 @@ class PermissionController extends Controller
     {
         $permission->load('roles'); // Load roles that have this permission as requested
 
-        return Inertia::render('user/permission/Show', [
+        return Inertia::render('user/permission/show', [
             'permission' => $permission,
         ]);
     }

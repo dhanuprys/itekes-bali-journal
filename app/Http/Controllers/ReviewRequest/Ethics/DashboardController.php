@@ -17,7 +17,7 @@ class DashboardController extends Controller
             ->latest()
             ->paginate(10);
 
-        return Inertia::render('review-request/ethics/dashboard/Index', [
+        return Inertia::render('review-request/ethics/dashboard/index', [
             'submissions' => $submissions,
         ]);
     }

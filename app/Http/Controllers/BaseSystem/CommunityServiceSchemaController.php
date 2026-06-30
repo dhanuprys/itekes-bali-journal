@@ -20,7 +20,7 @@ class CommunityServiceSchemaController extends Controller
             ->paginate($limit)
             ->withQueryString();
 
-        return Inertia::render('base-system/community-service-schema/Index', [
+        return Inertia::render('base-system/community-service-schema/index', [
             'communityServiceSchemas' => $communityServiceSchemas,
             'filters' => $request->only(['search', 'limit']),
         ]);
@@ -28,7 +28,7 @@ class CommunityServiceSchemaController extends Controller
 
     public function show(\App\Models\CommunityServiceSchema $communityServiceSchema)
     {
-        return Inertia::render('base-system/community-service-schema/Show', [
+        return Inertia::render('base-system/community-service-schema/show', [
             'communityServiceSchema' => $communityServiceSchema,
         ]);
     }

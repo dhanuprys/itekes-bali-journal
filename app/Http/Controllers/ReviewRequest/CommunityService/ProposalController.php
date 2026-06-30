@@ -52,7 +52,7 @@ class ProposalController extends Controller
             ->latest()
             ->paginate(10);
 
-        return Inertia::render('review-request/community-service/proposal/Index', [
+        return Inertia::render('review-request/community-service/proposal/index', [
             'submissions' => $submissions,
             'hasOngoing' => $this->hasOngoingSubmission(),
         ]);
@@ -64,7 +64,7 @@ class ProposalController extends Controller
             abort(403, 'Anda masih memiliki usulan pengabdian yang sedang berjalan.');
         }
 
-        return Inertia::render('review-request/community-service/proposal/Create', [
+        return Inertia::render('review-request/community-service/proposal/create', [
             'studyPrograms' => StudyProgram::all(),
             'communityServiceTargets' => CommunityServiceTarget::all(),
             'schemas' => CommunityServiceSchema::all(),
@@ -157,7 +157,7 @@ class ProposalController extends Controller
             ->where('user_id', Auth::id())
             ->findOrFail($id);
 
-        return Inertia::render('review-request/community-service/proposal/Show', [
+        return Inertia::render('review-request/community-service/proposal/show', [
             'submission' => $submission,
         ]);
     }
@@ -174,7 +174,7 @@ class ProposalController extends Controller
             }
         }
 
-        return Inertia::render('review-request/community-service/proposal/Edit', [
+        return Inertia::render('review-request/community-service/proposal/edit', [
             'submission' => $submission,
             'detail' => $submission->latestDetail,
             'studyPrograms' => StudyProgram::all(),

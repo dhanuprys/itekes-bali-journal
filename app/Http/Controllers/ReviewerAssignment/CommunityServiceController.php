@@ -50,7 +50,7 @@ class CommunityServiceController extends Controller
 
         $reviewers = User::permission(PermissionRole::P_REVIEW_COMMUNITY_SERVICE->value)->get();
 
-        return Inertia::render('reviewer-assignment/community-service/Index', [
+        return Inertia::render('reviewer-assignment/community-service/index', [
             'submissions' => $submissions,
             'reviewers' => $reviewers,
             'filters' => [

@@ -36,7 +36,7 @@ class RoleController extends Controller
             ];
         });
 
-        return Inertia::render('user/role/Index', [
+        return Inertia::render('user/role/index', [
             'roles' => $roles,
             'filters' => $request->only(['search', 'limit']),
             'permissions' => $permissions,
@@ -47,7 +47,7 @@ class RoleController extends Controller
     {
         $role->load('permissions');
 
-        return Inertia::render('user/role/Show', [
+        return Inertia::render('user/role/show', [
             'role' => $role,
         ]);
     }

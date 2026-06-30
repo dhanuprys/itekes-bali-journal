@@ -10,7 +10,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return Inertia::render('general/dashboard/Index');
+        return Inertia::render('general/dashboard/index');
     }
 
     public function changelog()
@@ -37,7 +37,7 @@ class DashboardController extends Controller
             ],
         ];
 
-        return Inertia::render('general/dashboard/Changelog', [
+        return Inertia::render('general/dashboard/changelog', [
             'changelog' => $changelog
         ]);
     }

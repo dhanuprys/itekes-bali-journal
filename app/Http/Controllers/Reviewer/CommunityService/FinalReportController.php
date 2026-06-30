@@ -31,7 +31,7 @@ class FinalReportController extends Controller
             ->latest()
             ->paginate(10);
 
-        return Inertia::render('reviewer/community-service/final-report/Index', [
+        return Inertia::render('reviewer/community-service/final-report/index', [
             'submissions' => $submissions,
         ]);
     }
@@ -57,7 +57,7 @@ class FinalReportController extends Controller
             'latestDetail.comments.user'
         ]);
 
-        return Inertia::render('reviewer/community-service/final-report/Show', [
+        return Inertia::render('reviewer/community-service/final-report/show', [
             'submission' => $submission,
             'comments' => $submission->latestDetail->comments,
         ]);

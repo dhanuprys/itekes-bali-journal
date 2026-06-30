@@ -28,7 +28,7 @@ class DashboardController extends Controller
                 ->count(),
         ];
 
-        return Inertia::render('review-request/community-service/dashboard/Index', [
+        return Inertia::render('review-request/community-service/dashboard/index', [
             'submissions' => $submissions,
             'counts' => $counts,
         ]);
@@ -40,7 +40,7 @@ class DashboardController extends Controller
             ->where('user_id', Auth::id())
             ->findOrFail($id);
 
-        return Inertia::render('review-request/community-service/dashboard/Revisions', [
+        return Inertia::render('review-request/community-service/dashboard/revisions', [
             'submission' => $submission,
         ]);
     }
@@ -54,7 +54,7 @@ class DashboardController extends Controller
             ->with(['comments.user', 'members', 'studyProgram', 'schema', 'target', 'reviewers.user'])
             ->findOrFail($revisionId);
 
-        return Inertia::render('review-request/community-service/dashboard/ShowRevision', [
+        return Inertia::render('review-request/community-service/dashboard/show-revision', [
             'submission' => $submission,
             'detail' => $detail,
         ]);

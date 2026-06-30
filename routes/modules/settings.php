@@ -21,6 +21,6 @@ Route::middleware('auth')->group(function () {
     Route::get('settings/login-logs', [ProfileController::class, 'loginLogs'])->name('login-logs.index');
 
     Route::get('settings/appearance', function () {
-        return Inertia::render('settings/Appearance');
+        return Inertia::render('settings/appearance');
     })->name('appearance.edit');
 });

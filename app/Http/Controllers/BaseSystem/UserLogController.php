@@ -25,7 +25,7 @@ class UserLogController extends Controller
             ->paginate($limit)
             ->withQueryString();
 
-        return Inertia::render('base-system/user-log/Index', [
+        return Inertia::render('base-system/user-log/index', [
             'logs' => $logs,
             'filters' => $request->only(['search', 'limit']),
         ]);

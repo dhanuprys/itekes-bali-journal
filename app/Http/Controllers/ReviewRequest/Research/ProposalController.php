@@ -50,7 +50,7 @@ class ProposalController extends Controller
             ->latest()
             ->paginate(10);
 
-        return Inertia::render('review-request/research/proposal/Index', [
+        return Inertia::render('review-request/research/proposal/index', [
             'submissions' => $submissions,
             'hasOngoing' => $this->hasOngoingSubmission(),
         ]);
@@ -62,7 +62,7 @@ class ProposalController extends Controller
             abort(403, 'Anda masih memiliki usulan penelitian yang sedang berjalan.');
         }
 
-        return Inertia::render('review-request/research/proposal/Create', [
+        return Inertia::render('review-request/research/proposal/create', [
             'studyPrograms' => StudyProgram::all(),
             'researchTargets' => ResearchTarget::all(),
             'schemas' => ResearchSchema::all(),
@@ -155,7 +155,7 @@ class ProposalController extends Controller
             ->where('user_id', Auth::id())
             ->findOrFail($id);
 
-        return Inertia::render('review-request/research/proposal/Show', [
+        return Inertia::render('review-request/research/proposal/show', [
             'submission' => $submission,
         ]);
     }
@@ -172,7 +172,7 @@ class ProposalController extends Controller
             }
         }
 
-        return Inertia::render('review-request/research/proposal/Edit', [
+        return Inertia::render('review-request/research/proposal/edit', [
             'submission' => $submission,
             'detail' => $submission->latestDetail,
             'studyPrograms' => StudyProgram::all(),

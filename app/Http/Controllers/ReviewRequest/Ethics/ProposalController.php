@@ -48,7 +48,7 @@ class ProposalController extends Controller
             ->latest()
             ->paginate(10);
 
-        return Inertia::render('review-request/ethics/proposal/Index', [
+        return Inertia::render('review-request/ethics/proposal/index', [
             'submissions' => $submissions,
             'hasOngoing' => $this->hasOngoingSubmission(),
         ]);
@@ -60,7 +60,7 @@ class ProposalController extends Controller
             abort(403, 'Anda masih memiliki pengajuan etik yang sedang berjalan.');
         }
 
-        return Inertia::render('review-request/ethics/proposal/Create', [
+        return Inertia::render('review-request/ethics/proposal/create', [
             'studyPrograms' => \App\Models\StudyProgram::all(),
         ]);
     }
@@ -146,7 +146,7 @@ class ProposalController extends Controller
             ->where('user_id', Auth::id())
             ->findOrFail($id);
 
-        return Inertia::render('review-request/ethics/proposal/Show', [
+        return Inertia::render('review-request/ethics/proposal/show', [
             'submission' => $submission,
         ]);
     }
@@ -163,7 +163,7 @@ class ProposalController extends Controller
             }
         }
 
-        return Inertia::render('review-request/ethics/proposal/Edit', [
+        return Inertia::render('review-request/ethics/proposal/edit', [
             'submission' => $submission,
         ]);
     }

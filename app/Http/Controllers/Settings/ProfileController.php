@@ -18,7 +18,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): Response
     {
-        return Inertia::render('settings/Profile', [
+        return Inertia::render('settings/profile', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => $request->session()->get('status'),
         ]);
@@ -81,7 +81,7 @@ class ProfileController extends Controller
 
         $loginLogs = $user->loginLogs()->latest()->paginate(10);
 
-        return Inertia::render('settings/LoginLogs', [
+        return Inertia::render('settings/login-logs', [
             'loginLogs' => $loginLogs,
         ]);
     }

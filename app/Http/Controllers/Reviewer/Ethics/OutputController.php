@@ -41,7 +41,7 @@ class OutputController extends Controller
             ->latest()
             ->paginate(10);
 
-        return Inertia::render('reviewer/ethics/output/WaitForOutput', [
+        return Inertia::render('reviewer/ethics/output/wait-for-output', [
             'submissions' => $submissions,
         ]);
     }
@@ -54,7 +54,7 @@ class OutputController extends Controller
             ->latest()
             ->paginate(10);
 
-        return Inertia::render('reviewer/ethics/output/Index', [
+        return Inertia::render('reviewer/ethics/output/index', [
             'submissions' => $submissions,
         ]);
     }
@@ -73,7 +73,7 @@ class OutputController extends Controller
             })
             ->findOrFail($id);
 
-        return Inertia::render('reviewer/ethics/output/Show', [
+        return Inertia::render('reviewer/ethics/output/show', [
             'submission' => $submission,
             'comments' => $submission->latestDetail->comments ?? [],
         ]);
@@ -171,7 +171,7 @@ class OutputController extends Controller
             ->latest()
             ->paginate(10);
 
-        return Inertia::render('reviewer/ethics/verification/Index', [
+        return Inertia::render('reviewer/ethics/verification/index', [
             'submissions' => $submissions,
         ]);
     }
@@ -190,7 +190,7 @@ class OutputController extends Controller
             ->where('stage', EthicsReviewStage::VERIFICATION->value)
             ->findOrFail($id);
 
-        return Inertia::render('reviewer/ethics/verification/Show', [
+        return Inertia::render('reviewer/ethics/verification/show', [
             'submission' => $submission,
         ]);
     }

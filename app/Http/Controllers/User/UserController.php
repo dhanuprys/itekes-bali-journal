@@ -40,7 +40,7 @@ class UserController extends Controller
             ];
         });
 
-        return Inertia::render('user/user/Index', [
+        return Inertia::render('user/user/index', [
             'users' => $users,
             'filters' => $request->only(['search', 'limit', 'role']),
             'roles' => $roles,
@@ -96,7 +96,7 @@ class UserController extends Controller
             }
         ]);
 
-        return Inertia::render('user/user/Show', [
+        return Inertia::render('user/user/show', [
             'user' => $user,
         ]);
     }

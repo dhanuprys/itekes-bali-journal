@@ -16,7 +16,7 @@ class NotificationController extends Controller
             ->limit(20)
             ->get();
 
-        return Inertia::render('general/notification/Index', [
+        return Inertia::render('general/notification/index', [
             'notifications' => $notifications,
         ]);
     }

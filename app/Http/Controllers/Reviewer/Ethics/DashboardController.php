@@ -39,7 +39,7 @@ class DashboardController extends Controller
             ->where('status', '!=', \App\Enums\EthicsStatus::APPROVED->value)
             ->count();
 
-        return Inertia::render('reviewer/ethics/dashboard/Index', [
+        return Inertia::render('reviewer/ethics/dashboard/index', [
             'proposalCount' => $proposalCount,
             'waitForOutputCount' => $waitForOutputCount,
             'outputCompletedCount' => $outputCompletedCount,

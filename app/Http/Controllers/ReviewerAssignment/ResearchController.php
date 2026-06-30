@@ -50,7 +50,7 @@ class ResearchController extends Controller
 
         $reviewers = User::permission(PermissionRole::P_REVIEW_RESEARCH->value)->get();
 
-        return Inertia::render('reviewer-assignment/research/Index', [
+        return Inertia::render('reviewer-assignment/research/index', [
             'submissions' => $submissions,
             'reviewers' => $reviewers,
             'filters' => [

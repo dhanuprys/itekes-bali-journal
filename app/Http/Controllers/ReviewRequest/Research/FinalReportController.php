@@ -30,7 +30,7 @@ class FinalReportController extends Controller
             ->latest()
             ->paginate(10);
 
-        return Inertia::render('review-request/research/final-report/Index', [
+        return Inertia::render('review-request/research/final-report/index', [
             'submissions' => $submissions,
         ]);
     }
@@ -43,7 +43,7 @@ class FinalReportController extends Controller
             ->where('stage', ResearchReviewStage::FINAL_REPORT->value)
             ->findOrFail($submissionId);
 
-        return Inertia::render('review-request/research/final-report/Create', [
+        return Inertia::render('review-request/research/final-report/create', [
             'submission' => $submission,
             'detail' => $submission->latestDetail,
         ]);
@@ -148,7 +148,7 @@ class FinalReportController extends Controller
             ->where('stage', ResearchReviewStage::FINAL_REPORT->value)
             ->findOrFail($id);
 
-        return Inertia::render('review-request/research/final-report/Show', [
+        return Inertia::render('review-request/research/final-report/show', [
             'submission' => $submission,
         ]);
     }
@@ -165,7 +165,7 @@ class FinalReportController extends Controller
             }
         }
 
-        return Inertia::render('review-request/research/final-report/Edit', [
+        return Inertia::render('review-request/research/final-report/edit', [
             'submission' => $submission,
             'detail' => $submission->latestDetail,
         ]);

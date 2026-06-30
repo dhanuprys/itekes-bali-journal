@@ -31,7 +31,7 @@ class ProposalController extends Controller
             ->latest()
             ->paginate(10);
 
-        return Inertia::render('reviewer/community-service/proposal/Index', [
+        return Inertia::render('reviewer/community-service/proposal/index', [
             'submissions' => $submissions,
         ]);
     }
@@ -57,7 +57,7 @@ class ProposalController extends Controller
             'latestDetail.comments.user'
         ]);
 
-        return Inertia::render('reviewer/community-service/proposal/Show', [
+        return Inertia::render('reviewer/community-service/proposal/show', [
             'submission' => $submission,
             'comments' => $submission->latestDetail->comments,
         ]);

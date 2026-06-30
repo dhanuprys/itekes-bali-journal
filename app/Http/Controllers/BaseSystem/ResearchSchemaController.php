@@ -20,7 +20,7 @@ class ResearchSchemaController extends Controller
             ->paginate($limit)
             ->withQueryString();
 
-        return Inertia::render('base-system/research-schema/Index', [
+        return Inertia::render('base-system/research-schema/index', [
             'researchSchemas' => $researchSchemas,
             'filters' => $request->only(['search', 'limit']),
         ]);
@@ -28,7 +28,7 @@ class ResearchSchemaController extends Controller
 
     public function show(\App\Models\ResearchSchema $researchSchema)
     {
-        return Inertia::render('base-system/research-schema/Show', [
+        return Inertia::render('base-system/research-schema/show', [
             'researchSchema' => $researchSchema,
         ]);
     }

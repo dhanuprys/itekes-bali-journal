@@ -33,7 +33,7 @@ class StorageUploadController extends Controller
         $files = $query->latest()
             ->paginate(10);
 
-        return Inertia::render('general/storage/Index', [
+        return Inertia::render('general/storage/index', [
             'files' => $files,
             'stats' => $stats,
         ]);

@@ -14,7 +14,7 @@ class PublicProfileController extends Controller
             ->select(['name', 'username', 'photo_path', 'created_at', 'id'])
             ->firstOrFail();
 
-        return Inertia::render('general/public-profile/Index', [
+        return Inertia::render('general/public-profile/index', [
             'profile' => $user,
         ]);
     }

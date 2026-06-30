@@ -29,7 +29,7 @@ class ProgressReportController extends Controller
             ->latest()
             ->paginate(10);
 
-        return Inertia::render('review-request/community-service/progress-report/Index', [
+        return Inertia::render('review-request/community-service/progress-report/index', [
             'submissions' => $submissions,
         ]);
     }
@@ -42,7 +42,7 @@ class ProgressReportController extends Controller
             ->where('stage', CommunityServiceReviewStage::PROGRESS_REPORT->value)
             ->findOrFail($submissionId);
 
-        return Inertia::render('review-request/community-service/progress-report/Create', [
+        return Inertia::render('review-request/community-service/progress-report/create', [
             'submission' => $submission,
             'detail' => $submission->latestDetail,
         ]);
@@ -139,7 +139,7 @@ class ProgressReportController extends Controller
             ->where('user_id', Auth::id())
             ->findOrFail($id);
 
-        return Inertia::render('review-request/community-service/progress-report/Show', [
+        return Inertia::render('review-request/community-service/progress-report/show', [
             'submission' => $submission,
         ]);
     }
@@ -155,7 +155,7 @@ class ProgressReportController extends Controller
             }
         }
 
-        return Inertia::render('review-request/community-service/progress-report/Edit', [
+        return Inertia::render('review-request/community-service/progress-report/edit', [
             'submission' => $submission,
             'detail' => $submission->latestDetail,
         ]);

@@ -1,0 +1,68 @@
+<script lang="ts">
+    import Heading from '@/components/heading.svelte';
+    import { Button } from '@/components/ui/button';
+    import { Separator } from '@/components/ui/separator';
+    import { cn } from '@/lib/utils';
+    import { type NavItem } from '@/types';
+    import { Link, page } from '@inertiajs/svelte';
+    import type { Snippet } from 'svelte';
+
+    const sidebarNavItems: NavItem[] = [
+        {
+            title: 'Profile',
+            href: '/settings/profile',
+        },
+        {
+            title: 'Password',
+            href: '/settings/password',
+        },
+        {
+            title: 'Riwayat Login',
+            href: '/settings/login-logs',
+        },
+        {
+            title: 'Tampilan',
+            href: '/settings/appearance',
+        },
+    ];
+
+    const currentPath = $page.props.ziggy?.location ? new URL($page.props.ziggy.location).pathname : '';
+
+    interface Props {
+        children?: Snippet;
+        isFullWidth?: boolean;
+    }
+
+    let { children, isFullWidth = false }: Props = $props();
+</script>
+
+<div class="px-4 py-6">
+    <Heading title="Pengaturan" description="Kelola profil dan pengaturan akun Anda" />
+
+    <div class="flex flex-col lg:flex-row lg:space-x-12">
+        <aside class="w-full max-w-xl lg:w-48">
+            <nav class="flex flex-col space-x-0 space-y-1">
+                {#each sidebarNavItems as item (item.href)}
+                    <Link href={item.href}>
+                        <Button
+                            variant="ghost"
+                            class={cn('w-full justify-start', {
+                                'bg-muted': currentPath === item.href,
+                            })}
+                        >
+                            {item.title}
+                        </Button>
+                    </Link>
+                {/each}
+            </nav>
+        </aside>
+
+        <Separator class="my-6 lg:hidden" />
+
+        <div class="flex-1 {isFullWidth ? 'w-full' : 'md:max-w-2xl'}">
+            <section class="{isFullWidth ? 'max-w-full' : 'max-w-xl'} space-y-12">
+                {@render children?.()}
+            </section>
+        </div>
+    </div>
+</div>

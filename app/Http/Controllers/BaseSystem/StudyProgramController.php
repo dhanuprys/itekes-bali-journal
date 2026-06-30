@@ -20,7 +20,7 @@ class StudyProgramController extends Controller
             ->paginate($limit)
             ->withQueryString();
 
-        return Inertia::render('base-system/study-program/Index', [
+        return Inertia::render('base-system/study-program/index', [
             'studyPrograms' => $studyPrograms,
             'filters' => $request->only(['search', 'limit']),
         ]);
@@ -28,7 +28,7 @@ class StudyProgramController extends Controller
 
     public function show(\App\Models\StudyProgram $studyProgram)
     {
-        return Inertia::render('base-system/study-program/Show', [
+        return Inertia::render('base-system/study-program/show', [
             'studyProgram' => $studyProgram,
         ]);
     }
