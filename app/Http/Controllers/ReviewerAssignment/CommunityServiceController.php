@@ -64,7 +64,14 @@ class CommunityServiceController extends Controller
     {
         $validated = $request->validate([
             'reviewers' => 'array',
-            'reviewers.*' => 'exists:users,id',
+            'reviewers.*' => [
+                'exists:users,id',
+                function ($attribute, $value, $fail) {
+                    if (!User::find($value)?->hasPermissionTo(PermissionRole::P_REVIEW_COMMUNITY_SERVICE->value)) {
+                        $fail('Pengguna yang dipilih tidak memiliki izin sebagai reviewer pengabdian masyarakat.');
+                    }
+                },
+            ],
         ]);
 
         $submission = CommunityServiceSubmission::with('latestDetail')->findOrFail($id);

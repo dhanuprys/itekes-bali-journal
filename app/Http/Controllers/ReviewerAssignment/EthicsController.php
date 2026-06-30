@@ -63,7 +63,14 @@ class EthicsController extends Controller
     {
         $validated = $request->validate([
             'reviewers' => 'array',
-            'reviewers.*' => 'exists:users,id',
+            'reviewers.*' => [
+                'exists:users,id',
+                function ($attribute, $value, $fail) {
+                    if (!User::find($value)?->hasPermissionTo(PermissionRole::P_REVIEW_ETHICS->value)) {
+                        $fail('Pengguna yang dipilih tidak memiliki izin sebagai reviewer etik.');
+                    }
+                },
+            ],
         ]);
 
         $submission = EthicalClearanceSubmission::with('latestDetail')->findOrFail($id);

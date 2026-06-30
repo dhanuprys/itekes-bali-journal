@@ -10,6 +10,7 @@ use App\Models\ResearchSubmission;
 use App\Models\ResearchSubmissionComment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class ProposalController extends Controller
@@ -118,20 +119,19 @@ class ProposalController extends Controller
 
         $newStatus = $statusMap[$request->input('status')];
 
-        // Ensure reviewer is traced before final decision
-        ResearchSubdetailReviewer::firstOrCreate([
-            'user_id' => Auth::id(),
-            'research_submission_detail_id' => $submission->latestDetail->id,
-        ]);
-
-        // If approved, move to next stage (Progress Report) and set status to Revision Needed (so user can fill next stage)
-        // Otherwise use the selected status (Rejected/Revision Needed) and keep current stage
         $isApproved = $request->input('status') === 'approved';
 
-        $submission->update([
-            'status' => $isApproved ? ResearchStatus::REVISION_NEEDED->value : $newStatus,
-            'stage' => $isApproved ? ResearchReviewStage::PROGRESS_REPORT->value : $submission->stage,
-        ]);
+        DB::transaction(function () use ($submission, $isApproved, $newStatus) {
+            ResearchSubdetailReviewer::firstOrCreate([
+                'user_id' => Auth::id(),
+                'research_submission_detail_id' => $submission->latestDetail->id,
+            ]);
+
+            $submission->update([
+                'status' => $isApproved ? ResearchStatus::REVISION_NEEDED->value : $newStatus,
+                'stage' => $isApproved ? ResearchReviewStage::PROGRESS_REPORT->value : $submission->stage,
+            ]);
+        });
 
         // Notify User
         $this->notificationService->send(

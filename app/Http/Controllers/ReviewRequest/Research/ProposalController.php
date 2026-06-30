@@ -79,7 +79,7 @@ class ProposalController extends Controller
             'leader_name' => 'required|string|max:255',
             'study_program_id' => 'required|exists:study_programs,id',
             'title' => 'required|string',
-            'budget' => 'nullable|numeric',
+            'budget' => 'nullable|integer|min:0',
             'research_target_id' => 'nullable|exists:research_targets,id',
             'proposal_path' => 'required|string|max:2048', // Changed from proposal_file
             'members' => 'nullable|array',
@@ -189,7 +189,7 @@ class ProposalController extends Controller
             'leader_name' => 'required|string|max:255',
             'study_program_id' => 'required|exists:study_programs,id',
             'title' => 'required|string',
-            'budget' => 'nullable|numeric',
+            'budget' => 'nullable|integer|min:0',
             'research_target_id' => 'nullable|exists:research_targets,id',
             'proposal_path' => 'required|string|max:2048',
             'members' => 'nullable|array',

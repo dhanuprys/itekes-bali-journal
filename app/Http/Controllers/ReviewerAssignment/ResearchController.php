@@ -64,7 +64,14 @@ class ResearchController extends Controller
     {
         $validated = $request->validate([
             'reviewers' => 'array',
-            'reviewers.*' => 'exists:users,id',
+            'reviewers.*' => [
+                'exists:users,id',
+                function ($attribute, $value, $fail) {
+                    if (!User::find($value)?->hasPermissionTo(PermissionRole::P_REVIEW_RESEARCH->value)) {
+                        $fail('Pengguna yang dipilih tidak memiliki izin sebagai reviewer penelitian.');
+                    }
+                },
+            ],
         ]);
 
         $submission = ResearchSubmission::with('latestDetail')->findOrFail($id);

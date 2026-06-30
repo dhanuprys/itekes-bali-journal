@@ -10,6 +10,7 @@ use App\Models\CommunityServiceSubmission;
 use App\Models\CommunityServiceSubmissionComment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class ProposalController extends Controller
@@ -118,20 +119,19 @@ class ProposalController extends Controller
 
         $newStatus = $statusMap[$request->input('status')];
 
-        // Ensure reviewer is traced before final decision
-        CommunityServiceSubdetailReviewer::firstOrCreate([
-            'user_id' => Auth::id(),
-            'community_service_subdetail_id' => $submission->latestDetail->id,
-        ]);
-
-        // If approved, move to next stage (Progress Report) and set status to Revision Needed (so user can fill next stage)
-        // Otherwise use the selected status (Rejected/Revision Needed) and keep current stage
         $isApproved = $request->input('status') === 'approved';
 
-        $submission->update([
-            'status' => $isApproved ? CommunityServiceStatus::REVISION_NEEDED->value : $newStatus,
-            'stage' => $isApproved ? CommunityServiceReviewStage::PROGRESS_REPORT->value : $submission->stage,
-        ]);
+        DB::transaction(function () use ($submission, $isApproved, $newStatus) {
+            CommunityServiceSubdetailReviewer::firstOrCreate([
+                'user_id' => Auth::id(),
+                'community_service_subdetail_id' => $submission->latestDetail->id,
+            ]);
+
+            $submission->update([
+                'status' => $isApproved ? CommunityServiceStatus::REVISION_NEEDED->value : $newStatus,
+                'stage' => $isApproved ? CommunityServiceReviewStage::PROGRESS_REPORT->value : $submission->stage,
+            ]);
+        });
 
         // Notify User
         $this->notificationService->send(
