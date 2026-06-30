@@ -4,14 +4,13 @@ namespace App\Exports;
 
 use App\Models\ResearchSubmission;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
-class ResearchRecapExport implements FromCollection, WithHeadings, WithMapping, WithColumnWidths, WithStyles
+class ResearchRecapExport implements FromCollection, WithColumnWidths, WithHeadings, WithMapping, WithStyles
 {
     private $submissions;
 
@@ -48,7 +47,7 @@ class ResearchRecapExport implements FromCollection, WithHeadings, WithMapping, 
         }
 
         $leaderName = $detail->final_leader_name ?: $detail->leader_name;
-        
+
         $members = $detail->members->pluck('name')->toArray();
         $membersString = empty($members) ? '-' : implode("\n", $members);
 
@@ -87,13 +86,14 @@ class ResearchRecapExport implements FromCollection, WithHeadings, WithMapping, 
     public function styles(Worksheet $sheet)
     {
         $highestColumn = $sheet->getHighestColumn();
+
         return [
-            1    => ['font' => ['bold' => true]],
+            1 => ['font' => ['bold' => true]],
             "A:{$highestColumn}" => [
                 'alignment' => [
                     'wrapText' => true,
-                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP
-                ]
+                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP,
+                ],
             ],
         ];
     }

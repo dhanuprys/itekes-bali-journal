@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\General;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class PublicProfileController extends Controller

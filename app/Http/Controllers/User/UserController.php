@@ -80,7 +80,7 @@ class UserController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Membuat pengguna baru: {$validated['name']} ({$validated['email']})"
+            'comment' => "Membuat pengguna baru: {$validated['name']} ({$validated['email']})",
         ]);
 
         return redirect()->back()->with('success', 'User created successfully.');
@@ -93,7 +93,7 @@ class UserController extends Controller
             'permissions',
             'loginLogs' => function ($query) {
                 $query->latest()->limit(10);
-            }
+            },
         ]);
 
         return Inertia::render('user/user/show', [
@@ -139,7 +139,7 @@ class UserController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Memperbarui pengguna: {$validated['name']} ({$validated['email']})"
+            'comment' => "Memperbarui pengguna: {$validated['name']} ({$validated['email']})",
         ]);
 
         return redirect()->back()->with('success', 'User updated successfully.');
@@ -156,7 +156,7 @@ class UserController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Menghapus pengguna: {$name}"
+            'comment' => "Menghapus pengguna: {$name}",
         ]);
 
         return redirect()->back()->with('success', 'User deleted successfully.');
@@ -173,7 +173,7 @@ class UserController extends Controller
 
         $originalUserId = auth()->id();
         session()->put('impersonate_by', $originalUserId);
-        
+
         \Illuminate\Support\Facades\Auth::login($user);
 
         return redirect()->route('dashboard')->with('success', "You are now impersonating {$user->name}.");
@@ -190,6 +190,7 @@ class UserController extends Controller
 
         if (!$originalUser) {
             session()->forget('impersonate_by');
+
             return redirect()->route('login');
         }
 

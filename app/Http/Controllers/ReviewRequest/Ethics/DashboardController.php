@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\ReviewRequest\Ethics;
 
-use App\Enums\EthicsReviewStage;
 use App\Http\Controllers\Controller;
 use App\Models\EthicalClearanceSubmission;
 use Illuminate\Support\Facades\Auth;

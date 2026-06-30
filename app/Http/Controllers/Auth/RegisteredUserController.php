@@ -49,7 +49,7 @@ class RegisteredUserController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Mendaftar akun baru: {$request->name} ({$request->email})"
+            'comment' => "Mendaftar akun baru: {$request->name} ({$request->email})",
         ]);
 
         return to_route('dashboard');

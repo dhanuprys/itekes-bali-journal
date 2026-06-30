@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::table('research_members', function (Blueprint $table) {
             $table->string('identifier', 50)->nullable()->after('name')->comment('NIM / NUPTK');
         });
-        
+
         Schema::table('community_service_members', function (Blueprint $table) {
             $table->string('identifier', 50)->nullable()->after('name')->comment('NIM / NUPTK');
         });
-        
+
         Schema::table('ethical_clearance_members', function (Blueprint $table) {
             $table->string('identifier', 50)->nullable()->after('name')->comment('NIM / NUPTK');
         });
@@ -32,11 +32,11 @@ return new class extends Migration
         Schema::table('research_members', function (Blueprint $table) {
             $table->dropColumn('identifier');
         });
-        
+
         Schema::table('community_service_members', function (Blueprint $table) {
             $table->dropColumn('identifier');
         });
-        
+
         Schema::table('ethical_clearance_members', function (Blueprint $table) {
             $table->dropColumn('identifier');
         });

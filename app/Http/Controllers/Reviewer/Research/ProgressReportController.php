@@ -20,6 +20,7 @@ class ProgressReportController extends Controller
     {
         $this->notificationService = $notificationService;
     }
+
     public function index()
     {
         $submissions = ResearchSubmission::with(['latestDetail', 'user'])
@@ -53,7 +54,7 @@ class ProgressReportController extends Controller
             'latestDetail.schema',
             'latestDetail.target',
             'latestDetail.members',
-            'latestDetail.comments.user'
+            'latestDetail.comments.user',
         ]);
 
         return Inertia::render('reviewer/research/progress-report/show', [
@@ -90,7 +91,7 @@ class ProgressReportController extends Controller
         $title = $detail->title ?? 'Laporan Kemajuan Penelitian';
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Memberikan komentar pada laporan kemajuan penelitian: {$title}"
+            'comment' => "Memberikan komentar pada laporan kemajuan penelitian: {$title}",
         ]);
 
         return back()->with('success', 'Komentar terkirim.');
@@ -133,9 +134,9 @@ class ProgressReportController extends Controller
         // Notify User
         $this->notificationService->send(
             $submission->user,
-            "Reviewer memperbarui status Laporan Kemajuan penelitian Anda: " . $submission->latestDetail->title . " menjadi " . strtoupper(str_replace('_', ' ', $request->input('status'))) . ". Silakan cek detailnya.",
+            'Reviewer memperbarui status Laporan Kemajuan penelitian Anda: ' . $submission->latestDetail->title . ' menjadi ' . strtoupper(str_replace('_', ' ', $request->input('status'))) . '. Silakan cek detailnya.',
             new \App\DTO\NotificationPayload(
-                title: "Status Laporan Kemajuan Diperbarui",
+                title: 'Status Laporan Kemajuan Diperbarui',
                 url: route('apply.research.progress_report.show', $submission->id),
                 type: 'info',
                 metadata: ['submission_id' => $submission->id, 'status' => $request->input('status')]
@@ -146,7 +147,7 @@ class ProgressReportController extends Controller
         $title = $submission->latestDetail->title ?? 'Laporan Kemajuan Penelitian';
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Mengubah status laporan kemajuan penelitian '{$title}' menjadi '{$request->input('status')}'"
+            'comment' => "Mengubah status laporan kemajuan penelitian '{$title}' menjadi '{$request->input('status')}'",
         ]);
 
         return redirect()->route('review.research.index')->with('success', 'Status berhasil diperbarui.');

@@ -4,7 +4,6 @@
     import { type BreadcrumbItem } from '@/types';
     import Heading from '@/components/heading.svelte';
     import { Badge } from '@/components/ui/badge';
-    import * as Card from '@/components/ui/card';
     import ReviewerSplitLayout from '@/components/reviewer/reviewer-split-layout.svelte';
     import ReviewerChatPanel from '@/components/reviewer/reviewer-chat-panel.svelte';
     import { FileTextIcon, ClockIcon, CheckCircleIcon, AlertCircleIcon, DownloadIcon, XCircleIcon } from 'lucide-svelte';

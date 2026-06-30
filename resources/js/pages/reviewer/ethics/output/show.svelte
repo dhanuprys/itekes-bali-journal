@@ -11,7 +11,7 @@
     import { StorageUploadAction } from '@/data/storage-upload';
     import { toast } from 'svelte-sonner';
     import { uploadState } from '@/stores/upload-state.svelte';
-    import { FileTextIcon, DownloadIcon, CheckCircleIcon, AlertCircleIcon, XCircleIcon } from 'lucide-svelte';
+    import { FileTextIcon, DownloadIcon, CheckCircleIcon, AlertCircleIcon } from 'lucide-svelte';
     import { Textarea } from '@/components/ui/textarea';
     import Label from '@/components/ui/label/label.svelte';
 

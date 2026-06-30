@@ -15,7 +15,6 @@ enum PermissionRole: string
     case R_REVIEWER_COMMUNITY_SERVICE = 'reviewer-community-service';
     case R_REVIEWER_ETHICS = 'reviewer-ethics';
 
-
     // BUILT-IN PERMISSIONS (IMMUTABLE)
     case P_MANAGE_USERS = 'manage users';
     case P_MANAGE_BASE = 'manage base';

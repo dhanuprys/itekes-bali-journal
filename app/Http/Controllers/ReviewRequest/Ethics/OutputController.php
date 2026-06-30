@@ -20,10 +20,10 @@ class OutputController extends Controller
                 // Currently in output stage (waiting for operator to upload/re-upload)
                 $query->where('stage', EthicsReviewStage::OUTPUT->value)
                 // In verification stage but not fully approved
-                ->orWhere(function ($q) {
-                    $q->where('stage', EthicsReviewStage::VERIFICATION->value)
-                        ->where('status', '!=', EthicsStatus::APPROVED->value);
-                });
+                    ->orWhere(function ($q) {
+                        $q->where('stage', EthicsReviewStage::VERIFICATION->value)
+                            ->where('status', '!=', EthicsStatus::APPROVED->value);
+                    });
             })
             ->latest()
             ->paginate(10);
@@ -39,7 +39,7 @@ class OutputController extends Controller
             ->where('user_id', Auth::id())
             ->where(function ($q) {
                 $q->where('stage', EthicsReviewStage::OUTPUT->value)
-                  ->orWhere('stage', EthicsReviewStage::VERIFICATION->value);
+                    ->orWhere('stage', EthicsReviewStage::VERIFICATION->value);
             })
             ->findOrFail($id);
 

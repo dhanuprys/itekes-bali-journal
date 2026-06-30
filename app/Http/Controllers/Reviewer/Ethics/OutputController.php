@@ -18,6 +18,7 @@ use Inertia\Inertia;
 class OutputController extends Controller
 {
     protected $notificationService;
+
     protected $uploadService;
 
     public function __construct(NotificationService $notificationService, StorageUploadService $uploadService)
@@ -33,10 +34,10 @@ class OutputController extends Controller
                 // In output stage (waiting for upload or re-upload after rejection)
                 $query->where('stage', EthicsReviewStage::OUTPUT->value)
                 // Uploaded but waiting for verification
-                ->orWhere(function ($q) {
-                    $q->where('stage', EthicsReviewStage::VERIFICATION->value)
-                        ->where('status', '!=', EthicsStatus::APPROVED->value);
-                });
+                    ->orWhere(function ($q) {
+                        $q->where('stage', EthicsReviewStage::VERIFICATION->value)
+                            ->where('status', '!=', EthicsStatus::APPROVED->value);
+                    });
             })
             ->latest()
             ->paginate(10);
@@ -69,7 +70,7 @@ class OutputController extends Controller
         ])
             ->where(function ($q) {
                 $q->where('stage', EthicsReviewStage::OUTPUT->value)
-                  ->orWhere('stage', EthicsReviewStage::VERIFICATION->value);
+                    ->orWhere('stage', EthicsReviewStage::VERIFICATION->value);
             })
             ->findOrFail($id);
 
@@ -103,7 +104,7 @@ class OutputController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Memberikan komentar pada penerbitan output etik kategori {$submission->category}"
+            'comment' => "Memberikan komentar pada penerbitan output etik kategori {$submission->category}",
         ]);
 
         return back()->with('success', 'Komentar terkirim.');
@@ -140,9 +141,9 @@ class OutputController extends Controller
             if ($reviewer->user) {
                 $this->notificationService->send(
                     $reviewer->user_id,
-                    "Dokumen Ethical Clearance telah diunggah dan membutuhkan verifikasi Anda.",
+                    'Dokumen Ethical Clearance telah diunggah dan membutuhkan verifikasi Anda.',
                     new \App\DTO\NotificationPayload(
-                        title: "Verifikasi Dokumen Etik",
+                        title: 'Verifikasi Dokumen Etik',
                         url: route('review.ethics.verification.show', $submission->id),
                         type: 'info',
                         metadata: ['submission_id' => $submission->id]
@@ -154,7 +155,7 @@ class OutputController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Mengunggah dokumen Ethical Clearance kategori {$submission->category} untuk diverifikasi"
+            'comment' => "Mengunggah dokumen Ethical Clearance kategori {$submission->category} untuk diverifikasi",
         ]);
 
         return redirect()->route('review.ethics.wait_for_output.index')->with('success', 'Dokumen berhasil diunggah dan dikirim ke reviewer untuk verifikasi.');
@@ -182,7 +183,7 @@ class OutputController extends Controller
             'latestDetail',
             'latestOutput.verifications.user',
             'user',
-            'reviewers.user'
+            'reviewers.user',
         ])
             ->whereHas('reviewers', function ($query) {
                 $query->where('user_id', Auth::id());
@@ -239,9 +240,9 @@ class OutputController extends Controller
             if ($output->user_id) {
                 $this->notificationService->send(
                     $output->user_id,
-                    "Dokumen Ethical Clearance ditolak oleh reviewer dan perlu diperbaiki.",
+                    'Dokumen Ethical Clearance ditolak oleh reviewer dan perlu diperbaiki.',
                     new \App\DTO\NotificationPayload(
-                        title: "Revisi Dokumen Etik",
+                        title: 'Revisi Dokumen Etik',
                         url: route('review.ethics.wait_for_output.show', $submission->id),
                         type: 'warning',
                         metadata: ['submission_id' => $submission->id]
@@ -252,7 +253,7 @@ class OutputController extends Controller
 
             \App\Models\UserLog::create([
                 'user_id' => auth()->id(),
-                'comment' => "Menolak dokumen verifikasi Ethical Clearance kategori {$submission->category}"
+                'comment' => "Menolak dokumen verifikasi Ethical Clearance kategori {$submission->category}",
             ]);
 
             return redirect()->route('review.ethics.verification.index')->with('success', 'Dokumen ditolak dan dikembalikan ke operator.');
@@ -275,9 +276,9 @@ class OutputController extends Controller
             // Notify applicant
             $this->notificationService->send(
                 $submission->user_id,
-                "Ethical Clearance Anda telah diverifikasi dan diterbitkan. Silakan unduh dokumennya.",
+                'Ethical Clearance Anda telah diverifikasi dan diterbitkan. Silakan unduh dokumennya.',
                 new \App\DTO\NotificationPayload(
-                    title: "Ethical Clearance Diterbitkan",
+                    title: 'Ethical Clearance Diterbitkan',
                     url: route('apply.ethics.output.show', $submission->id),
                     type: 'info',
                     metadata: ['submission_id' => $submission->id]
@@ -287,7 +288,7 @@ class OutputController extends Controller
 
             \App\Models\UserLog::create([
                 'user_id' => auth()->id(),
-                'comment' => "Memverifikasi dokumen Ethical Clearance kategori {$submission->category} (Final)"
+                'comment' => "Memverifikasi dokumen Ethical Clearance kategori {$submission->category} (Final)",
             ]);
 
             return redirect()->route('review.ethics.verification.index')->with('success', 'Dokumen berhasil diverifikasi. Proses selesai.');
@@ -295,7 +296,7 @@ class OutputController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Memverifikasi dokumen Ethical Clearance kategori {$submission->category}"
+            'comment' => "Memverifikasi dokumen Ethical Clearance kategori {$submission->category}",
         ]);
 
         return back()->with('success', 'Verifikasi berhasil disimpan.');

@@ -21,6 +21,7 @@ class ProgressReportController extends Controller
     {
         $this->notificationService = $notificationService;
     }
+
     public function index()
     {
         $submissions = CommunityServiceSubmission::with(['latestDetail'])
@@ -62,7 +63,7 @@ class ProgressReportController extends Controller
             ->where('id', $validated['submission_id'])
             ->firstOrFail();
 
-        DB::transaction(function () use ($validated, $request, $submission, $uploadService) {
+        DB::transaction(function () use ($validated, $submission, $uploadService) {
             $latestDetail = $submission->latestDetail;
 
             // Mark files as used
@@ -106,9 +107,9 @@ class ProgressReportController extends Controller
             foreach ($reviewers as $reviewer) {
                 $this->notificationService->send(
                     $reviewer->user_id,
-                    "Laporan Kemajuan Pengabdian Baru: " . $validated['final_title'] . " oleh " . Auth::user()->name,
+                    'Laporan Kemajuan Pengabdian Baru: ' . $validated['final_title'] . ' oleh ' . Auth::user()->name,
                     new \App\DTO\NotificationPayload(
-                        title: "Laporan Kemajuan Baru",
+                        title: 'Laporan Kemajuan Baru',
                         url: route('review.community_service.progress_report.show', $submission->id),
                         type: 'info',
                         metadata: ['submission_id' => $submission->id]
@@ -120,7 +121,7 @@ class ProgressReportController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Mengunggah laporan kemajuan pengabdian: {$validated['final_title']}"
+            'comment' => "Mengunggah laporan kemajuan pengabdian: {$validated['final_title']}",
         ]);
 
         return redirect()->route('apply.community_service.progress_report.index')
@@ -134,7 +135,7 @@ class ProgressReportController extends Controller
             'latestDetail.schema',
             'latestDetail.target',
             'latestDetail.members',
-            'latestDetail.comments.user'
+            'latestDetail.comments.user',
         ])
             ->where('user_id', Auth::id())
             ->findOrFail($id);
@@ -143,6 +144,7 @@ class ProgressReportController extends Controller
             'submission' => $submission,
         ]);
     }
+
     public function edit($id)
     {
         $submission = CommunityServiceSubmission::with(['latestDetail', 'latestDetail.members', 'latestDetail.comments.user'])
@@ -176,7 +178,7 @@ class ProgressReportController extends Controller
         // In Store method: 'schema_id' => 'required|exists:community_service_schema,id'
         // I should stick to what user did.
 
-        DB::transaction(function () use ($validated, $request, $submission, $uploadService) {
+        DB::transaction(function () use ($validated, $submission, $uploadService) {
             $latestDetail = $submission->latestDetail;
 
             // Mark files as used
@@ -220,9 +222,9 @@ class ProgressReportController extends Controller
             foreach ($reviewers as $reviewer) {
                 $this->notificationService->send(
                     $reviewer->user_id,
-                    "Revisi Laporan Kemajuan Pengabdian: " . $validated['final_title'] . " oleh " . Auth::user()->name,
+                    'Revisi Laporan Kemajuan Pengabdian: ' . $validated['final_title'] . ' oleh ' . Auth::user()->name,
                     new \App\DTO\NotificationPayload(
-                        title: "Revisi Laporan Kemajuan",
+                        title: 'Revisi Laporan Kemajuan',
                         url: route('review.community_service.progress_report.show', $submission->id),
                         type: 'info',
                         metadata: ['submission_id' => $submission->id]
@@ -234,7 +236,7 @@ class ProgressReportController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Mengajukan revisi laporan kemajuan pengabdian: {$validated['final_title']}"
+            'comment' => "Mengajukan revisi laporan kemajuan pengabdian: {$validated['final_title']}",
         ]);
 
         return redirect()->route('apply.community_service.progress_report.index')

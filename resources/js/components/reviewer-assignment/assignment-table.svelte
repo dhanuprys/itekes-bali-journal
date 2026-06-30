@@ -106,7 +106,7 @@
             onFinish: () => {
                 deleteDialogOpen = false;
                 submissionToDelete = null;
-            }
+            },
         });
     }
 
@@ -325,7 +325,9 @@
             <AlertDialog.Header>
                 <AlertDialog.Title>Apakah Anda yakin?</AlertDialog.Title>
                 <AlertDialog.Description>
-                    Tindakan ini akan menghapus usulan <span class="font-semibold text-foreground">"{submissionToDelete?.latest_detail?.title || submissionToDelete?.latest_detail?.final_title || 'ini'}"</span>. Data ini akan dihapus secara sementara (soft delete) dan tidak akan hilang dari database.
+                    Tindakan ini akan menghapus usulan <span class="font-semibold text-foreground"
+                        >"{submissionToDelete?.latest_detail?.title || submissionToDelete?.latest_detail?.final_title || 'ini'}"</span
+                    >. Data ini akan dihapus secara sementara (soft delete) dan tidak akan hilang dari database.
                 </AlertDialog.Description>
             </AlertDialog.Header>
             <AlertDialog.Footer>
@@ -337,4 +339,3 @@
         </AlertDialog.Content>
     </AlertDialog.Root>
 {/if}
-

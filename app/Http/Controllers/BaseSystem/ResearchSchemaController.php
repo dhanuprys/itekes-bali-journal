@@ -44,7 +44,7 @@ class ResearchSchemaController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Membuat Skema Penelitian baru: {$validated['title']}"
+            'comment' => "Membuat Skema Penelitian baru: {$validated['title']}",
         ]);
 
         return redirect()->back()->with('success', 'Research Schema created successfully.');
@@ -61,7 +61,7 @@ class ResearchSchemaController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Memperbarui Skema Penelitian menjadi: {$validated['title']}"
+            'comment' => "Memperbarui Skema Penelitian menjadi: {$validated['title']}",
         ]);
 
         return redirect()->back()->with('success', 'Research Schema updated successfully.');
@@ -74,7 +74,7 @@ class ResearchSchemaController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Menghapus Skema Penelitian: {$title}"
+            'comment' => "Menghapus Skema Penelitian: {$title}",
         ]);
 
         return redirect()->back()->with('success', 'Research Schema deleted successfully.');

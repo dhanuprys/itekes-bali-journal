@@ -43,7 +43,7 @@ class ProfileController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Memperbarui profil pengguna"
+            'comment' => 'Memperbarui profil pengguna',
         ]);
 
         return to_route('profile.edit');
@@ -66,7 +66,7 @@ class ProfileController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => $user->id,
-            'comment' => "Menghapus akun pengguna"
+            'comment' => 'Menghapus akun pengguna',
         ]);
 
         $request->session()->invalidate();

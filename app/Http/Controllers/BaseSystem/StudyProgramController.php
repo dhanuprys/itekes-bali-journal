@@ -43,7 +43,7 @@ class StudyProgramController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Membuat Program Studi baru: {$validated['name']}"
+            'comment' => "Membuat Program Studi baru: {$validated['name']}",
         ]);
 
         return redirect()->back()->with('success', 'Study Program created successfully.');
@@ -59,7 +59,7 @@ class StudyProgramController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Memperbarui Program Studi menjadi: {$validated['name']}"
+            'comment' => "Memperbarui Program Studi menjadi: {$validated['name']}",
         ]);
 
         return redirect()->back()->with('success', 'Study Program updated successfully.');
@@ -72,7 +72,7 @@ class StudyProgramController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Menghapus Program Studi: {$name}"
+            'comment' => "Menghapus Program Studi: {$name}",
         ]);
 
         return redirect()->back()->with('success', 'Study Program deleted successfully.');

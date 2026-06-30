@@ -54,7 +54,7 @@ class ProposalController extends Controller
             'latestDetail.schema',
             'latestDetail.target',
             'latestDetail.members',
-            'latestDetail.comments.user'
+            'latestDetail.comments.user',
         ]);
 
         return Inertia::render('reviewer/research/proposal/show', [
@@ -92,7 +92,7 @@ class ProposalController extends Controller
         $title = $detail->title ?? 'Proposal Penelitian';
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Memberikan komentar pada proposal penelitian: {$title}"
+            'comment' => "Memberikan komentar pada proposal penelitian: {$title}",
         ]);
 
         return back()->with('success', 'Komentar terkirim.');
@@ -136,9 +136,9 @@ class ProposalController extends Controller
         // Notify User
         $this->notificationService->send(
             $submission->user,
-            "Reviewer memperbarui status proposal penelitian Anda: " . $submission->latestDetail->title . " menjadi " . strtoupper(str_replace('_', ' ', $request->input('status'))) . ". Silakan cek detailnya.",
+            'Reviewer memperbarui status proposal penelitian Anda: ' . $submission->latestDetail->title . ' menjadi ' . strtoupper(str_replace('_', ' ', $request->input('status'))) . '. Silakan cek detailnya.',
             new \App\DTO\NotificationPayload(
-                title: "Status Proposal Diperbarui",
+                title: 'Status Proposal Diperbarui',
                 url: route('apply.research.proposal.show', $submission->id),
                 type: 'info',
                 metadata: ['submission_id' => $submission->id, 'status' => $request->input('status')]
@@ -149,7 +149,7 @@ class ProposalController extends Controller
         $title = $submission->latestDetail->title ?? 'Proposal Penelitian';
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Mengubah status proposal penelitian '{$title}' menjadi '{$request->input('status')}'"
+            'comment' => "Mengubah status proposal penelitian '{$title}' menjadi '{$request->input('status')}'",
         ]);
 
         return redirect()->route('review.research.index')->with('success', 'Status berhasil diperbarui.');

@@ -11,16 +11,16 @@ use App\Models\ResearchSubmission;
 use App\Models\ResearchSubmissionDetail;
 use App\Models\ResearchTarget;
 use App\Models\StudyProgram;
+use App\Services\StorageUploadService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
-use App\Enums\StorageUploadAction;
-use App\Services\StorageUploadService;
 
 class ProposalController extends Controller
 {
     protected $uploadService;
+
     protected $notificationService;
 
     public function __construct(StorageUploadService $uploadService, \App\Services\NotificationService $notificationService)
@@ -90,7 +90,7 @@ class ProposalController extends Controller
             'leader_nuptk' => 'required|string|max:50',
         ]);
 
-        DB::transaction(function () use ($validated, $request) {
+        DB::transaction(function () use ($validated) {
             $submission = ResearchSubmission::create([
                 'user_id' => Auth::id(),
                 'status' => ResearchStatus::NEED_REVIEW->value,
@@ -126,9 +126,9 @@ class ProposalController extends Controller
             // Notify Admins
             $this->notificationService->sendToPermission(
                 \App\Enums\PermissionRole::P_ASSIGN_REVIEWER_RESEARCH,
-                Auth::user()->name . " mengajukan proposal penelitian baru: " . $validated['title'] . ". Segera tugaskan reviewer.",
+                Auth::user()->name . ' mengajukan proposal penelitian baru: ' . $validated['title'] . '. Segera tugaskan reviewer.',
                 new \App\DTO\NotificationPayload(
-                    title: "Proposal Baru",
+                    title: 'Proposal Baru',
                     url: route('reviewer_assignment.research.index'),
                     type: 'info',
                     metadata: ['submission_id' => $submission->id]
@@ -138,7 +138,7 @@ class ProposalController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Mengajukan proposal penelitian baru: {$validated['title']}"
+            'comment' => "Mengajukan proposal penelitian baru: {$validated['title']}",
         ]);
 
         return redirect()->route('apply.research.index')->with('success', 'Proposal submitted successfully.');
@@ -150,7 +150,7 @@ class ProposalController extends Controller
             'latestDetail.studyProgram',
             'latestDetail.target',
             'latestDetail.members',
-            'latestDetail.comments.user'
+            'latestDetail.comments.user',
         ])
             ->where('user_id', Auth::id())
             ->findOrFail($id);
@@ -200,7 +200,7 @@ class ProposalController extends Controller
             'leader_nuptk' => 'required|string|max:50',
         ]);
 
-        DB::transaction(function () use ($validated, $request, $submission) {
+        DB::transaction(function () use ($validated, $submission) {
             $latestDetail = $submission->latestDetail;
             // Mark the file as used if it changed?
             // Actually, simply mark whatever path is sent as used is safe enough.
@@ -240,9 +240,9 @@ class ProposalController extends Controller
             foreach ($reviewers as $reviewer) {
                 $this->notificationService->send(
                     $reviewer->user_id, // Use user_id directly
-                    Auth::user()->name . " telah menyelesaikan revisi proposal: " . $validated['title'] . ". Mohon divalidasi kembali.",
+                    Auth::user()->name . ' telah menyelesaikan revisi proposal: ' . $validated['title'] . '. Mohon divalidasi kembali.',
                     new \App\DTO\NotificationPayload(
-                        title: "Revisi Proposal",
+                        title: 'Revisi Proposal',
                         url: route('review.research.proposal.show', $submission->id),
                         type: 'info',
                         metadata: ['submission_id' => $submission->id]
@@ -254,7 +254,7 @@ class ProposalController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Mengajukan revisi proposal penelitian: {$validated['title']}"
+            'comment' => "Mengajukan revisi proposal penelitian: {$validated['title']}",
         ]);
 
         return redirect()->route('apply.research.index')->with('success', 'Proposal revision submitted.');

@@ -4,7 +4,6 @@
     import { type BreadcrumbItem } from '@/types';
     import Heading from '@/components/heading.svelte';
     import * as Card from '@/components/ui/card';
-    import { Button } from '@/components/ui/button';
     import { router } from '@inertiajs/svelte';
     import { FileTextIcon, UploadIcon, CheckCircleIcon } from 'lucide-svelte';
 

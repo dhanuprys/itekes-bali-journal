@@ -1,8 +1,8 @@
 <?php
 
 use App\Enums\PermissionRole;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReviewerAssignment;
+use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])
     ->prefix('assign-reviewer')

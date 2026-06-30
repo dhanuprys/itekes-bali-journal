@@ -9,8 +9,7 @@ class NotificationPayload
         public ?string $url = null,
         public ?string $type = null, // e.g., 'info', 'success', 'warning', 'error'
         public ?array $metadata = null
-    ) {
-    }
+    ) {}
 
     public function toArray(): array
     {

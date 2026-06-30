@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::table('ethical_clearance_submissions', function (Blueprint $table) {
             $table->foreignId('study_program_id')->nullable()->after('student_nim')
-                  ->constrained('study_programs')
-                  ->onDelete('set null');
+                ->constrained('study_programs')
+                ->onDelete('set null');
         });
     }
 

@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\ReviewRequest\Ethics;
 
-use App\Enums\EthicsCategory;
 use App\Enums\EthicsReviewStage;
 use App\Enums\EthicsStatus;
 use App\Http\Controllers\Controller;
+use App\Models\EthicalClearanceComment;
 use App\Models\EthicalClearanceDetail;
 use App\Models\EthicalClearanceDetailFile;
 use App\Models\EthicalClearanceSubmission;
-use App\Models\EthicalClearanceComment;
 use App\Services\NotificationService;
 use App\Services\StorageUploadService;
 use Illuminate\Http\Request;
@@ -20,6 +19,7 @@ use Inertia\Inertia;
 class ProposalController extends Controller
 {
     protected $uploadService;
+
     protected $notificationService;
 
     public function __construct(StorageUploadService $uploadService, NotificationService $notificationService)
@@ -118,9 +118,9 @@ class ProposalController extends Controller
             // Notify reviewers with ethics permission
             $this->notificationService->sendToPermission(
                 \App\Enums\PermissionRole::P_REVIEW_ETHICS,
-                Auth::user()->name . " mengajukan pengajuan etik baru. Silakan ditinjau.",
+                Auth::user()->name . ' mengajukan pengajuan etik baru. Silakan ditinjau.',
                 new \App\DTO\NotificationPayload(
-                    title: "Pengajuan Etik Baru",
+                    title: 'Pengajuan Etik Baru',
                     url: route('review.ethics.proposal.show', $submission->id),
                     type: 'info',
                     metadata: ['submission_id' => $submission->id]
@@ -130,7 +130,7 @@ class ProposalController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Mengajukan proposal etik baru kategori: {$validated['category']}"
+            'comment' => "Mengajukan proposal etik baru kategori: {$validated['category']}",
         ]);
 
         return redirect()->route('apply.ethics.proposal.index')->with('success', 'Pengajuan etik berhasil dikirim.');
@@ -208,7 +208,7 @@ class ProposalController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Mengajukan revisi proposal etik"
+            'comment' => 'Mengajukan revisi proposal etik',
         ]);
 
         return redirect()->route('apply.ethics.proposal.show', $id)->with('success', 'Revisi berhasil dikirim.');
@@ -232,7 +232,7 @@ class ProposalController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Menambahkan komentar pada pengajuan etik"
+            'comment' => 'Menambahkan komentar pada pengajuan etik',
         ]);
 
         return back()->with('success', 'Komentar terkirim.');

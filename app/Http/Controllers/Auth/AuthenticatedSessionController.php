@@ -35,7 +35,7 @@ class AuthenticatedSessionController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Berhasil login ke dalam sistem"
+            'comment' => 'Berhasil login ke dalam sistem',
         ]);
 
         return redirect()->intended(route('dashboard', absolute: false));
@@ -55,7 +55,7 @@ class AuthenticatedSessionController extends Controller
         if ($userId) {
             \App\Models\UserLog::create([
                 'user_id' => $userId,
-                'comment' => "Berhasil logout dari sistem"
+                'comment' => 'Berhasil logout dari sistem',
             ]);
         }
 

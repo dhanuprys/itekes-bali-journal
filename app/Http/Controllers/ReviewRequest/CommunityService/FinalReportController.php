@@ -81,7 +81,7 @@ class FinalReportController extends Controller
                 'proposal_path' => $latestDetail->proposal_path,
                 'leader_name' => $latestDetail->leader_name,
                 'title' => $latestDetail->title,
-                
+
                 'community_service_schema_id' => $latestDetail->community_service_schema_id,
                 'leader_nidn' => $latestDetail->leader_nidn,
                 'leader_nuptk' => $latestDetail->leader_nuptk,
@@ -114,9 +114,9 @@ class FinalReportController extends Controller
             foreach ($reviewers as $reviewer) {
                 $this->notificationService->send(
                     $reviewer->user_id,
-                    Auth::user()->name . " telah mengunggah Laporan Akhir Pengabdian: " . $latestDetail->final_title . ". Mohon direview.",
+                    Auth::user()->name . ' telah mengunggah Laporan Akhir Pengabdian: ' . $latestDetail->final_title . '. Mohon direview.',
                     new \App\DTO\NotificationPayload(
-                        title: "Laporan Akhir Baru",
+                        title: 'Laporan Akhir Baru',
                         url: route('review.community_service.final_report.show', $submission->id),
                         type: 'info',
                         metadata: ['submission_id' => $submission->id]
@@ -128,7 +128,7 @@ class FinalReportController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Mengunggah laporan akhir pengabdian: {$latestDetail->final_title}"
+            'comment' => "Mengunggah laporan akhir pengabdian: {$latestDetail->final_title}",
         ]);
 
         return redirect()->route('apply.community_service.final_report.index')
@@ -142,7 +142,7 @@ class FinalReportController extends Controller
             'latestDetail.schema',
             'latestDetail.target',
             'latestDetail.members',
-            'latestDetail.comments.user'
+            'latestDetail.comments.user',
         ])
             ->where('user_id', Auth::id())
             ->where('stage', CommunityServiceReviewStage::FINAL_REPORT->value)
@@ -152,7 +152,7 @@ class FinalReportController extends Controller
             'submission' => $submission,
         ]);
     }
-    
+
     public function edit($id)
     {
         $submission = CommunityServiceSubmission::with(['latestDetail', 'latestDetail.members', 'latestDetail.comments.user'])
@@ -201,7 +201,7 @@ class FinalReportController extends Controller
                 'proposal_path' => $latestDetail->proposal_path,
                 'leader_name' => $latestDetail->leader_name,
                 'title' => $latestDetail->title,
-                
+
                 'community_service_schema_id' => $latestDetail->community_service_schema_id,
                 'leader_nidn' => $latestDetail->leader_nidn,
                 'leader_nuptk' => $latestDetail->leader_nuptk,
@@ -234,9 +234,9 @@ class FinalReportController extends Controller
             foreach ($reviewers as $reviewer) {
                 $this->notificationService->send(
                     $reviewer->user_id,
-                    Auth::user()->name . " telah menyelesaikan revisi Laporan Akhir Pengabdian: " . $latestDetail->final_title . ". Mohon divalidasi kembali.",
+                    Auth::user()->name . ' telah menyelesaikan revisi Laporan Akhir Pengabdian: ' . $latestDetail->final_title . '. Mohon divalidasi kembali.',
                     new \App\DTO\NotificationPayload(
-                        title: "Revisi Laporan Akhir",
+                        title: 'Revisi Laporan Akhir',
                         url: route('review.community_service.final_report.show', $submission->id),
                         type: 'info',
                         metadata: ['submission_id' => $submission->id]
@@ -248,7 +248,7 @@ class FinalReportController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Mengajukan revisi laporan akhir pengabdian: {$latestDetail->final_title}"
+            'comment' => "Mengajukan revisi laporan akhir pengabdian: {$latestDetail->final_title}",
         ]);
 
         return redirect()->route('apply.community_service.final_report.index')

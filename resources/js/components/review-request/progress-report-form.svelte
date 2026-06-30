@@ -5,7 +5,6 @@
     import FileUpload from '@/components/file-upload.svelte';
     import { StorageUploadAction } from '@/data/storage-upload';
     import { getProgressReportHint } from '@/data/file-naming';
-    import * as Select from '@/components/ui/select';
     import Label from '../ui/label/label.svelte';
 
     let { form = $bindable(), data, type = 'research', mode = 'create' } = $props();

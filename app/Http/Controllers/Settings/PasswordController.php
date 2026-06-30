@@ -37,7 +37,7 @@ class PasswordController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Memperbarui kata sandi pengguna"
+            'comment' => 'Memperbarui kata sandi pengguna',
         ]);
 
         return back();

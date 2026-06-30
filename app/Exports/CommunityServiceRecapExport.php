@@ -4,14 +4,13 @@ namespace App\Exports;
 
 use App\Models\CommunityServiceSubmission;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
-class CommunityServiceRecapExport implements FromCollection, WithHeadings, WithMapping, WithColumnWidths, WithStyles
+class CommunityServiceRecapExport implements FromCollection, WithColumnWidths, WithHeadings, WithMapping, WithStyles
 {
     private $submissions;
 
@@ -48,7 +47,7 @@ class CommunityServiceRecapExport implements FromCollection, WithHeadings, WithM
         }
 
         $leaderName = $detail->final_leader_name ?: $detail->leader_name;
-        
+
         $members = $detail->members->pluck('name')->toArray();
         $membersString = empty($members) ? '-' : implode("\n", $members);
 
@@ -87,13 +86,14 @@ class CommunityServiceRecapExport implements FromCollection, WithHeadings, WithM
     public function styles(Worksheet $sheet)
     {
         $highestColumn = $sheet->getHighestColumn();
+
         return [
-            1    => ['font' => ['bold' => true]],
+            1 => ['font' => ['bold' => true]],
             "A:{$highestColumn}" => [
                 'alignment' => [
                     'wrapText' => true,
-                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP
-                ]
+                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP,
+                ],
             ],
         ];
     }

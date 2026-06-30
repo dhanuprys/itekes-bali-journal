@@ -11,5 +11,6 @@ class CommunityServiceSchema extends Model
     use HasFactory, SoftDeletes;
 
     protected $table = 'community_service_schema';
+
     protected $fillable = ['title', 'description'];
 }

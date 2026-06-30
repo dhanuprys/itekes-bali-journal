@@ -8,10 +8,10 @@ use App\Http\Controllers\Controller;
 use App\Models\ResearchSubdetailReviewer;
 use App\Models\ResearchSubmission;
 use App\Models\ResearchSubmissionComment;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-use App\Services\NotificationService;
 
 class FinalReportController extends Controller
 {
@@ -21,6 +21,7 @@ class FinalReportController extends Controller
     {
         $this->notificationService = $notificationService;
     }
+
     public function index()
     {
         $submissions = ResearchSubmission::with(['latestDetail', 'user'])
@@ -54,7 +55,7 @@ class FinalReportController extends Controller
             'latestDetail.schema',
             'latestDetail.target',
             'latestDetail.members',
-            'latestDetail.comments.user'
+            'latestDetail.comments.user',
         ]);
 
         return Inertia::render('reviewer/research/final-report/show', [
@@ -91,7 +92,7 @@ class FinalReportController extends Controller
         $title = $detail->title ?? 'Laporan Akhir Penelitian';
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Memberikan komentar pada laporan akhir penelitian: {$title}"
+            'comment' => "Memberikan komentar pada laporan akhir penelitian: {$title}",
         ]);
 
         return back()->with('success', 'Komentar terkirim.');
@@ -129,9 +130,9 @@ class FinalReportController extends Controller
         // Notify User
         $this->notificationService->send(
             $submission->user,
-            "Reviewer memperbarui status Laporan Akhir penelitian Anda: " . $submission->latestDetail->title . " menjadi " . strtoupper(str_replace('_', ' ', $request->input('status'))) . ". Silakan cek detailnya.",
+            'Reviewer memperbarui status Laporan Akhir penelitian Anda: ' . $submission->latestDetail->title . ' menjadi ' . strtoupper(str_replace('_', ' ', $request->input('status'))) . '. Silakan cek detailnya.',
             new \App\DTO\NotificationPayload(
-                title: "Status Laporan Akhir Diperbarui",
+                title: 'Status Laporan Akhir Diperbarui',
                 url: route('apply.research.final_report.show', $submission->id),
                 type: 'info',
                 metadata: ['submission_id' => $submission->id, 'status' => $request->input('status')]
@@ -142,7 +143,7 @@ class FinalReportController extends Controller
         $title = $submission->latestDetail->title ?? 'Laporan Akhir Penelitian';
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Mengubah status laporan akhir penelitian '{$title}' menjadi '{$request->input('status')}'"
+            'comment' => "Mengubah status laporan akhir penelitian '{$title}' menjadi '{$request->input('status')}'",
         ]);
 
         return redirect()->route('review.research.index')->with('success', 'Status berhasil diperbarui.');

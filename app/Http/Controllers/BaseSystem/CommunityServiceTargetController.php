@@ -44,7 +44,7 @@ class CommunityServiceTargetController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Membuat Target Pengabdian Masyarakat baru: {$validated['title']}"
+            'comment' => "Membuat Target Pengabdian Masyarakat baru: {$validated['title']}",
         ]);
 
         return redirect()->back()->with('success', 'Community Service Target created successfully.');
@@ -61,7 +61,7 @@ class CommunityServiceTargetController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Memperbarui Target Pengabdian Masyarakat menjadi: {$validated['title']}"
+            'comment' => "Memperbarui Target Pengabdian Masyarakat menjadi: {$validated['title']}",
         ]);
 
         return redirect()->back()->with('success', 'Community Service Target updated successfully.');
@@ -74,7 +74,7 @@ class CommunityServiceTargetController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Menghapus Target Pengabdian Masyarakat: {$title}"
+            'comment' => "Menghapus Target Pengabdian Masyarakat: {$title}",
         ]);
 
         return redirect()->back()->with('success', 'Community Service Target deleted successfully.');

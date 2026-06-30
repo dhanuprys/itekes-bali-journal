@@ -5,8 +5,8 @@ namespace App\Http\Controllers\User;
 use App\Enums\PermissionRole;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 use Inertia\Inertia;
+use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
@@ -26,6 +26,7 @@ class RoleController extends Controller
             ->withQueryString()
             ->through(function ($role) use ($preservedRoles) {
                 $role->is_preserved = in_array($role->name, $preservedRoles);
+
                 return $role;
             });
 
@@ -68,7 +69,7 @@ class RoleController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Membuat peran (role) baru: {$validated['name']}"
+            'comment' => "Membuat peran (role) baru: {$validated['name']}",
         ]);
 
         return redirect()->back()->with('success', 'Role created successfully.');
@@ -86,7 +87,7 @@ class RoleController extends Controller
             // Given "Guest" or "Lecture", we might want to change their permissions.
             // But I will stick to "cannot be updated" to be safe.
             return redirect()->back()->with('error', 'Cannot update a preserved role.');
-            // Note: If user wants to allow permission updates, they should specify. 
+            // Note: If user wants to allow permission updates, they should specify.
         }
 
         $validated = $request->validate([
@@ -103,7 +104,7 @@ class RoleController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Memperbarui peran (role): {$validated['name']}"
+            'comment' => "Memperbarui peran (role): {$validated['name']}",
         ]);
 
         return redirect()->back()->with('success', 'Role updated successfully.');
@@ -120,7 +121,7 @@ class RoleController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Menghapus peran (role): {$name}"
+            'comment' => "Menghapus peran (role): {$name}",
         ]);
 
         return redirect()->back()->with('success', 'Role deleted successfully.');
@@ -129,6 +130,7 @@ class RoleController extends Controller
     private function isPreserved(Role $role): bool
     {
         $preservedRoles = array_column(array_map(fn($r) => $r, PermissionRole::getRoleAsArray()), 'value');
+
         return in_array($role->name, $preservedRoles);
     }
 }

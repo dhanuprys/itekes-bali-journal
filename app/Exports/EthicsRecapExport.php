@@ -4,13 +4,13 @@ namespace App\Exports;
 
 use App\Models\EthicalClearanceSubmission;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class EthicsRecapExport implements FromCollection, WithHeadings, WithMapping, WithColumnWidths, WithStyles
+class EthicsRecapExport implements FromCollection, WithColumnWidths, WithHeadings, WithMapping, WithStyles
 {
     private $submissions;
 
@@ -121,6 +121,7 @@ class EthicsRecapExport implements FromCollection, WithHeadings, WithMapping, Wi
     public function styles(Worksheet $sheet)
     {
         $highestColumn = $sheet->getHighestColumn();
+
         return [
             1 => ['font' => ['bold' => true]],
             "A:{$highestColumn}" => [

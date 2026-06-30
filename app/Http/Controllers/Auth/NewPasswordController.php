@@ -55,7 +55,7 @@ class NewPasswordController extends Controller
 
                 \App\Models\UserLog::create([
                     'user_id' => $user->id,
-                    'comment' => "Mengatur ulang kata sandi melalui tautan email"
+                    'comment' => 'Mengatur ulang kata sandi melalui tautan email',
                 ]);
             }
         );

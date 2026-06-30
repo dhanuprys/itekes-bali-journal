@@ -2,13 +2,12 @@
 
 namespace App\Services;
 
+use App\DTO\NotificationPayload;
 use App\Enums\PermissionRole;
+use App\Mail\GeneralNotificationMail;
 use App\Models\Notification;
 use App\Models\User;
-use App\Mail\GeneralNotificationMail;
 use Illuminate\Support\Facades\Mail;
-
-use App\DTO\NotificationPayload;
 
 class NotificationService
 {
@@ -50,7 +49,7 @@ class NotificationService
         // Find users with this permission (via roles)
         // Note: This assumes using Spatie Permission or similar acting on roles/permissions
         // Since we are using a simple PermissionRole enum, we might need to query users by role.
-        // Let's assume User model has standard relations. 
+        // Let's assume User model has standard relations.
         // If using standard many-to-many roles:
 
         $users = User::permission($permission->value)->get();

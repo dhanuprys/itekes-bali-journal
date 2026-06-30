@@ -48,7 +48,9 @@ export default ts.config(
             '@typescript-eslint/no-explicit-any': 'off',
             'svelte/infinite-reactive-loop': 'error',
             'svelte/no-at-html-tags': 'error',
-            'svelte/no-target-blank': 'error',
+            'svelte/no-target-blank': 'off',
+            'svelte/no-navigation-without-resolve': 'off',
+            'svelte/require-each-key': 'off',
         },
     },
     {

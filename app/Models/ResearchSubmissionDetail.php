@@ -32,7 +32,7 @@ class ResearchSubmissionDetail extends Model
         'final_report_path',
         'manuscript_path',
         'supplementary_path',
-        'notes'
+        'notes',
     ];
 
     public function submission(): BelongsTo

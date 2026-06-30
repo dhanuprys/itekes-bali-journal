@@ -5,8 +5,8 @@ namespace Database\Seeders;
 use App\Enums\PermissionRole;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class PermissionAndRoleSeeder extends Seeder
 {
@@ -49,11 +49,11 @@ class PermissionAndRoleSeeder extends Seeder
         $lecture->givePermissionTo([
             $permissionRequestResearchReview,
             $permissionRequestCommunityServiceReview,
-            $permissionRequestEthicsReview
+            $permissionRequestEthicsReview,
         ]);
 
         $guest->givePermissionTo([
-            $permissionRequestEthicsReview
+            $permissionRequestEthicsReview,
         ]);
 
         $operator->givePermissionTo([
@@ -65,7 +65,7 @@ class PermissionAndRoleSeeder extends Seeder
             $permissionViewAllCommunityService,
             $permissionViewAllEthics,
             $permissionReviewEthics,
-            $permissionViewUserLogs
+            $permissionViewUserLogs,
         ]);
 
         $reviewerResearch->givePermissionTo([

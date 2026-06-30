@@ -1,8 +1,8 @@
 <?php
 
 use App\Enums\PermissionRole;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User;
+use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'permission:' . PermissionRole::P_MANAGE_USERS->value])
     ->prefix('users')

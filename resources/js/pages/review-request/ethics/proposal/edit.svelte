@@ -13,7 +13,7 @@
     import { snakeToTitleCase } from '@/lib/utils';
     import { toast } from 'svelte-sonner';
     import { uploadState } from '@/stores/upload-state.svelte';
-    import { CheckCircle2Icon, XCircleIcon, FileTextIcon, AlertCircleIcon } from 'lucide-svelte';
+    import { CheckCircle2Icon, AlertCircleIcon } from 'lucide-svelte';
 
     let { submission } = $props();
     let detail = $derived(submission.latest_detail);

@@ -33,7 +33,13 @@
         {/snippet}
 
         <div class="bg-background">
-            <AssignmentTable {submissions} {reviewers} {filters} assignRouteName="reviewer_assignment.community_service.store" deleteRouteName="reviewer_assignment.community_service.destroy" />
+            <AssignmentTable
+                {submissions}
+                {reviewers}
+                {filters}
+                assignRouteName="reviewer_assignment.community_service.store"
+                deleteRouteName="reviewer_assignment.community_service.destroy"
+            />
         </div>
     </LayoutComposer>
 </AppLayout>

@@ -5,7 +5,6 @@
 
     import AppLayout from '@/layouts/app-layout.svelte';
     import SettingsLayout from '@/layouts/settings/layout.svelte';
-    import { mode } from 'mode-watcher';
 
     const breadcrumbItems: BreadcrumbItem[] = [
         {

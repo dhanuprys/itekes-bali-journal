@@ -4,9 +4,9 @@ use Illuminate\Support\Str;
 
 // backward compatibility for PHP 8.4+ Pdo\Mysql::ATTR_SSL_CA is removed
 $mysqlOptions = array_filter([
-    (class_exists(Pdo\Mysql::class) 
-        ? Pdo\Mysql::ATTR_SSL_CA 
-        : PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA')
+    (class_exists(Pdo\Mysql::class)
+        ? Pdo\Mysql::ATTR_SSL_CA
+        : PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA'),
 ]);
 
 return [

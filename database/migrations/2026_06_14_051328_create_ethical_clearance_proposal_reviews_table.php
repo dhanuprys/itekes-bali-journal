@@ -14,14 +14,14 @@ return new class extends Migration
         Schema::create('ethical_clearance_proposal_reviews', function (Blueprint $table) {
             $table->id();
             $table->foreignId('ethical_clearance_submission_id')
-                  ->constrained(
-                      table: 'ethical_clearance_submissions',
-                      indexName: 'fk_ec_prop_reviews_sub_id'
-                  )
-                  ->onDelete('cascade');
+                ->constrained(
+                    table: 'ethical_clearance_submissions',
+                    indexName: 'fk_ec_prop_reviews_sub_id'
+                )
+                ->onDelete('cascade');
             $table->foreignId('user_id')
-                  ->constrained('users')
-                  ->onDelete('cascade');
+                ->constrained('users')
+                ->onDelete('cascade');
             $table->string('status'); // 'approved', 'rejected', 'revision_needed'
             $table->text('notes')->nullable();
             $table->timestamps();

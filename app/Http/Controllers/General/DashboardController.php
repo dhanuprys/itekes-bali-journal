@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\General;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
@@ -24,7 +23,7 @@ class DashboardController extends Controller
                     ['type' => 'new', 'message' => 'Menambahkan Halaman Changelog'],
                     ['type' => 'fix', 'message' => 'Memperbaiki layout pada halaman mobile'],
                     ['type' => 'change', 'message' => 'Penyempurnaan tampilan Dashboard'],
-                ]
+                ],
             ],
             [
                 'version' => 'v1.0.0',
@@ -33,12 +32,12 @@ class DashboardController extends Controller
                     ['type' => 'new', 'message' => 'Rilis awal aplikasi'],
                     ['type' => 'new', 'message' => 'Fitur Manajemen Pengguna'],
                     ['type' => 'new', 'message' => 'Fitur Manajemen Role & Permission'],
-                ]
+                ],
             ],
         ];
 
         return Inertia::render('general/dashboard/changelog', [
-            'changelog' => $changelog
+            'changelog' => $changelog,
         ]);
     }
 }

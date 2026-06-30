@@ -60,8 +60,6 @@ class ResearchController extends Controller
         ]);
     }
 
-
-
     public function store(Request $request, $id)
     {
         $validated = $request->validate([
@@ -85,9 +83,9 @@ class ResearchController extends Controller
                     if (!in_array($userId, $existingReviewers)) {
                         $this->notificationService->send(
                             $userId,
-                            "Anda ditugaskan sebagai Reviewer untuk proposal penelitian: " . ($submission->latestDetail->title ?? 'Judul Tidak Tersedia') . ". Silakan mulai mereview.",
+                            'Anda ditugaskan sebagai Reviewer untuk proposal penelitian: ' . ($submission->latestDetail->title ?? 'Judul Tidak Tersedia') . '. Silakan mulai mereview.',
                             new \App\DTO\NotificationPayload(
-                                title: "Tugas Review Baru",
+                                title: 'Tugas Review Baru',
                                 url: route('review.research.proposal.index'),
                                 type: 'info'
                             ),
@@ -101,7 +99,7 @@ class ResearchController extends Controller
         $title = $submission->latestDetail->title ?? 'Judul Tidak Tersedia';
         UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Menugaskan reviewer untuk proposal penelitian: {$title}"
+            'comment' => "Menugaskan reviewer untuk proposal penelitian: {$title}",
         ]);
 
         return back()->with('success', 'Reviewers assigned successfully.');
@@ -115,11 +113,11 @@ class ResearchController extends Controller
     public function destroy($id)
     {
         $submission = ResearchSubmission::with('latestDetail')->findOrFail($id);
-        
+
         $title = $submission->latestDetail->title ?? 'Judul Tidak Tersedia';
         UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Menghapus usulan penelitian (soft delete): {$title}"
+            'comment' => "Menghapus usulan penelitian (soft delete): {$title}",
         ]);
 
         $submission->delete();

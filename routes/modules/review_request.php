@@ -1,8 +1,8 @@
 <?php
 
 use App\Enums\PermissionRole;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReviewRequest;
+use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'permission:' . PermissionRole::P_REQUEST_RESEARCH_REVIEW->value])
     ->prefix('apply/research')

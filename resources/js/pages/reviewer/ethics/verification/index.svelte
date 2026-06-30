@@ -5,7 +5,7 @@
     import { type BreadcrumbItem } from '@/types';
     import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
     import { Button } from '@/components/ui/button';
-    import { Link, router, page } from '@inertiajs/svelte';
+    import { router, page } from '@inertiajs/svelte';
     import { FileTextIcon, EyeIcon } from 'lucide-svelte';
     import Badge from '@/components/ui/badge/badge.svelte';
 

@@ -82,9 +82,9 @@ class EthicsController extends Controller
                     if (!in_array($userId, $existingReviewers)) {
                         $this->notificationService->send(
                             $userId,
-                            "Anda ditugaskan sebagai Reviewer untuk pengajuan etik: " . ($submission->latestDetail->title ?? 'Judul Tidak Tersedia') . ". Silakan mulai mereview.",
+                            'Anda ditugaskan sebagai Reviewer untuk pengajuan etik: ' . ($submission->latestDetail->title ?? 'Judul Tidak Tersedia') . '. Silakan mulai mereview.',
                             new \App\DTO\NotificationPayload(
-                                title: "Tugas Review Baru",
+                                title: 'Tugas Review Baru',
                                 url: route('review.ethics.proposal.index'),
                                 type: 'info'
                             ),
@@ -104,7 +104,7 @@ class EthicsController extends Controller
         $title = $submission->latestDetail->title ?? 'Judul Tidak Tersedia';
         UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Menugaskan reviewer untuk pengajuan etik: {$title}"
+            'comment' => "Menugaskan reviewer untuk pengajuan etik: {$title}",
         ]);
 
         return back()->with('success', 'Reviewers assigned successfully.');
@@ -118,11 +118,11 @@ class EthicsController extends Controller
     public function destroy($id)
     {
         $submission = EthicalClearanceSubmission::with('latestDetail')->findOrFail($id);
-        
+
         $title = $submission->latestDetail->title ?? 'Judul Tidak Tersedia';
         UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Menghapus usulan etik (soft delete): {$title}"
+            'comment' => "Menghapus usulan etik (soft delete): {$title}",
         ]);
 
         $submission->delete();

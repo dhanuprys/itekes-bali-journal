@@ -21,6 +21,7 @@ class ProgressReportController extends Controller
     {
         $this->notificationService = $notificationService;
     }
+
     public function index()
     {
         $submissions = ResearchSubmission::with(['latestDetail'])
@@ -62,7 +63,7 @@ class ProgressReportController extends Controller
             ->where('id', $validated['submission_id'])
             ->firstOrFail();
 
-        DB::transaction(function () use ($validated, $request, $submission, $uploadService) {
+        DB::transaction(function () use ($validated, $submission, $uploadService) {
             $latestDetail = $submission->latestDetail;
 
             // Mark files as used
@@ -106,9 +107,9 @@ class ProgressReportController extends Controller
             foreach ($reviewers as $reviewer) {
                 $this->notificationService->send(
                     $reviewer->user_id,
-                    Auth::user()->name . " telah mengunggah Laporan Kemajuan: " . $validated['final_title'] . ". Mohon direview.",
+                    Auth::user()->name . ' telah mengunggah Laporan Kemajuan: ' . $validated['final_title'] . '. Mohon direview.',
                     new \App\DTO\NotificationPayload(
-                        title: "Laporan Kemajuan Baru",
+                        title: 'Laporan Kemajuan Baru',
                         url: route('review.research.progress_report.show', $submission->id),
                         type: 'info',
                         metadata: ['submission_id' => $submission->id]
@@ -120,7 +121,7 @@ class ProgressReportController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Mengunggah laporan kemajuan penelitian: {$validated['final_title']}"
+            'comment' => "Mengunggah laporan kemajuan penelitian: {$validated['final_title']}",
         ]);
 
         return redirect()->route('apply.research.progress_report.index')
@@ -134,7 +135,7 @@ class ProgressReportController extends Controller
             'latestDetail.schema',
             'latestDetail.target',
             'latestDetail.members',
-            'latestDetail.comments.user'
+            'latestDetail.comments.user',
         ])
             ->where('user_id', Auth::id())
             ->findOrFail($id);
@@ -143,6 +144,7 @@ class ProgressReportController extends Controller
             'submission' => $submission,
         ]);
     }
+
     public function edit($id)
     {
         $submission = ResearchSubmission::with(['latestDetail', 'latestDetail.members', 'latestDetail.comments.user'])
@@ -172,7 +174,7 @@ class ProgressReportController extends Controller
             'progress_report_path' => 'required|string',
         ]);
 
-        DB::transaction(function () use ($validated, $request, $submission, $uploadService) {
+        DB::transaction(function () use ($validated, $submission, $uploadService) {
             $latestDetail = $submission->latestDetail;
 
             // Mark files as used
@@ -216,9 +218,9 @@ class ProgressReportController extends Controller
             foreach ($reviewers as $reviewer) {
                 $this->notificationService->send(
                     $reviewer->user_id,
-                    Auth::user()->name . " telah menyelesaikan revisi Laporan Kemajuan: " . $validated['final_title'] . ". Mohon divalidasi kembali.",
+                    Auth::user()->name . ' telah menyelesaikan revisi Laporan Kemajuan: ' . $validated['final_title'] . '. Mohon divalidasi kembali.',
                     new \App\DTO\NotificationPayload(
-                        title: "Revisi Laporan Kemajuan",
+                        title: 'Revisi Laporan Kemajuan',
                         url: route('review.research.progress_report.show', $submission->id),
                         type: 'info',
                         metadata: ['submission_id' => $submission->id]
@@ -230,7 +232,7 @@ class ProgressReportController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Mengajukan revisi laporan kemajuan penelitian: {$validated['final_title']}"
+            'comment' => "Mengajukan revisi laporan kemajuan penelitian: {$validated['final_title']}",
         ]);
 
         return redirect()->route('apply.research.progress_report.index')

@@ -62,8 +62,8 @@ class ProposalController extends Controller
     public function comment(Request $request, $id)
     {
         $submission = EthicalClearanceSubmission::whereHas('reviewers', function ($query) {
-                $query->where('user_id', Auth::id());
-            })
+            $query->where('user_id', Auth::id());
+        })
             ->where('stage', EthicsReviewStage::PROPOSAL->value)
             ->findOrFail($id);
 
@@ -90,7 +90,7 @@ class ProposalController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Memberikan komentar pada proposal etik kategori {$submission->category}"
+            'comment' => "Memberikan komentar pada proposal etik kategori {$submission->category}",
         ]);
 
         return back()->with('success', 'Komentar terkirim.');
@@ -99,8 +99,8 @@ class ProposalController extends Controller
     public function changeState(Request $request, $id)
     {
         $submission = EthicalClearanceSubmission::whereHas('reviewers', function ($query) {
-                $query->where('user_id', Auth::id());
-            })
+            $query->where('user_id', Auth::id());
+        })
             ->where('stage', EthicsReviewStage::PROPOSAL->value)
             ->findOrFail($id);
 
@@ -147,9 +147,9 @@ class ProposalController extends Controller
 
             $this->notificationService->send(
                 $submission->user,
-                "Proposal etik Anda ditolak. Silakan cek detailnya.",
+                'Proposal etik Anda ditolak. Silakan cek detailnya.',
                 new \App\DTO\NotificationPayload(
-                    title: "Status Pengajuan Etik Diperbarui",
+                    title: 'Status Pengajuan Etik Diperbarui',
                     url: route('apply.ethics.proposal.show', $submission->id),
                     type: 'info',
                     metadata: ['submission_id' => $submission->id, 'status' => 'rejected']
@@ -159,7 +159,7 @@ class ProposalController extends Controller
 
             \App\Models\UserLog::create([
                 'user_id' => auth()->id(),
-                'comment' => "Menolak proposal etik kategori {$submission->category}"
+                'comment' => "Menolak proposal etik kategori {$submission->category}",
             ]);
 
             return redirect()->route('review.ethics.index')->with('success', 'Status berhasil diperbarui.');
@@ -168,16 +168,16 @@ class ProposalController extends Controller
         if ($status === 'revision_needed') {
             // Reset reviews for next round
             $submission->proposalReviews()->delete();
-            
+
             $submission->update([
                 'status' => EthicsStatus::REVISION_NEEDED->value,
             ]);
 
             $this->notificationService->send(
                 $submission->user,
-                "Proposal etik Anda memerlukan revisi. Silakan cek detailnya.",
+                'Proposal etik Anda memerlukan revisi. Silakan cek detailnya.',
                 new \App\DTO\NotificationPayload(
-                    title: "Status Pengajuan Etik Diperbarui",
+                    title: 'Status Pengajuan Etik Diperbarui',
                     url: route('apply.ethics.proposal.show', $submission->id),
                     type: 'info',
                     metadata: ['submission_id' => $submission->id, 'status' => 'revision_needed']
@@ -187,7 +187,7 @@ class ProposalController extends Controller
 
             \App\Models\UserLog::create([
                 'user_id' => auth()->id(),
-                'comment' => "Meminta revisi proposal etik kategori {$submission->category}"
+                'comment' => "Meminta revisi proposal etik kategori {$submission->category}",
             ]);
 
             return redirect()->route('review.ethics.index')->with('success', 'Status berhasil diperbarui.');
@@ -204,18 +204,18 @@ class ProposalController extends Controller
 
         if ($allApproved) {
             \Illuminate\Support\Facades\DB::transaction(function () use ($submission) {
-                // Lock the table to prevent concurrent increments. 
+                // Lock the table to prevent concurrent increments.
                 // Using orderBy desc -> first instead of max() because PostgreSQL doesn't support FOR UPDATE with aggregates.
                 $latestSubmission = EthicalClearanceSubmission::lockForUpdate()
                     ->whereNotNull('document_number')
                     ->orderBy('document_number', 'desc')
                     ->first();
-                
+
                 $maxNumber = $latestSubmission ? $latestSubmission->document_number : 0;
 
                 $submission->update([
                     'status' => EthicsStatus::APPROVED->value,
-                    'stage'  => EthicsReviewStage::OUTPUT->value,
+                    'stage' => EthicsReviewStage::OUTPUT->value,
                     'document_number' => $maxNumber + 1,
                     'document_date' => now(),
                 ]);
@@ -223,9 +223,9 @@ class ProposalController extends Controller
 
             $this->notificationService->send(
                 $submission->user,
-                "Proposal etik Anda telah disetujui. Silakan cek detailnya.",
+                'Proposal etik Anda telah disetujui. Silakan cek detailnya.',
                 new \App\DTO\NotificationPayload(
-                    title: "Status Pengajuan Etik Diperbarui",
+                    title: 'Status Pengajuan Etik Diperbarui',
                     url: route('apply.ethics.proposal.show', $submission->id),
                     type: 'info',
                     metadata: ['submission_id' => $submission->id, 'status' => 'approved']
@@ -235,15 +235,15 @@ class ProposalController extends Controller
 
             \App\Models\UserLog::create([
                 'user_id' => auth()->id(),
-                'comment' => "Menyetujui proposal etik kategori {$submission->category}"
+                'comment' => "Menyetujui proposal etik kategori {$submission->category}",
             ]);
 
             return redirect()->route('review.ethics.index')->with('success', 'Semua reviewer telah menyetujui. Proposal disetujui.');
         }
 
         \App\Models\UserLog::create([
-                'user_id' => auth()->id(),
-                'comment' => "Menyetujui proposal etik kategori {$submission->category} (Menunggu Reviewer Lain)"
+            'user_id' => auth()->id(),
+            'comment' => "Menyetujui proposal etik kategori {$submission->category} (Menunggu Reviewer Lain)",
         ]);
 
         return back()->with('success', 'Keputusan Anda tersimpan. Menunggu reviewer lain.');

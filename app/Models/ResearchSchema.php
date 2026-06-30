@@ -11,5 +11,6 @@ class ResearchSchema extends Model
     use HasFactory, SoftDeletes;
 
     protected $table = 'research_schema';
+
     protected $fillable = ['title', 'description'];
 }

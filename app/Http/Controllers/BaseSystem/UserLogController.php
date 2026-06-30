@@ -18,8 +18,8 @@ class UserLogController extends Controller
                 // Search in comment or user's name
                 $query->where('comment', 'like', "%{$search}%")
                     ->orWhereHas('user', function ($q) use ($search) {
-                    $q->where('name', 'like', "%{$search}%");
-                });
+                        $q->where('name', 'like', "%{$search}%");
+                    });
             })
             ->latest()
             ->paginate($limit)

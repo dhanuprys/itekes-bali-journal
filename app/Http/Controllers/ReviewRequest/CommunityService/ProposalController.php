@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\ReviewRequest\CommunityService;
 
 use App\Enums\CommunityServiceReviewStage;
-use App\Enums\PermissionRole;
 use App\Enums\CommunityServiceStatus;
+use App\Enums\PermissionRole;
 use App\Http\Controllers\Controller;
 use App\Models\CommunityServiceMember;
 use App\Models\CommunityServiceSchema;
@@ -12,17 +12,16 @@ use App\Models\CommunityServiceSubmission;
 use App\Models\CommunityServiceSubmissionDetail;
 use App\Models\CommunityServiceTarget;
 use App\Models\StudyProgram;
+use App\Services\StorageUploadService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
-use App\Enums\StorageUploadAction;
-use App\Services\StorageUploadService;
-
 class ProposalController extends Controller
 {
     protected $uploadService;
+
     protected $notificationService;
 
     public function __construct(StorageUploadService $uploadService, \App\Services\NotificationService $notificationService)
@@ -92,7 +91,7 @@ class ProposalController extends Controller
             'leader_nuptk' => 'required|string|max:50',
         ]);
 
-        DB::transaction(function () use ($validated, $request) {
+        DB::transaction(function () use ($validated) {
             $submission = CommunityServiceSubmission::create([
                 'user_id' => Auth::id(),
                 'status' => CommunityServiceStatus::NEED_REVIEW->value,
@@ -128,9 +127,9 @@ class ProposalController extends Controller
             // Notify Admins
             $this->notificationService->sendToPermission(
                 PermissionRole::P_ASSIGN_REVIEWER_COMMUNITY_SERVICE,
-                Auth::user()->name . " mengajukan proposal pengabdian baru: " . $validated['title'] . ". Mohon segera tugaskan reviewer.",
+                Auth::user()->name . ' mengajukan proposal pengabdian baru: ' . $validated['title'] . '. Mohon segera tugaskan reviewer.',
                 new \App\DTO\NotificationPayload(
-                    title: "Proposal Baru",
+                    title: 'Proposal Baru',
                     url: route('reviewer_assignment.community_service.index'),
                     type: 'info',
                     metadata: ['submission_id' => $submission->id]
@@ -140,7 +139,7 @@ class ProposalController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Mengajukan proposal pengabdian baru: {$validated['title']}"
+            'comment' => "Mengajukan proposal pengabdian baru: {$validated['title']}",
         ]);
 
         return redirect()->route('apply.community_service.index')->with('success', 'Proposal submitted successfully.');
@@ -152,7 +151,7 @@ class ProposalController extends Controller
             'latestDetail.studyProgram',
             'latestDetail.target',
             'latestDetail.members',
-            'latestDetail.comments.user' // Eager load comments
+            'latestDetail.comments.user', // Eager load comments
         ])
             ->where('user_id', Auth::id())
             ->findOrFail($id);
@@ -202,7 +201,7 @@ class ProposalController extends Controller
             'leader_nuptk' => 'required|string|max:50',
         ]);
 
-        DB::transaction(function () use ($validated, $request, $submission) {
+        DB::transaction(function () use ($validated, $submission) {
             $latestDetail = $submission->latestDetail;
             // Mark the file as used
             $path = $validated['proposal_path'];
@@ -239,9 +238,9 @@ class ProposalController extends Controller
             foreach ($reviewers as $reviewer) {
                 $this->notificationService->send(
                     $reviewer->user_id,
-                    Auth::user()->name . " telah menyelesaikan revisi proposal: " . $validated['title'] . ". Mohon divalidasi kembali.",
+                    Auth::user()->name . ' telah menyelesaikan revisi proposal: ' . $validated['title'] . '. Mohon divalidasi kembali.',
                     new \App\DTO\NotificationPayload(
-                        title: "Revisi Proposal",
+                        title: 'Revisi Proposal',
                         url: route('review.community_service.proposal.show', $submission->id),
                         type: 'info',
                         metadata: ['submission_id' => $submission->id]
@@ -253,7 +252,7 @@ class ProposalController extends Controller
 
         \App\Models\UserLog::create([
             'user_id' => auth()->id(),
-            'comment' => "Mengajukan revisi proposal pengabdian: {$validated['title']}"
+            'comment' => "Mengajukan revisi proposal pengabdian: {$validated['title']}",
         ]);
 
         return redirect()->route('apply.community_service.index')->with('success', 'Proposal revision submitted.');

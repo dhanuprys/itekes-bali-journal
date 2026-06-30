@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\General;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
-use App\Http\Controllers\General;
 use Laravel\Fortify\Http\Controllers\RegisteredUserController;
 
 Route::get('/', function () {
