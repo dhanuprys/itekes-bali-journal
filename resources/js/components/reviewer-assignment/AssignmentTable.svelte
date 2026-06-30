@@ -3,10 +3,11 @@
     import { Badge } from '@/components/ui/badge';
     import { Button } from '@/components/ui/button';
     import { Input } from '@/components/ui/input';
-    import { Edit2Icon, SearchIcon, FilterIcon } from 'lucide-svelte';
+    import { Edit2Icon, SearchIcon, FilterIcon, Trash2Icon } from 'lucide-svelte';
     import * as Avatar from '@/components/ui/avatar';
     import * as Tooltip from '@/components/ui/tooltip';
     import * as Select from '@/components/ui/select';
+    import * as AlertDialog from '@/components/ui/alert-dialog';
     import ReviewerAssignmentSheet from './ReviewerAssignmentSheet.svelte';
     import { router } from '@inertiajs/svelte';
     import { debounce } from 'lodash-es';
@@ -16,16 +17,20 @@
         submissions: any;
         reviewers: any[];
         assignRouteName: string;
+        deleteRouteName?: string;
         filters: {
             search?: string;
             status?: string;
         };
     }
 
-    let { submissions, reviewers, assignRouteName, filters }: Props = $props();
+    let { submissions, reviewers, assignRouteName, deleteRouteName, filters }: Props = $props();
 
     let dialogOpen = $state(false);
     let selectedSubmission = $state<any>(null);
+
+    let deleteDialogOpen = $state(false);
+    let submissionToDelete = $state<any>(null);
 
     // Use $state.raw to create a reactive object that can be mutated
     const propSearch = $derived(filters.search || '');
@@ -86,6 +91,23 @@
     function openAssignment(submission: any) {
         selectedSubmission = submission;
         dialogOpen = true;
+    }
+
+    function triggerDelete(submission: any) {
+        if (!deleteRouteName) return;
+        submissionToDelete = submission;
+        deleteDialogOpen = true;
+    }
+
+    function executeDelete() {
+        if (!deleteRouteName || !submissionToDelete) return;
+        router.delete(route(deleteRouteName, submissionToDelete.id), {
+            preserveScroll: true,
+            onFinish: () => {
+                deleteDialogOpen = false;
+                submissionToDelete = null;
+            }
+        });
     }
 
     function getInitials(name: string) {
@@ -248,14 +270,28 @@
                                 </div>
                             </Table.Cell>
                             <Table.Cell class="text-right">
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onclick={() => openAssignment(submission)}
-                                    class="opacity-0 group-hover:opacity-100 transition-opacity"
-                                >
-                                    <Edit2Icon class="h-4 w-4" />
-                                </Button>
+                                <div class="flex justify-end gap-1">
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onclick={() => openAssignment(submission)}
+                                        class="opacity-0 group-hover:opacity-100 transition-opacity text-primary"
+                                        title="Atur Reviewer"
+                                    >
+                                        <Edit2Icon class="h-4 w-4" />
+                                    </Button>
+                                    {#if deleteRouteName}
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            onclick={() => triggerDelete(submission)}
+                                            class="opacity-0 group-hover:opacity-100 transition-opacity text-destructive hover:text-destructive hover:bg-destructive/10"
+                                            title="Hapus Usulan"
+                                        >
+                                            <Trash2Icon class="h-4 w-4" />
+                                        </Button>
+                                    {/if}
+                                </div>
                             </Table.Cell>
                         </Table.Row>
                     {/each}
@@ -273,3 +309,23 @@
 {#if selectedSubmission}
     <ReviewerAssignmentSheet bind:open={dialogOpen} submission={selectedSubmission} {reviewers} {assignRouteName} />
 {/if}
+
+{#if deleteRouteName}
+    <AlertDialog.Root bind:open={deleteDialogOpen}>
+        <AlertDialog.Content>
+            <AlertDialog.Header>
+                <AlertDialog.Title>Apakah Anda yakin?</AlertDialog.Title>
+                <AlertDialog.Description>
+                    Tindakan ini akan menghapus usulan <span class="font-semibold text-foreground">"{submissionToDelete?.latest_detail?.title || submissionToDelete?.latest_detail?.final_title || 'ini'}"</span>. Data ini akan dihapus secara sementara (soft delete) dan tidak akan hilang dari database.
+                </AlertDialog.Description>
+            </AlertDialog.Header>
+            <AlertDialog.Footer>
+                <AlertDialog.Cancel onclick={() => (deleteDialogOpen = false)}>Batal</AlertDialog.Cancel>
+                <AlertDialog.Action onclick={executeDelete} class="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                    Hapus
+                </AlertDialog.Action>
+            </AlertDialog.Footer>
+        </AlertDialog.Content>
+    </AlertDialog.Root>
+{/if}
+

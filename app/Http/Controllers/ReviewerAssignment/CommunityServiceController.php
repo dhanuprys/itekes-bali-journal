@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\ReviewerAssignment;
 
 use App\Enums\PermissionRole;
+use App\Exports\CommunityServiceRecapExport;
 use App\Http\Controllers\Controller;
 use App\Models\CommunityServiceSubmission;
 use App\Models\User;
+use App\Models\UserLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CommunityServiceController extends Controller
 {
@@ -96,7 +99,7 @@ class CommunityServiceController extends Controller
         });
 
         $title = $submission->latestDetail->title ?? 'Judul Tidak Tersedia';
-        \App\Models\UserLog::create([
+        UserLog::create([
             'user_id' => auth()->id(),
             'comment' => "Menugaskan reviewer untuk proposal pengabdian: {$title}"
         ]);
@@ -106,6 +109,21 @@ class CommunityServiceController extends Controller
 
     public function export()
     {
-        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\CommunityServiceRecapExport, 'Rekap_PKM.xlsx');
+        return Excel::download(new CommunityServiceRecapExport, 'Rekap_PKM.xlsx');
+    }
+
+    public function destroy($id)
+    {
+        $submission = CommunityServiceSubmission::with('latestDetail')->findOrFail($id);
+        
+        $title = $submission->latestDetail->title ?? 'Judul Tidak Tersedia';
+        UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Menghapus usulan PKM (soft delete): {$title}"
+        ]);
+
+        $submission->delete();
+
+        return back()->with('success', 'Usulan PKM berhasil dihapus.');
     }
 }

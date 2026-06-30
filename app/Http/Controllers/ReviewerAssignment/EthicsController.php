@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\ReviewerAssignment;
 
 use App\Enums\PermissionRole;
+use App\Exports\EthicsRecapExport;
 use App\Http\Controllers\Controller;
 use App\Models\EthicalClearanceSubmission;
 use App\Models\User;
+use App\Models\UserLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EthicsController extends Controller
 {
@@ -99,7 +102,7 @@ class EthicsController extends Controller
         });
 
         $title = $submission->latestDetail->title ?? 'Judul Tidak Tersedia';
-        \App\Models\UserLog::create([
+        UserLog::create([
             'user_id' => auth()->id(),
             'comment' => "Menugaskan reviewer untuk pengajuan etik: {$title}"
         ]);
@@ -109,6 +112,21 @@ class EthicsController extends Controller
 
     public function export()
     {
-        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\EthicsRecapExport, 'Rekap_Etik.xlsx');
+        return Excel::download(new EthicsRecapExport, 'Rekap_Etik.xlsx');
+    }
+
+    public function destroy($id)
+    {
+        $submission = EthicalClearanceSubmission::with('latestDetail')->findOrFail($id);
+        
+        $title = $submission->latestDetail->title ?? 'Judul Tidak Tersedia';
+        UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Menghapus usulan etik (soft delete): {$title}"
+        ]);
+
+        $submission->delete();
+
+        return back()->with('success', 'Usulan etik berhasil dihapus.');
     }
 }

@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\ReviewerAssignment;
 
 use App\Enums\PermissionRole;
+use App\Exports\ResearchRecapExport;
 use App\Http\Controllers\Controller;
 use App\Models\ResearchSubmission;
 use App\Models\User;
+use App\Models\UserLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ResearchController extends Controller
 {
@@ -96,7 +99,7 @@ class ResearchController extends Controller
         });
 
         $title = $submission->latestDetail->title ?? 'Judul Tidak Tersedia';
-        \App\Models\UserLog::create([
+        UserLog::create([
             'user_id' => auth()->id(),
             'comment' => "Menugaskan reviewer untuk proposal penelitian: {$title}"
         ]);
@@ -106,6 +109,21 @@ class ResearchController extends Controller
 
     public function export()
     {
-        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\ResearchRecapExport, 'Rekap_Penelitian.xlsx');
+        return Excel::download(new ResearchRecapExport, 'Rekap_Penelitian.xlsx');
+    }
+
+    public function destroy($id)
+    {
+        $submission = ResearchSubmission::with('latestDetail')->findOrFail($id);
+        
+        $title = $submission->latestDetail->title ?? 'Judul Tidak Tersedia';
+        UserLog::create([
+            'user_id' => auth()->id(),
+            'comment' => "Menghapus usulan penelitian (soft delete): {$title}"
+        ]);
+
+        $submission->delete();
+
+        return back()->with('success', 'Usulan penelitian berhasil dihapus.');
     }
 }
