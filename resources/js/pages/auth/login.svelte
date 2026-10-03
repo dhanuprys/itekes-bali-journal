@@ -27,15 +27,15 @@
         try {
             const puzzle = JSON.parse(atob(puzzleBase64));
             let chars = Array.from(pwd);
-            
+
             if (puzzle.action === 'reverse') chars = chars.reverse();
-            
+
             let processed = '';
             for (let i = 0; i < chars.length; i++) {
                 let code = chars[i].codePointAt(0) || 0;
-                if (puzzle.action === 'shift') code = (code + puzzle.key);
-                if (puzzle.action === 'xor') code = (code ^ puzzle.key);
-                
+                if (puzzle.action === 'shift') code = code + puzzle.key;
+                if (puzzle.action === 'xor') code = code ^ puzzle.key;
+
                 processed += code.toString(16).padStart(6, '0');
             }
             return processed;
